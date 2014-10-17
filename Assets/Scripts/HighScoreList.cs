@@ -5,7 +5,9 @@ using System.Collections.Generic;
 public class HighScoreList
 {
 
+	[SerializeField]
 	public string name;
+	[SerializeField]
 	public List<float> highScores;
 
 }

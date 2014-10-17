@@ -11,7 +11,7 @@ public class MainMenuGUI : MonoBehaviour
 
 	enum MenuScreen
 	{
-		MAIN,LEVELSELECT
+		MAIN,LEVELSELECT,CONTROLS,HELP
 	};
 
 	public static GUIContent[] controlSchemes = new GUIContent[]
@@ -29,8 +29,6 @@ public class MainMenuGUI : MonoBehaviour
 	Vector3 scale;
 
 	int controller = 1;
-
-	bool displayHelp = false;
 	
 	Vector2 levelScrollPos = Vector2.zero;
 	int levelSelection = -1;
@@ -50,9 +48,9 @@ public class MainMenuGUI : MonoBehaviour
 
 	void Update()
 	{
-		if(screen == MenuScreen.MAIN) {
-			if(displayHelp && Input.anyKeyDown)
-				displayHelp = false;
+		if(screen == MenuScreen.HELP || screen == MenuScreen.CONTROLS) {
+			if(Input.anyKeyDown)
+				screen = MenuScreen.MAIN;
 		}
 	}
 
@@ -73,17 +71,16 @@ public class MainMenuGUI : MonoBehaviour
 			case MenuScreen.LEVELSELECT:
 				LevelSelectGUI();
 				break;
+			case MenuScreen.CONTROLS:
+				ControlsGUI();
+				break;
+			case MenuScreen.HELP:
+				HelpGUI();
+				break;
 			default:
 				MainGUI();
 				break;
 		}
-
-		if(screen == MenuScreen.MAIN) {
-			MainGUI();
-		} else if(screen == MenuScreen.LEVELSELECT) {
-
-		}
-
 
 
 		GUI.skin = unityDef;
@@ -92,29 +89,28 @@ public class MainMenuGUI : MonoBehaviour
 
 	void MainGUI()
 	{
-		if(displayHelp) {
-			GUI.DrawTexture(new Rect(0,0,1920,1080),howToPlayImage);
-		} else {
-			GUI.Label(new Rect(0,100,1920,100),"Balls!", defaultSkin.GetStyle("Title"));
-			GUILayout.BeginArea(new Rect(800,300,320,480));
+		GUI.Label(new Rect(0,100,1920,100),"Balls!", defaultSkin.GetStyle("Title"));
+		GUILayout.BeginArea(new Rect(800,300,320,480));
 
-			GUILayout.Label ("Controls",defaultSkin.GetStyle("Score"));
-			GUILayout.BeginVertical(defaultSkin.GetStyle ("GridBox"));
+		GUILayout.Label ("Controls",defaultSkin.GetStyle("Score"));
+		GUILayout.BeginVertical(defaultSkin.GetStyle ("GridBox"));
 
-			controller = GUILayout.SelectionGrid(controller,controlSchemes,1);
-			GUILayout.EndVertical();
-			if(GUILayout.Button ("How To Play")) {
-				displayHelp = true;
-			}
-			if(GUILayout.Button ("Select Level")) {
-				screen = MenuScreen.LEVELSELECT;
-			}
-			GUILayout.Box ("",defaultSkin.GetStyle("EmptySpace"),GUILayout.Height (20));
-			if(GUILayout.Button ("Credits")) {
-				Application.LoadLevel("Credits");
-			}
-			GUILayout.EndArea ();
+		controller = GUILayout.SelectionGrid(controller,controlSchemes,1);
+		GUILayout.EndVertical();
+		if(GUILayout.Button ("How To Play")) {
+			screen = MenuScreen.HELP;
 		}
+		if(GUILayout.Button ("Controls")) {
+			screen = MenuScreen.CONTROLS;
+		}
+		if(GUILayout.Button ("Select Level")) {
+			screen = MenuScreen.LEVELSELECT;
+		}
+		GUILayout.Box ("",defaultSkin.GetStyle("EmptySpace"),GUILayout.Height (20));
+		if(GUILayout.Button ("Credits")) {
+			Application.LoadLevel("Credits");
+		}
+		GUILayout.EndArea ();
 	}
 
 
@@ -158,6 +154,32 @@ public class MainMenuGUI : MonoBehaviour
 		GUILayout.EndArea();
 	}
 
+	void ControlsGUI()
+	{
+		GUILayout.BeginArea(new Rect(640,160,640,680),defaultSkin.GetStyle("MenuBox"));
+		GUILayout.Label ("Keyboard",defaultSkin.GetStyle("Title"));
+		GUILayout.Label ("Movement",defaultSkin.GetStyle("Score"));
+		GUILayout.Label ("W,A,S,D or Arrow Keys",defaultSkin.GetStyle ("SmallerText"));
+		GUILayout.Label ("Spin",defaultSkin.GetStyle("Score"));
+		GUILayout.Label ("'g' and 'h' or ',' and '.'",defaultSkin.GetStyle ("SmallerText"));
+		GUILayout.Label ("Bombs",defaultSkin.GetStyle("Score"));
+		GUILayout.Label ("Space",defaultSkin.GetStyle ("SmallerText"));
+
+		GUILayout.Label ("Mouse",defaultSkin.GetStyle("Title"));
+		GUILayout.Label ("Movement",defaultSkin.GetStyle("Score"));
+		GUILayout.Label ("Mouse Cursor",defaultSkin.GetStyle ("SmallerText"));
+		GUILayout.Label ("Spin",defaultSkin.GetStyle("Score"));
+		GUILayout.Label ("Left and Right Mouse Buttons",defaultSkin.GetStyle ("SmallerText"));
+		GUILayout.Label ("Bombs",defaultSkin.GetStyle("Score"));
+		GUILayout.Label ("Middle Mouse Button",defaultSkin.GetStyle ("SmallerText"));
+		GUILayout.EndArea();
+	}
+
+	void HelpGUI()
+	{
+		GUI.DrawTexture(new Rect(0,0,1920,1080),howToPlayImage);
+	}
+
 	void LaunchLevel(int levelIndex, int goalIndex)
 	{
 		PlayerPrefs.SetInt("Controller",controller);
@@ -168,15 +190,18 @@ public class MainMenuGUI : MonoBehaviour
 
 	string DifficultyToString(int diff)
 	{
-		if(diff == 0)
+		switch(diff) {
+		case 0:
 			return "Easy";
-		if(diff == 1)
+		case 1:
 			return "Medium";
-		if(diff == 2)
+		case 2:
 			return "Hard";
-		if(diff == 3)
+		case 3:
 			return "Very Hard";
-		return "UNKNOWN";
+		default:
+			return "UNKNOWN";
+		}
 	}
 
 
