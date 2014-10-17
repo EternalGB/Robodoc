@@ -1,0 +1,7 @@
+fileFormatVersion: 2
+guid: 63b71d1fde543734b9acaa7b5da14647
+ShaderImporter:
+  defaultTextures:
+  - _MainTex: {instanceID: 0}
+  - _Mask: {fileID: 2800000, guid: 7252211c7ce68ea4e995fb435de5d3c1, type: 3}
+  userData: 
