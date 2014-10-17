@@ -10,13 +10,17 @@ public class Level : ScriptableObject
 	public Goal[] possibleGoals;
 	public int goalIndex;
 
-	public float[] highScores;
+	public List<HighScoreList> scoreLists;
 
-	public void SetHighScore(Goal goal, float score)
+	public static int maxDifficulty = 3;
+
+	public void SetHighScore(Goal goal, int diff, float score)
 	{
-		for(int i = 0; i < possibleGoals.Length; i++) {
-			if(possibleGoals[i].Equals(goal))
-				highScores[i] = Mathf.Max(highScores[i],score);
+		for(int i = 0; i < possibleGoals.Length ; i++) {
+			if(possibleGoals[i].Equals(goal)) {
+				scoreLists[diff].highScores[i] = Mathf.Max(scoreLists[diff].highScores[i],score);
+				return;
+			}
 		}
 	}
 

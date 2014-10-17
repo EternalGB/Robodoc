@@ -132,7 +132,7 @@ public class MainMenuGUI : MonoBehaviour
 					levelSelection = i;
 				
 			}
-			GUI.Label(GUILayoutUtility.GetLastRect(),"Difficulty: " + DifficultyToString(levels[i].difficulty),defaultSkin.GetStyle("DifficultyText"));
+			//GUI.Label(GUILayoutUtility.GetLastRect(),"Difficulty: " + DifficultyToString(levels[i].difficulty),defaultSkin.GetStyle("DifficultyText"));
 			if(levelSelection == i) {
 				for(int j = 0; j < levels[i].possibleGoals.Length; j++) {
 					GUILayout.BeginVertical();
@@ -140,8 +140,12 @@ public class MainMenuGUI : MonoBehaviour
 						//levels[i].goalIndex = j;
 						LaunchLevel(i,j);
 					}
-					GUILayout.Label("Your Best: " + levels[i].possibleGoals[j].FormatSuccess(levels[i].highScores[j]),
-					                defaultSkin.GetStyle("YourBest"));
+					GUILayout.BeginHorizontal(defaultSkin.GetStyle("HighScoreBox"));
+					for(int k = 0; k <= Level.maxDifficulty; k++) {
+						GUILayout.Label(DifficultyToString(k) + ": " + levels[i].possibleGoals[j].FormatSuccess(levels[i].scoreLists[k].highScores[j]),
+						                defaultSkin.GetStyle("YourBest"));
+					}
+					GUILayout.EndHorizontal();
 					GUILayout.EndVertical();
 				}
 			}
@@ -164,13 +168,13 @@ public class MainMenuGUI : MonoBehaviour
 
 	string DifficultyToString(int diff)
 	{
-		if(diff == 1)
+		if(diff == 0)
 			return "Easy";
-		if(diff == 2)
+		if(diff == 1)
 			return "Medium";
-		if(diff == 3)
+		if(diff == 2)
 			return "Hard";
-		if(diff == 4)
+		if(diff == 3)
 			return "Very Hard";
 		return "UNKNOWN";
 	}

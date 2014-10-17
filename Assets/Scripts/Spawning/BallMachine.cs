@@ -15,7 +15,7 @@ public class BallMachine : MonoBehaviour
 
 	public Collider2D playArea;
 
-
+	List<GameObject> goodBalls;
 
 	void Start()
 	{
@@ -28,6 +28,9 @@ public class BallMachine : MonoBehaviour
 		*/
 		if(playArea == null)
 			playArea = GameObject.Find("PlayArea").GetComponent<Collider2D>();
+		goodBalls = new List<GameObject>();
+		goodBalls.AddRange(colourBalls);
+		goodBalls.AddRange(bonusBalls);
 		InvokeRepeating("SpawnBall",1/ballsPerSec,1/ballsPerSec);
 	}
 	
@@ -47,7 +50,7 @@ public class BallMachine : MonoBehaviour
 		if(Random.value < badBallChance) {
 			ball = PoolManager.Instance.GetPoolByRepresentative(Util.GetRandomElement(badBalls)).GetPooled();
 		} else {
-			ball = PoolManager.Instance.GetPoolByRepresentative(Util.GetRandomElement(colourBalls)).GetPooled();
+			ball = PoolManager.Instance.GetPoolByRepresentative(Util.GetRandomElement(goodBalls)).GetPooled();
 		}
 		Vector3 pos = PointOutside(Vector2.zero,playArea.transform.localScale.x/2,playArea.transform.localScale.x*1.25f);
 		ball.transform.position = pos;

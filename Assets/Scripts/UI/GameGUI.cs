@@ -74,7 +74,7 @@ public class GameGUI : MonoBehaviour
 		if(goal.Completed()) {
 			Time.timeScale = 0;
 			screen = GameScreen.END;
-			level.SetHighScore(goal,goal.EvaluateSuccess());
+			level.SetHighScore(goal,difficulty,goal.EvaluateSuccess());
 		}
 	}
 
