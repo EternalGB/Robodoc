@@ -4,31 +4,31 @@ using System.Collections.Generic;
 [System.Serializable]
 public class Level : ScriptableObject
 {
-	
+
+	public string displayName;
 	public string sceneName;
 	public int difficulty;
 	public Goal[] possibleGoals;
-	public int goalIndex;
-
-	public List<HighScoreList> scoreLists;
 
 	public static int maxDifficulty = 3;
 
-	public void SetHighScore(Goal goal, int diff, float score)
+	public int GoalUnlockedIndex
 	{
-		for(int i = 0; i < possibleGoals.Length ; i++) {
-			if(possibleGoals[i].Equals(goal)) {
-				scoreLists[diff].highScores[i] = Mathf.Max(scoreLists[diff].highScores[i],score);
-				return;
-			}
+		get
+		{
+			return PlayerPrefs.GetInt(name + "GoalUnlocked",0);
+		}
+		set
+		{
+			PlayerPrefs.SetInt(name + "GoalUnlocked",value);
 		}
 	}
 
-	public Goal ActiveGoal()
+	public void SetHighScore(Goal goal, int diff, float score)
 	{
-		return possibleGoals[goalIndex];
+		HighScores.SetScore(this,goal,diff,score);
 	}
-
+	
 
 
 

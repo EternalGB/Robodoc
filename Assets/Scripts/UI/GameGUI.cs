@@ -37,6 +37,8 @@ public class GameGUI : MonoBehaviour
 	};
 	public int difficulty = 0;
 
+	bool doneGoalCompleted;
+
 	void Start()
 	{
 		Time.timeScale = 0;
@@ -48,7 +50,7 @@ public class GameGUI : MonoBehaviour
 		controller = PlayerPrefs.GetInt("Controller",0);
 
 		if(level == null) {
-			level = Resources.Load<Level>("Levels/" + Application.loadedLevelName);
+			level = Resources.Load<Level>("Levels/" + PlayerPrefs.GetString("LevelName","01-Circle"));
 			goal = level.possibleGoals[PlayerPrefs.GetInt("GoalIndex",0)];
 		}
 
@@ -57,6 +59,8 @@ public class GameGUI : MonoBehaviour
 		} else {
 			countUpwards = true;
 		}
+
+		doneGoalCompleted = false;
 	}
 
 	void Update()
@@ -74,7 +78,7 @@ public class GameGUI : MonoBehaviour
 		if(goal.Completed()) {
 			Time.timeScale = 0;
 			screen = GameScreen.END;
-			level.SetHighScore(goal,difficulty,goal.EvaluateSuccess());
+			OnGoalCompleted();
 		}
 	}
 
@@ -197,6 +201,16 @@ public class GameGUI : MonoBehaviour
 	{
 		PlayerPrefs.SetInt("Controller",controller);
 		PlayerPrefs.Save();
+	}
+
+	void OnGoalCompleted()
+	{
+		if(!doneGoalCompleted) {
+			level.SetHighScore(goal,difficulty,goal.EvaluateSuccess());
+			PlayerPrefs.SetInt("UnlockedLevel",PlayerPrefs.GetInt("UnlockedLevel",0)+1);
+			level.GoalUnlockedIndex = level.GoalUnlockedIndex+1;
+			doneGoalCompleted = true;
+		}
 	}
 
 	/*

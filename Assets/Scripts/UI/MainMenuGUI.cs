@@ -1,13 +1,9 @@
 using UnityEngine;
-using System.Collections;
+using System.Collections.Generic;
 
 public class MainMenuGUI : MonoBehaviour
 {
 
-	int LevelComparitor(Level l1, Level l2)
-	{
-		return l1.difficulty - l2.difficulty;
-	}
 
 	enum MenuScreen
 	{
@@ -35,6 +31,7 @@ public class MainMenuGUI : MonoBehaviour
 	//Vector2 goalScrollPos
 	
 	Level[] levels;
+	int unlockedIndex;
 
 	MenuScreen screen = MenuScreen.MAIN;
 
@@ -42,8 +39,8 @@ public class MainMenuGUI : MonoBehaviour
 	{
 		controller = PlayerPrefs.GetInt("Controller",1);
 		levels = Resources.LoadAll<Level>("Levels");
-		System.Array.Sort<Level>(levels,LevelComparitor);
 		screen = (MenuScreen)System.Enum.Parse(typeof(MenuScreen),PlayerPrefs.GetString("MenuScreen","MAIN"));
+		unlockedIndex = PlayerPrefs.GetInt("UnlockedLevel",0);
 	}
 
 	void Update()
@@ -92,11 +89,6 @@ public class MainMenuGUI : MonoBehaviour
 		GUI.Label(new Rect(0,100,1920,100),"Balls!", defaultSkin.GetStyle("Title"));
 		GUILayout.BeginArea(new Rect(800,300,320,480));
 
-		GUILayout.Label ("Controls",defaultSkin.GetStyle("Score"));
-		GUILayout.BeginVertical(defaultSkin.GetStyle ("GridBox"));
-
-		controller = GUILayout.SelectionGrid(controller,controlSchemes,1);
-		GUILayout.EndVertical();
 		if(GUILayout.Button ("How To Play")) {
 			screen = MenuScreen.HELP;
 		}
@@ -106,7 +98,20 @@ public class MainMenuGUI : MonoBehaviour
 		if(GUILayout.Button ("Select Level")) {
 			screen = MenuScreen.LEVELSELECT;
 		}
-		GUILayout.Box ("",defaultSkin.GetStyle("EmptySpace"),GUILayout.Height (20));
+
+		GUILayout.Label ("Control Scheme",defaultSkin.GetStyle("Text"));
+		GUILayout.BeginVertical(defaultSkin.GetStyle ("GridBox"));
+		
+		controller = GUILayout.SelectionGrid(controller,controlSchemes,1);
+		GUILayout.EndVertical();
+
+		GUILayout.Box ("",defaultSkin.GetStyle("EmptySpace"),GUILayout.Height (10));
+
+		if(GUILayout.Button("Reset Progress")) {
+			ResetProgress();
+		}
+
+		GUILayout.Box ("",defaultSkin.GetStyle("EmptySpace"),GUILayout.Height (10));
 		if(GUILayout.Button ("Credits")) {
 			Application.LoadLevel("Credits");
 		}
@@ -121,27 +126,40 @@ public class MainMenuGUI : MonoBehaviour
 		GUILayout.BeginArea(new Rect(0,100,1152,780));
 		levelScrollPos = GUILayout.BeginScrollView(levelScrollPos);
 		for(int i = 0; i < levels.Length; i++) {
-			if(GUILayout.Button(levels[i].name,defaultSkin.GetStyle("LevelButton"))) {
-				if(levelSelection == i)
-					levelSelection = -1;
-				else
-					levelSelection = i;
-				
+			if(i <= unlockedIndex) {
+				if(GUILayout.Button(levels[i].displayName,defaultSkin.GetStyle("LevelButton"))) {
+					if(levelSelection == i)
+						levelSelection = -1;
+					else
+						levelSelection = i;
+					
+				}
+			} else {
+				GUILayout.Button(levels[i].displayName,defaultSkin.GetStyle("DeactivatedLB"));
 			}
+
 			//GUI.Label(GUILayoutUtility.GetLastRect(),"Difficulty: " + DifficultyToString(levels[i].difficulty),defaultSkin.GetStyle("DifficultyText"));
 			if(levelSelection == i) {
 				for(int j = 0; j < levels[i].possibleGoals.Length; j++) {
 					GUILayout.BeginVertical();
-					if(GUILayout.Button (levels[i].possibleGoals[j].displayName,defaultSkin.GetStyle("GoalButton"))) {
-						//levels[i].goalIndex = j;
-						LaunchLevel(i,j);
+					if(j <= levels[i].GoalUnlockedIndex) {
+						if(GUILayout.Button (levels[i].possibleGoals[j].displayName,defaultSkin.GetStyle("GoalButton"))) {
+							//levels[i].goalIndex = j;
+							LaunchLevel(i,j);
+						}
+						GUILayout.BeginHorizontal(defaultSkin.GetStyle("HighScoreBox"));
+
+						List<float> scores = HighScores.GetScores(levels[i],levels[i].possibleGoals[j]);
+						for(int k = 0; k < scores.Count; k++) {
+							GUILayout.Label(DifficultyToString(k) + ": " + scores[k],defaultSkin.GetStyle("YourBest"));
+						}
+
+						GUILayout.EndHorizontal();
+					} else {
+						GUILayout.Button (levels[i].possibleGoals[j].displayName,defaultSkin.GetStyle("DeactivatedGB")); 
 					}
-					GUILayout.BeginHorizontal(defaultSkin.GetStyle("HighScoreBox"));
-					for(int k = 0; k <= Level.maxDifficulty; k++) {
-						GUILayout.Label(DifficultyToString(k) + ": " + levels[i].possibleGoals[j].FormatSuccess(levels[i].scoreLists[k].highScores[j]),
-						                defaultSkin.GetStyle("YourBest"));
-					}
-					GUILayout.EndHorizontal();
+
+
 					GUILayout.EndVertical();
 				}
 			}
@@ -184,8 +202,18 @@ public class MainMenuGUI : MonoBehaviour
 	{
 		PlayerPrefs.SetInt("Controller",controller);
 		PlayerPrefs.SetInt("GoalIndex",goalIndex);
+		PlayerPrefs.SetString("LevelName",levels[levelIndex].name);
 		PlayerPrefs.Save();
 		Application.LoadLevel(levels[levelIndex].sceneName);
+	}
+
+	void ResetProgress()
+	{
+		PlayerPrefs.DeleteKey("UnlockedLevel");
+		PlayerPrefs.DeleteKey("HighScores");
+		foreach(Level level in levels)
+			level.GoalUnlockedIndex = 0;
+		Application.LoadLevel(Application.loadedLevel);
 	}
 
 	string DifficultyToString(int diff)

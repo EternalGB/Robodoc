@@ -14,6 +14,7 @@ public class PlayerBall : MonoBehaviour
 
 	public Collider2D playArea;
 	public float edgeOffset = 20;
+	float rotAngle = 0;
 
 	void Start()
 	{
@@ -37,7 +38,8 @@ public class PlayerBall : MonoBehaviour
 		}
 
 		//spin left or right
-		rigidbody.angularVelocity += Input.GetAxisRaw("Spin")*Vector3.forward*rotSpeed*Time.deltaTime;
+		rotAngle = Mathf.Repeat(rotAngle + Input.GetAxisRaw("Spin")*rotSpeed*Time.deltaTime,360);
+		transform.rotation = Quaternion.AngleAxis(rotAngle,Vector3.forward);
 		//rigidbody.angularVelocity += new Vector3(0,0,rigidbody.velocity.x + rigidbody.velocity.y)*-0.1f;
 
 
