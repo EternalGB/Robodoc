@@ -99,6 +99,7 @@ public class PlayerBall : MonoBehaviour
 			col.gameObject.GetComponent<BadBall>().ApplyEffect(cps[0].thisCollider.transform);
 			//recalculate score
 			ScoreCalculator.Instance.SetScorePrediction();
+			SoundEffectManager.Instance.PlayClipOnce("BadHit",Vector3.zero,1,1);
 		}
 	}
 

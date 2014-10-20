@@ -51,6 +51,11 @@ public class MainMenuGUI : MonoBehaviour
 		}
 	}
 
+	void OnDisable()
+	{
+		screen = MenuScreen.MAIN;
+	}
+
 	void OnGUI()
 	{
 		scale.x = Screen.width/origWidth;
