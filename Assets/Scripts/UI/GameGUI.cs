@@ -139,12 +139,9 @@ public class GameGUI : MonoBehaviour
 			}
 			GUILayout.EndArea ();
 		} else if(screen == GameScreen.START) {
-			GUILayout.BeginArea(new Rect(640,320,640,480),defaultSkin.GetStyle("MenuBox"));
-			GUILayout.Label("Difficulty",defaultSkin.GetStyle("Title"));
-			GUILayout.BeginVertical(defaultSkin.GetStyle("GridBox"));
-			difficulty = GUILayout.SelectionGrid(difficulty,difficulties,1,defaultSkin.GetStyle("MediumButton"));
-			GUILayout.EndVertical();
-			if(GUILayout.Button ("Start",defaultSkin.GetStyle("MediumButton"))) {
+			GUILayout.BeginArea(new Rect(640,360,640,360),defaultSkin.GetStyle("MenuBox"));
+
+			if(GUILayout.Button ("Start",defaultSkin.GetStyle("LargeButton"))) {
 				screen = GameScreen.GAME;
 				Time.timeScale = 1;
 				GameObject.Instantiate(difficultyPrefabs[difficulty]);
@@ -158,9 +155,19 @@ public class GameGUI : MonoBehaviour
 				Time.timeScale = 1;
 				GoToMainMenu(MainMenuGUI.MenuScreen.MAIN);
 			}
+
+			GUILayout.Label("Difficulty",defaultSkin.GetStyle("Title"));
+			GUILayout.BeginVertical(defaultSkin.GetStyle("GridBox"));
+			//difficulty = GUILayout.SelectionGrid(difficulty,difficulties,1,defaultSkin.GetStyle("MediumButton"));
+			difficulty = GUILayoutExtras.ArrowedSelector(
+				difficulty,difficulties,
+				new GUIStyle[] {defaultSkin.GetStyle("ArrowButtonLeft"),defaultSkin.GetStyle("ArrowButtonRight")},
+			defaultSkin.GetStyle("MediumButton"));
+			GUILayout.EndVertical();
+
 			GUILayout.EndArea ();
 		} else if(screen == GameScreen.END) {
-			GUILayout.BeginArea(new Rect(640,320,640,320),defaultSkin.GetStyle("MenuBox"));
+			GUILayout.BeginArea(new Rect(640,360,640,360),defaultSkin.GetStyle("MenuBox"));
 			GUILayout.Label("Game Over",defaultSkin.GetStyle("Title"));
 			goal.DisplaySuccess(defaultSkin.GetStyle("Score"));
 			if(GUILayout.Button ("Retry",defaultSkin.GetStyle("MediumButton"))) {
