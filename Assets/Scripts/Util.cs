@@ -1,6 +1,8 @@
 using UnityEngine;
 using System.Collections.Generic;
 using PriorityQueueDemo;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.IO;
 
 public class Util
 {
@@ -161,6 +163,34 @@ public class Util
 		t.renderer.sharedMaterial = mat;
 		foreach(Transform child in t)
 			SetMaterialAllChildren(child,mat);
+	}
+
+	public static bool TryLoadFromPlayerPrefs<T>(string key, out T obj)
+	{
+		string data = PlayerPrefs.GetString(key);
+		obj = default(T);
+		if(!string.IsNullOrEmpty(data)) {
+			//Binary formatter for loading back
+			BinaryFormatter b = new BinaryFormatter();
+			//Create a memory stream with the data
+			MemoryStream m = new MemoryStream(System.Convert.FromBase64String(data));
+			//Load back the scores
+			obj = (T)b.Deserialize(m);
+			return true;
+		}
+		return false;
+	}
+
+	public static void SaveToPlayerPrefs<T>(string key, T obj)
+	{
+		//Get a binary formatter
+		var b = new BinaryFormatter();
+		//Create an in memory stream
+		var m = new MemoryStream();
+		//Save the scores
+		b.Serialize(m, obj);
+		//Add it to player prefs
+		PlayerPrefs.SetString(key,System.Convert.ToBase64String(m.GetBuffer()));
 	}
 	
 

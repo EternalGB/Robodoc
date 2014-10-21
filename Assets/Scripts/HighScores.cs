@@ -1,8 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
-using System;
-using System.Runtime.Serialization.Formatters.Binary;
-using System.IO;
+
 
 public class HighScores
 {
@@ -29,29 +27,13 @@ public class HighScores
 	
 	static void LoadScores()
 	{
-		string data = PlayerPrefs.GetString("HighScores");
-		if(!string.IsNullOrEmpty(data)) {
-			//Binary formatter for loading back
-			BinaryFormatter b = new BinaryFormatter();
-			//Create a memory stream with the data
-			MemoryStream m = new MemoryStream(Convert.FromBase64String(data));
-			//Load back the scores
-			scores = (Dictionary<string,List<float>>)b.Deserialize(m);
-		} else {
+		if(!Util.TryLoadFromPlayerPrefs<Dictionary<string,List<float>>>("HighScores",out scores))
 			InitScores();
-		}
 	}
 
 	public static void SaveScores()
 	{
-		//Get a binary formatter
-		var b = new BinaryFormatter();
-		//Create an in memory stream
-		var m = new MemoryStream();
-		//Save the scores
-		b.Serialize(m, scores);
-		//Add it to player prefs
-		PlayerPrefs.SetString("HighScores",Convert.ToBase64String(m.GetBuffer()));
+		Util.SaveToPlayerPrefs<Dictionary<string,List<float>>>("HighScores",scores);
 	}
 
 	static void InitScores()
@@ -78,6 +60,11 @@ public class HighScores
 	public static List<float> GetScores(Level level, Goal goal) 
 	{
 		return GetAllScores()[level.name + goal.name];
+	}
+
+	public static float GetScore(Level level, Goal goal, int difficulty)
+	{
+		return GetAllScores()[level.name + goal.name][difficulty];
 	}
 
 }

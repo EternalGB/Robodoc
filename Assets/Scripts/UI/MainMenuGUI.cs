@@ -31,11 +31,10 @@ public class MainMenuGUI : MonoBehaviour
 	//Vector2 goalScrollPos
 	
 	Level[] levels;
-	int unlockedIndex;
 
 	MenuScreen screen = MenuScreen.MAIN;
 
-	void Start()
+	void OnEnable()
 	{
 		controller = PlayerPrefs.GetInt("Controller",1);
 		levels = Resources.LoadAll<Level>("Levels");
@@ -45,7 +44,7 @@ public class MainMenuGUI : MonoBehaviour
 		} else {
 			screen = MenuScreen.MAIN;
 		}
-		unlockedIndex = PlayerPrefs.GetInt("UnlockedLevel",0);
+		ProgressionManager.LoadProgression();
 	}
 
 	void Update()
@@ -137,7 +136,7 @@ public class MainMenuGUI : MonoBehaviour
 		GUILayout.BeginArea(new Rect(0,100,1152,780));
 		levelScrollPos = GUILayout.BeginScrollView(levelScrollPos);
 		for(int i = 0; i < levels.Length; i++) {
-			if(i <= unlockedIndex) {
+			if(ProgressionManager.LevelUnlocked(i)) {
 				if(GUILayout.Button(levels[i].displayName,defaultSkin.GetStyle("LevelButton"))) {
 					if(levelSelection == i)
 						levelSelection = -1;
@@ -153,7 +152,7 @@ public class MainMenuGUI : MonoBehaviour
 			if(levelSelection == i) {
 				for(int j = 0; j < levels[i].possibleGoals.Length; j++) {
 					GUILayout.BeginVertical();
-					if(j <= levels[i].GoalUnlockedIndex) {
+					if(ProgressionManager.GoalUnlocked(i,j)) {
 						if(GUILayout.Button (levels[i].possibleGoals[j].displayName,defaultSkin.GetStyle("GoalButton"))) {
 							//levels[i].goalIndex = j;
 							LaunchLevel(i,j);
@@ -213,6 +212,7 @@ public class MainMenuGUI : MonoBehaviour
 	{
 		PlayerPrefs.SetInt("Controller",controller);
 		PlayerPrefs.SetInt("GoalIndex",goalIndex);
+		PlayerPrefs.SetInt ("LevelIndex",levelIndex);
 		PlayerPrefs.SetString("LevelName",levels[levelIndex].name);
 		PlayerPrefs.Save();
 		Application.LoadLevel(levels[levelIndex].sceneName);
@@ -220,10 +220,9 @@ public class MainMenuGUI : MonoBehaviour
 
 	void ResetProgress()
 	{
-		PlayerPrefs.DeleteKey("UnlockedLevel");
 		PlayerPrefs.DeleteKey("HighScores");
-		foreach(Level level in levels)
-			level.GoalUnlockedIndex = 0;
+		//PlayerPrefs.DeleteKey("Progression");
+		ProgressionManager.ClearProgression();
 		Application.LoadLevel(Application.loadedLevel);
 	}
 

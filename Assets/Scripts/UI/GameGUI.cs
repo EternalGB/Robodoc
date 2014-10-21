@@ -80,6 +80,14 @@ public class GameGUI : MonoBehaviour
 			screen = GameScreen.END;
 			OnGoalCompleted();
 		}
+
+#if UNITY_EDITOR
+		if(Input.GetKeyDown(KeyCode.F1)) {
+			Time.timeScale = 0;
+			screen = GameScreen.END;
+			OnGoalCompleted();
+		}
+#endif
 	}
 
 	bool Paused()
@@ -201,8 +209,7 @@ public class GameGUI : MonoBehaviour
 	{
 		if(!doneGoalCompleted) {
 			level.SetHighScore(goal,difficulty,goal.EvaluateSuccess());
-			PlayerPrefs.SetInt("UnlockedLevel",PlayerPrefs.GetInt("UnlockedLevel",0)+1);
-			level.GoalUnlockedIndex = level.GoalUnlockedIndex+1;
+			ProgressionManager.UpdateProgression(PlayerPrefs.GetInt("LevelIndex"),PlayerPrefs.GetInt("GoalIndex"));
 			doneGoalCompleted = true;
 		}
 	}
