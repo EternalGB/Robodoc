@@ -37,11 +37,6 @@ public class AssetCreation
 		CreateAsset<BiggestCombo>();
 	}
 
-	[MenuItem("Assets/Create/Config")]
-	public static void CreateConfig()
-	{
-		CreateAsset<Config>();
-	}
 
 	public static void CreateAsset<T> () where T : ScriptableObject
 	{

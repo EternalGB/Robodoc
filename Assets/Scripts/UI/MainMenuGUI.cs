@@ -5,7 +5,7 @@ public class MainMenuGUI : MonoBehaviour
 {
 
 
-	enum MenuScreen
+	public enum MenuScreen
 	{
 		MAIN,LEVELSELECT,CONTROLS,HELP
 	};
@@ -39,7 +39,12 @@ public class MainMenuGUI : MonoBehaviour
 	{
 		controller = PlayerPrefs.GetInt("Controller",1);
 		levels = Resources.LoadAll<Level>("Levels");
-		screen = (MenuScreen)System.Enum.Parse(typeof(MenuScreen),PlayerPrefs.GetString("MenuScreen","MAIN"));
+		if(PlayerPrefs.GetInt("FromGameGUI",0) == 1) {
+			screen = (MenuScreen)System.Enum.Parse(typeof(MenuScreen),PlayerPrefs.GetString("MenuScreen","MAIN"));
+			PlayerPrefs.SetInt("FromGameGUI",0);
+		} else {
+			screen = MenuScreen.MAIN;
+		}
 		unlockedIndex = PlayerPrefs.GetInt("UnlockedLevel",0);
 	}
 
@@ -94,30 +99,31 @@ public class MainMenuGUI : MonoBehaviour
 		GUI.Label(new Rect(0,100,1920,100),"Balls!", defaultSkin.GetStyle("Title"));
 		GUILayout.BeginArea(new Rect(800,300,320,480));
 
-		if(GUILayout.Button ("How To Play")) {
-			screen = MenuScreen.HELP;
-		}
-		if(GUILayout.Button ("Controls")) {
-			screen = MenuScreen.CONTROLS;
-		}
-		if(GUILayout.Button ("Select Level")) {
+		if(GUILayout.Button ("Play",defaultSkin.GetStyle("LargeButton"))) {
 			screen = MenuScreen.LEVELSELECT;
 		}
+		if(GUILayout.Button ("How To Play",defaultSkin.GetStyle("MediumButton"))) {
+			screen = MenuScreen.HELP;
+		}
+		if(GUILayout.Button ("Controls",defaultSkin.GetStyle("MediumButton"))) {
+			screen = MenuScreen.CONTROLS;
+		}
+
 
 		GUILayout.Label ("Control Scheme",defaultSkin.GetStyle("Text"));
 		GUILayout.BeginVertical(defaultSkin.GetStyle ("GridBox"));
 		
-		controller = GUILayout.SelectionGrid(controller,controlSchemes,1);
+		controller = GUILayout.SelectionGrid(controller,controlSchemes,1,defaultSkin.GetStyle("MediumButton"));
 		GUILayout.EndVertical();
 
 		GUILayout.Box ("",defaultSkin.GetStyle("EmptySpace"),GUILayout.Height (10));
 
-		if(GUILayout.Button("Reset Progress")) {
+		if(GUILayout.Button("Reset Progress",defaultSkin.GetStyle("MediumButton"))) {
 			ResetProgress();
 		}
 
 		GUILayout.Box ("",defaultSkin.GetStyle("EmptySpace"),GUILayout.Height (10));
-		if(GUILayout.Button ("Credits")) {
+		if(GUILayout.Button ("Credits",defaultSkin.GetStyle("MediumButton"))) {
 			Application.LoadLevel("Credits");
 		}
 		GUILayout.EndArea ();

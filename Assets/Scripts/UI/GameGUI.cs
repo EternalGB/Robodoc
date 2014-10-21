@@ -114,65 +114,59 @@ public class GameGUI : MonoBehaviour
 			GUILayout.Label ("Paused",defaultSkin.GetStyle("Score"));
 			GUILayout.Label ("Controls",defaultSkin.GetStyle("SmallerText"));
 			GUILayout.BeginVertical(defaultSkin.GetStyle("GridBox"));
-			controller = GUILayout.SelectionGrid(controller,MainMenuGUI.controlSchemes,1);
+			controller = GUILayout.SelectionGrid(controller,MainMenuGUI.controlSchemes,1,defaultSkin.GetStyle("MediumButton"));
 			GUILayout.EndVertical();
-			if(GUILayout.Button ("Restart")) {
+			if(GUILayout.Button ("Restart",defaultSkin.GetStyle("MediumButton"))) {
 				screen = GameScreen.GAME;
 				Time.timeScale = 1;
 				Application.LoadLevel(Application.loadedLevel);
 			}
-			if(GUILayout.Button ("Level Select")) {
+			if(GUILayout.Button ("Level Select",defaultSkin.GetStyle("MediumButton"))) {
 				Time.timeScale = 1;
-				PlayerPrefs.SetString("MenuScreen","LEVELSELECT");
-				Application.LoadLevel("MainMenu");
+				GoToMainMenu(MainMenuGUI.MenuScreen.LEVELSELECT);
 			}
-			if(GUILayout.Button ("Main Menu")) {
+			if(GUILayout.Button ("Main Menu",defaultSkin.GetStyle("MediumButton"))) {
 				Time.timeScale = 1;
-				PlayerPrefs.SetString("MenuScreen","MAIN");
-				Application.LoadLevel("MainMenu");
+				GoToMainMenu(MainMenuGUI.MenuScreen.MAIN);
 			}
 			GUILayout.EndArea ();
 		} else if(screen == GameScreen.START) {
 			GUILayout.BeginArea(new Rect(640,320,640,480),defaultSkin.GetStyle("MenuBox"));
 			GUILayout.Label("Difficulty",defaultSkin.GetStyle("Title"));
 			GUILayout.BeginVertical(defaultSkin.GetStyle("GridBox"));
-			difficulty = GUILayout.SelectionGrid(difficulty,difficulties,1);
+			difficulty = GUILayout.SelectionGrid(difficulty,difficulties,1,defaultSkin.GetStyle("MediumButton"));
 			GUILayout.EndVertical();
-			if(GUILayout.Button ("Start")) {
+			if(GUILayout.Button ("Start",defaultSkin.GetStyle("MediumButton"))) {
 				screen = GameScreen.GAME;
 				Time.timeScale = 1;
 				GameObject.Instantiate(difficultyPrefabs[difficulty]);
 				GameObject.Find("BGMusic").GetComponent<AudioSource>().Play();
 			}
-			if(GUILayout.Button ("Level Select")) {
+			if(GUILayout.Button ("Level Select",defaultSkin.GetStyle("MediumButton"))) {
 				Time.timeScale = 1;
-				PlayerPrefs.SetString("MenuScreen","LEVELSELECT");
-				Application.LoadLevel("MainMenu");
+				GoToMainMenu(MainMenuGUI.MenuScreen.LEVELSELECT);
 			}
-			if(GUILayout.Button ("Main Menu")) {
+			if(GUILayout.Button ("Main Menu",defaultSkin.GetStyle("MediumButton"))) {
 				Time.timeScale = 1;
-				PlayerPrefs.SetString("MenuScreen","MAIN");
-				Application.LoadLevel("MainMenu");
+				GoToMainMenu(MainMenuGUI.MenuScreen.MAIN);
 			}
 			GUILayout.EndArea ();
 		} else if(screen == GameScreen.END) {
 			GUILayout.BeginArea(new Rect(640,320,640,320),defaultSkin.GetStyle("MenuBox"));
 			GUILayout.Label("Game Over",defaultSkin.GetStyle("Title"));
 			goal.DisplaySuccess(defaultSkin.GetStyle("Score"));
-			if(GUILayout.Button ("Retry")) {
+			if(GUILayout.Button ("Retry",defaultSkin.GetStyle("MediumButton"))) {
 				screen = GameScreen.GAME;
 				Time.timeScale = 1;
 				Application.LoadLevel(Application.loadedLevel);
 			}
-			if(GUILayout.Button ("Level Select")) {
+			if(GUILayout.Button ("Level Select",defaultSkin.GetStyle("MediumButton"))) {
 				Time.timeScale = 1;
-				PlayerPrefs.SetString("MenuScreen","LEVELSELECT");
-				Application.LoadLevel("MainMenu");
+				GoToMainMenu(MainMenuGUI.MenuScreen.LEVELSELECT);
 			}
-			if(GUILayout.Button ("Main Menu")) {
+			if(GUILayout.Button ("Main Menu",defaultSkin.GetStyle("MediumButton"))) {
 				Time.timeScale = 1;
-				PlayerPrefs.SetString("MenuScreen","MAIN");
-				Application.LoadLevel("MainMenu");
+				GoToMainMenu(MainMenuGUI.MenuScreen.MAIN);
 			}
 			GUILayout.EndArea ();
 		} else if(screen == GameScreen.GAME) {
@@ -211,6 +205,13 @@ public class GameGUI : MonoBehaviour
 			level.GoalUnlockedIndex = level.GoalUnlockedIndex+1;
 			doneGoalCompleted = true;
 		}
+	}
+
+	void GoToMainMenu(MainMenuGUI.MenuScreen screen)
+	{
+		PlayerPrefs.SetInt("FromGameGUI",1);
+		PlayerPrefs.SetString("MenuScreen",screen.ToString());
+		Application.LoadLevel("MainMenu");
 	}
 
 	/*
