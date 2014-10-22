@@ -185,7 +185,8 @@ public class GameGUI : MonoBehaviour
 			}
 			GUILayout.EndArea ();
 		} else if(screen == GameScreen.GAME) {
-			GUILayout.BeginArea(new Rect(10,320,480,1000));
+			//Top left area
+			GUILayout.BeginArea(new Rect(20,20,400,400));
 			if(countUpwards) {
 				GUILayout.Label("Time",defaultSkin.GetStyle ("Score"));
 				GUILayout.Label(Util.FormatTime(Time.timeSinceLevelLoad),defaultSkin.GetStyle("Score"));
@@ -193,12 +194,27 @@ public class GameGUI : MonoBehaviour
 				GUILayout.Label("Time Remaining",defaultSkin.GetStyle ("Score"));
 				GUILayout.Label(Util.FormatTime(maxTime - Time.timeSinceLevelLoad),defaultSkin.GetStyle("Score"));
 			}
-			goal.DisplayProgress(defaultSkin.GetStyle("Score"),defaultSkin.GetStyle ("NextScore"));
+			GUILayout.EndArea();
+
+			//top right area
+			GUILayout.BeginArea(new Rect(1500,20,400,400));
 			GUILayout.Label("Combo Multiplier",defaultSkin.GetStyle ("Score"));
 			GUILayout.Label("X" + ScoreCalculator.Instance.comboMulti.ToString(), defaultSkin.GetStyle("Score"));
+			GUILayout.EndArea();
+
+			//bottom left area
+			GUILayout.BeginArea(new Rect(20,660,400,400));
+			GUILayout.FlexibleSpace();
+			goal.DisplayProgress(defaultSkin.GetStyle("Score"),defaultSkin.GetStyle ("NextScore"));
+			GUILayout.EndArea();
+
+			//bottom right area
+			GUILayout.BeginArea(new Rect(1500,660,400,400));
+			GUILayout.FlexibleSpace();
 			GUILayout.Label ("Bombs",defaultSkin.GetStyle("Score"));
 			GUILayout.Label (pb.numBombs.ToString(),defaultSkin.GetStyle("Score"));
 			GUILayout.EndArea();
+
 		}
 
 		GUI.EndGroup();
