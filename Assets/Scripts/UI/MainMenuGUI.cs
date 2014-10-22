@@ -53,6 +53,11 @@ public class MainMenuGUI : MonoBehaviour
 			if(Input.anyKeyDown)
 				screen = MenuScreen.MAIN;
 		}
+#if UNITY_EDITOR
+		if(Input.GetKeyDown(KeyCode.F1)) {
+			ProgressionManager.UnlockAllTemporarily();
+		}
+#endif
 	}
 
 	void OnDisable()

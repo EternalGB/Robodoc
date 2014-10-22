@@ -63,6 +63,18 @@ public class ProgressionManager
 		PlayerPrefs.DeleteKey("GoalsUnlocked");
 	}
 
+	public static void UnlockAllTemporarily()
+	{
+		Level[] levels = Resources.LoadAll<Level>("Levels");
+		levelUnlockedIndex = levels.Length;
+
+		goalUnlockedIndexes = new List<int>();
+		for(int i = 0; i < levels.Length; i++) {
+			goalUnlockedIndexes.Add(levels[i].possibleGoals.Length);
+		}
+
+	}
+
 		
 }
 
