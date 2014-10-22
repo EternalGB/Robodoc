@@ -42,6 +42,14 @@ public class ScoreCalculator : MonoBehaviour
 	public float biggestScore = 0;
 	public int longestChain = 0;
 	public int nextLongestChain = 0;
+	
+	float lerpTimer;
+	float lerpSpeed = 0.05f;
+	public float displayScore = 0;
+	public float displayNextScore = 0;
+	public float displayBiggestScore = 0;
+	public float displayLongestChain = 0;
+	public float displayNextLongestChain = 0;
 
 	public void ScoreStructure()
 	{
@@ -50,6 +58,7 @@ public class ScoreCalculator : MonoBehaviour
 		biggestScore = Mathf.Max(biggestScore,amount);
 		longestChain = Mathf.Max(longestChain,maxChain);
 		score += amount;
+		lerpTimer = 0;
 		nextScore = 0;
 		CancelInvoke("ResetCombo");
 		Util.DestroyChildren(player.transform);
@@ -62,6 +71,15 @@ public class ScoreCalculator : MonoBehaviour
 		int maxChain;
 		nextScore = GetPoints(player.transform,out maxChain);
 		nextLongestChain = Mathf.Max(nextLongestChain,maxChain);
+	}
+
+	void Update()
+	{
+		displayScore = Mathf.Floor(Mathf.Lerp (displayScore,score,lerpSpeed*lerpTimer));
+		displayNextScore = Mathf.Floor(Mathf.Lerp (displayNextScore,nextScore,lerpSpeed*lerpTimer));
+		displayBiggestScore = Mathf.Floor(Mathf.Lerp (displayBiggestScore,biggestScore,lerpSpeed*lerpTimer));
+
+		lerpTimer = Mathf.Clamp (lerpTimer + Time.deltaTime,0,1f);
 	}
 
 	float GetPoints(Transform transform, out int maxDepth)
@@ -132,9 +150,14 @@ public class ScoreCalculator : MonoBehaviour
 	void ResetCombo()
 	{
 		comboMulti = 1;
-		ScoreCalculator.Instance.SetScorePrediction();
+		SetScorePrediction();
 	}
 
+
+	void CreateScoringBalls()
+	{
+
+	}
 
 
 }

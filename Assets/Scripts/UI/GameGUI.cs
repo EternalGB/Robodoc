@@ -38,6 +38,7 @@ public class GameGUI : MonoBehaviour
 	public int difficulty = 0;
 
 	bool doneGoalCompleted;
+	
 
 	void Start()
 	{
