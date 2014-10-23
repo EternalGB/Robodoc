@@ -1,5 +1,5 @@
 using UnityEngine;
-using System.Collections;
+using System.Collections.Generic;
 
 public class ScoreCalculator : MonoBehaviour
 {
@@ -30,6 +30,9 @@ public class ScoreCalculator : MonoBehaviour
 		player = GameObject.Find ("PlayerBall").GetComponent<PlayerBall>();
 	}
 
+	public GameObject scoringBallPrefab;
+	public GameObject scoringBallChildPrefab;
+
 	public float maxChainMultiplier = 3;
 
 
@@ -44,7 +47,7 @@ public class ScoreCalculator : MonoBehaviour
 	public int nextLongestChain = 0;
 	
 	float lerpTimer;
-	float lerpSpeed = 0.05f;
+	float lerpSpeed = 0.25f;
 	public float displayScore = 0;
 	public float displayNextScore = 0;
 	public float displayBiggestScore = 0;
@@ -61,6 +64,7 @@ public class ScoreCalculator : MonoBehaviour
 		lerpTimer = 0;
 		nextScore = 0;
 		CancelInvoke("ResetCombo");
+		CreateScoringBalls(player.transform,null);
 		Util.DestroyChildren(player.transform);
 		ResetCombo();
 		GameObject.FindWithTag("BallMachine").SendMessage("UpdateDifficulty",amount);
@@ -75,11 +79,11 @@ public class ScoreCalculator : MonoBehaviour
 
 	void Update()
 	{
-		displayScore = Mathf.Floor(Mathf.Lerp (displayScore,score,lerpSpeed*lerpTimer));
-		displayNextScore = Mathf.Floor(Mathf.Lerp (displayNextScore,nextScore,lerpSpeed*lerpTimer));
-		displayBiggestScore = Mathf.Floor(Mathf.Lerp (displayBiggestScore,biggestScore,lerpSpeed*lerpTimer));
+		displayScore = Mathf.Floor(Mathf.Lerp (displayScore,score,lerpTimer));
+		displayNextScore = Mathf.Floor(Mathf.Lerp (displayNextScore,nextScore,lerpTimer));
+		displayBiggestScore = Mathf.Floor(Mathf.Lerp (displayBiggestScore,biggestScore,lerpTimer));
 
-		lerpTimer = Mathf.Clamp (lerpTimer + Time.deltaTime,0,1f);
+		lerpTimer = Mathf.Clamp (lerpTimer + lerpSpeed*Time.deltaTime,0,1f);
 	}
 
 	float GetPoints(Transform transform, out int maxDepth)
@@ -153,12 +157,55 @@ public class ScoreCalculator : MonoBehaviour
 		SetScorePrediction();
 	}
 
-
-	void CreateScoringBalls()
+	bool ScoringBallComboValid(Transform parent, Transform child)
 	{
-
+		if(parent.GetComponent<PlayerBall>())
+			return false;
+		bool infected = (child.renderer.sharedMaterial.name == "Infected" || parent.renderer.sharedMaterial.name == "Infected");
+		if(infected)
+			return (child.renderer.sharedMaterial.name == "Infected" && parent.renderer.sharedMaterial.name == "Infected");
+		else
+			return (child.renderer.sharedMaterial.name == "AnyColour" || parent.renderer.sharedMaterial.name == "AnyColour" ||
+				 child.renderer.sharedMaterial.Equals(parent.renderer.sharedMaterial));
 	}
 
+	void CreateScoringBalls(Transform root, Transform lastScoringParent)
+	{
+		foreach(Transform child in root) {
+			GameObject ball;
+			if(ScoringBallComboValid(root,child)) {
+				ball = PoolManager.Instance.GetPoolByRepresentative(scoringBallChildPrefab).GetPooled();
+				ball.transform.localScale = child.transform.lossyScale;
+				ball.transform.parent = lastScoringParent;
+			} else {
+				ball = PoolManager.Instance.GetPoolByRepresentative(scoringBallPrefab).GetPooled();
+				ScoringBall sb = ball.GetComponent<ScoringBall>();
+				sb.lifeTime = Random.Range(1f,2f);
+				sb.speed = Random.Range(10f,20f);
+				sb.rotSpeed = Random.Range(180f,360f);
+				sb.travelDir = Quaternion.AngleAxis(Random.Range (-45f,45f),Vector3.forward)
+					*(ball.transform.position - root.transform.position).normalized;
+				ball.transform.localScale = child.transform.lossyScale;
+			}
+			ball.transform.position = child.position;
+			ball.transform.rotation = child.rotation;
+			ball.renderer.sharedMaterial = child.renderer.sharedMaterial;
+			ball.particleSystem.startColor = child.renderer.sharedMaterial.color;
+
+			ball.SetActive(true);
+			ball.SendMessage("Arm",SendMessageOptions.DontRequireReceiver);
+			CreateScoringBalls(child, ball.transform);
+		}
+	}
+
+	Vector3 ScoringBallPosAverage(List<ScoringBall> balls) 
+	{
+		Vector3 total = Vector3.zero;
+		foreach(ScoringBall ball in balls)
+			total += ball.transform.position;
+		total /= balls.Count;
+		return total;
+	}
 
 }
 
