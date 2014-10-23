@@ -190,7 +190,7 @@ public class ScoreCalculator : MonoBehaviour
 			ball.transform.position = child.position;
 			ball.transform.rotation = child.rotation;
 			ball.renderer.sharedMaterial = child.renderer.sharedMaterial;
-			ball.particleSystem.startColor = child.renderer.sharedMaterial.color;
+			//ball.particleSystem.startColor = child.renderer.sharedMaterial.color;
 
 			ball.SetActive(true);
 			ball.SendMessage("Arm",SendMessageOptions.DontRequireReceiver);

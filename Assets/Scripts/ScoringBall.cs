@@ -3,6 +3,8 @@ using System.Collections;
 
 public class ScoringBall : PoolableObject
 {
+	public GameObject particleBurstPrefab;
+
 
 	public float lifeTime;
 	public float speed;
@@ -18,10 +20,17 @@ public class ScoringBall : PoolableObject
 		//transform.RotateAround(rotCenter,Vector3.forward,rotSpeed*Time.deltaTime);
 	}
 			
-	void OnDisable()
+	public override void Destroy()
 	{
 		//CancelInvoke("Destroy");
+		PoolableParticleBurst particles = PoolManager.Instance.
+			GetPoolByRepresentative(particleBurstPrefab).GetPooled().GetComponent<PoolableParticleBurst>();
+		particles.transform.position = transform.position;
+		particles.gameObject.SetActive(true);
+		particles.particleSystem.startColor = renderer.sharedMaterial.color;
+		particles.Play();
 		Util.DestroyChildren(transform);
+		base.Destroy();
 	}
 
 	public void Arm()
