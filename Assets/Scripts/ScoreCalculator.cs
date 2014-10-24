@@ -175,20 +175,19 @@ public class ScoreCalculator : MonoBehaviour
 			GameObject ball;
 			if(ScoringBallComboValid(root,child)) {
 				ball = PoolManager.Instance.GetPoolByRepresentative(scoringBallChildPrefab).GetPooled();
-				ball.transform.localScale = child.transform.lossyScale;
 				ball.transform.parent = lastScoringParent;
 			} else {
 				ball = PoolManager.Instance.GetPoolByRepresentative(scoringBallPrefab).GetPooled();
 				ScoringBall sb = ball.GetComponent<ScoringBall>();
-				sb.lifeTime = Random.Range(1f,2f);
+				sb.lifeTime = Random.Range(0.5f,1f);
 				sb.speed = Random.Range(10f,20f);
 				sb.rotSpeed = Random.Range(180f,360f);
 				sb.travelDir = Quaternion.AngleAxis(Random.Range (-45f,45f),Vector3.forward)
 					*(ball.transform.position - root.transform.position).normalized;
-				ball.transform.localScale = child.transform.lossyScale;
 			}
 			ball.transform.position = child.position;
 			ball.transform.rotation = child.rotation;
+			ball.GetComponent<MeshFilter>().mesh = child.GetComponent<MeshFilter>().mesh;
 			ball.renderer.sharedMaterial = child.renderer.sharedMaterial;
 			//ball.particleSystem.startColor = child.renderer.sharedMaterial.color;
 

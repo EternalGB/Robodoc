@@ -26,7 +26,7 @@ public class AttachedBall : PoolableObject
 	public void ResetBall()
 	{
 		transform.parent = null;
-		transform.localScale = origScale;
+		//transform.localScale = origScale;
 		renderer.sharedMaterial = origMat;
 	}
 

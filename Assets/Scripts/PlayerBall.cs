@@ -67,13 +67,15 @@ public class PlayerBall : MonoBehaviour
 				Quaternion rot = pb.transform.rotation;
 				Vector3 scale = pb.transform.localScale;
 				Material mat = pb.renderer.sharedMaterial;
+				Mesh mesh = pb.GetComponent<MeshFilter>().mesh;
 				pb.Destroy();
 				AttachedBall ball = ballPool.GetPooled().GetComponent<AttachedBall>();
 				//make sure it's not bringing any friends
 				Util.DestroyChildren(ball.transform);
 				ball.transform.position = pos;
 				ball.transform.rotation = rot;
-				ball.transform.localScale = scale;
+				ball.GetComponent<MeshFilter>().mesh = mesh;
+				//ball.transform.localScale = scale;
 				ball.renderer.sharedMaterial = mat;
 				ball.gameObject.SetActive(true);
 				Transform parent = GetCorrectParent(cps);
