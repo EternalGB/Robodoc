@@ -23,6 +23,8 @@ public class ScoreCalculator : MonoBehaviour
 
 	GameGUI gui;
 	PlayerBall player;
+	public delegate void ScoreEvent(float scoreIncrease);
+	public static event ScoreEvent PlayerScored;
 
 	void Start()
 	{
@@ -67,7 +69,8 @@ public class ScoreCalculator : MonoBehaviour
 		CreateScoringBalls(player.transform,null);
 		Util.DestroyChildren(player.transform);
 		ResetCombo();
-		GameObject.FindWithTag("BallMachine").SendMessage("UpdateDifficulty",amount);
+		//GameObject.FindWithTag("BallMachine").SendMessage("UpdateDifficulty",amount);
+		PlayerScored(amount);
 	}
 
 	public void SetScorePrediction()

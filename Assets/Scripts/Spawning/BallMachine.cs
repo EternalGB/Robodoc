@@ -17,6 +17,8 @@ public class BallMachine : MonoBehaviour
 
 	List<GameObject> goodBalls;
 
+
+
 	void Start()
 	{
 		/*
@@ -32,6 +34,7 @@ public class BallMachine : MonoBehaviour
 		goodBalls.AddRange(colourBalls);
 		goodBalls.AddRange(bonusBalls);
 		InvokeRepeating("SpawnBall",1/ballsPerSec,1/ballsPerSec);
+		ScoreCalculator.PlayerScored += UpdateDifficulty;
 	}
 	
 
