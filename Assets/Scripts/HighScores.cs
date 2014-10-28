@@ -48,6 +48,9 @@ public class HighScores
 				scores.Add(levels[i].name + levels[i].possibleGoals[j].name,tmpScores);
 			}
 		}
+		List<float> endlessScore = new List<float>();
+		endlessScore.Add(0);
+		scores.Add("Endless" + "Endless",endlessScore);
 	}
 
 	public static Dictionary<string,List<float>> GetAllScores()
@@ -64,7 +67,12 @@ public class HighScores
 
 	public static float GetScore(Level level, Goal goal, int difficulty)
 	{
-		return GetAllScores()[level.name + goal.name][difficulty];
+		return GetScore(level.name,goal.name,difficulty);
+	}
+
+	public static float GetScore(string levelName, string goalName, int difficulty)
+	{
+		return GetAllScores()[levelName + goalName][difficulty];
 	}
 
 }

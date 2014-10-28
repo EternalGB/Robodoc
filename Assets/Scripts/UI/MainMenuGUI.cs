@@ -103,7 +103,13 @@ public class MainMenuGUI : MonoBehaviour
 		GUI.Label(new Rect(0,100,1920,100),"Balls!", defaultSkin.GetStyle("Title"));
 		GUILayout.BeginArea(new Rect(800,300,320,480));
 
-		if(GUILayout.Button ("Play",defaultSkin.GetStyle("LargeButton"))) {
+		if(GUILayout.Button ("Arcade Mode",defaultSkin.GetStyle("LargeButton"))) {
+			Application.LoadLevel("Endless");
+			PlayerPrefs.SetInt("Controller",controller);
+			PlayerPrefs.Save();
+		}
+		GUILayout.Label("Arcade Score: " + HighScores.GetScore("Endless","Endless",0),defaultSkin.GetStyle("YourBest"));
+		if(GUILayout.Button ("Challenges",defaultSkin.GetStyle("LargeButton"))) {
 			screen = MenuScreen.LEVELSELECT;
 		}
 		if(GUILayout.Button ("How To Play",defaultSkin.GetStyle("MediumButton"))) {
@@ -189,7 +195,7 @@ public class MainMenuGUI : MonoBehaviour
 
 	void ControlsGUI()
 	{
-		GUILayout.BeginArea(new Rect(640,160,640,680),defaultSkin.GetStyle("MenuBox"));
+		GUILayout.BeginArea(new Rect(640,120,640,720),defaultSkin.GetStyle("MenuBox"));
 		GUILayout.Label ("Keyboard",defaultSkin.GetStyle("Title"));
 		GUILayout.Label ("Movement",defaultSkin.GetStyle("Score"));
 		GUILayout.Label ("W,A,S,D or Arrow Keys",defaultSkin.GetStyle ("SmallerText"));

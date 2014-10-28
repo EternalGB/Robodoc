@@ -18,6 +18,7 @@ public class Level : ScriptableObject
 		HighScores.SetScore(this,goal,diff,score);
 	}
 
+	/*
 	public override bool Equals (object o)
 	{
 		if(o.GetType() == typeof(Level)) {
@@ -30,7 +31,7 @@ public class Level : ScriptableObject
 	{
 		return sceneName.GetHashCode();
 	}
-	
+	*/
 
 
 

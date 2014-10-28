@@ -26,7 +26,7 @@ public class GameGUI : MonoBehaviour
 	public Level level;
 	public Goal goal;
 	bool countUpwards = false;
-	float maxTime;
+	float timeRemaining;
 
 	int controller;
 
@@ -43,9 +43,16 @@ public class GameGUI : MonoBehaviour
 	void Start()
 	{
 		Time.timeScale = 0;
-		screen = GameScreen.START;
+		if(Application.loadedLevelName == "Endless") {
+			screen = GameScreen.GAME;
+			difficulty = 1;
+			Time.timeScale = 1;
+			//GameObject.Instantiate(difficultyPrefabs[difficulty]);
+			GameObject.Find("BGMusic").GetComponent<AudioSource>().Play();
+		} else
+			screen = GameScreen.START;
 		pb = GameObject.Find ("PlayerBall").GetComponent<PlayerBall>();
-		maxTime += Time.timeSinceLevelLoad;
+		//timeRemaining += Time.timeSinceLevelLoad;
 
 
 		controller = PlayerPrefs.GetInt("Controller",0);
@@ -56,7 +63,9 @@ public class GameGUI : MonoBehaviour
 		}
 
 		if(goal.GetType().BaseType == typeof(TimeLimitGoal)) {
-			maxTime = ((TimeLimitGoal)goal).timeLimit;
+			timeRemaining = ((TimeLimitGoal)goal).timeLimit;
+		} else if(goal.GetType() == typeof(Endless)){
+			timeRemaining = ((Endless)goal).timeRemaining;
 		} else {
 			countUpwards = true;
 		}
@@ -66,6 +75,10 @@ public class GameGUI : MonoBehaviour
 
 	void Update()
 	{
+		if(goal.GetType() == typeof(Endless)) {
+			timeRemaining = ((Endless)goal).displayTime;
+		} else
+			timeRemaining -= Time.deltaTime;
 		if(Input.GetButtonDown("Pause")) {
 			TogglePause();
 		}
@@ -143,10 +156,7 @@ public class GameGUI : MonoBehaviour
 			GUILayout.BeginArea(new Rect(640,360,640,360),defaultSkin.GetStyle("MenuBox"));
 
 			if(GUILayout.Button ("Start",defaultSkin.GetStyle("LargeButton"))) {
-				screen = GameScreen.GAME;
-				Time.timeScale = 1;
-				GameObject.Instantiate(difficultyPrefabs[difficulty]);
-				GameObject.Find("BGMusic").GetComponent<AudioSource>().Play();
+				StartLevel(difficulty);
 			}
 			if(GUILayout.Button ("Level Select",defaultSkin.GetStyle("MediumButton"))) {
 				Time.timeScale = 1;
@@ -193,7 +203,7 @@ public class GameGUI : MonoBehaviour
 				GUILayout.Label(Util.FormatTime(Time.timeSinceLevelLoad),defaultSkin.GetStyle("Score"));
 			} else {
 				GUILayout.Label("Time Remaining",defaultSkin.GetStyle ("Score"));
-				GUILayout.Label(Util.FormatTime(maxTime - Time.timeSinceLevelLoad),defaultSkin.GetStyle("Score"));
+				GUILayout.Label(Util.FormatTime(timeRemaining),defaultSkin.GetStyle("Score"));
 			}
 			GUILayout.EndArea();
 
@@ -244,6 +254,15 @@ public class GameGUI : MonoBehaviour
 		PlayerPrefs.SetString("MenuScreen",screen.ToString());
 		Application.LoadLevel("MainMenu");
 	}
+
+	void StartLevel(int difficulty)
+	{
+		screen = GameScreen.GAME;
+		Time.timeScale = 1;
+		GameObject.Instantiate(difficultyPrefabs[difficulty]);
+		GameObject.Find("BGMusic").GetComponent<AudioSource>().Play();
+	}
+
 
 	/*
 	 * 

@@ -37,6 +37,26 @@ public class AssetCreation
 		CreateAsset<BiggestCombo>();
 	}
 
+	[MenuItem("Assets/Create/Goal/Endless")]
+	public static void CreateEndless()
+	{
+		CreateAsset<Endless>();
+	}
+
+	[MenuItem("Assets/Create/Selected Scriptable")]
+	public static void CreateScriptableObject()
+	{
+		CreateScriptableObject(((MonoScript)Selection.activeObject).GetClass());
+	}
+
+	[MenuItem("Assets/Create/Selected Scriptable",true)]
+	public static bool ValidateCreateScriptableObject()
+	{
+		if(Selection.activeObject.GetType() == typeof(MonoScript))
+			return HasTypeInHierarchy(((MonoScript)Selection.activeObject).GetClass(),typeof(ScriptableObject));
+		else
+			return false;
+	}
 
 	public static void CreateAsset<T> () where T : ScriptableObject
 	{
@@ -53,6 +73,27 @@ public class AssetCreation
 		}
 		
 		string assetPathAndName = AssetDatabase.GenerateUniqueAssetPath (path + "/New " + typeof(T).ToString() + ".asset");
+		
+		AssetDatabase.CreateAsset (asset, assetPathAndName);
+		AssetDatabase.SaveAssets ();
+		EditorUtility.FocusProjectWindow ();
+		Selection.activeObject = asset;
+	}
+
+	public static void CreateScriptableObject(Type type)
+	{
+		ScriptableObject asset = ScriptableObject.CreateInstance(type);
+		string path = AssetDatabase.GetAssetPath (Selection.activeObject);
+		if (path == "") 
+		{
+			path = "Assets";
+		} 
+		else if (Path.GetExtension (path) != "") 
+		{
+			path = path.Replace (Path.GetFileName (AssetDatabase.GetAssetPath (Selection.activeObject)), "");
+		}
+		
+		string assetPathAndName = AssetDatabase.GenerateUniqueAssetPath (path + "/New " + type.ToString() + ".asset");
 		
 		AssetDatabase.CreateAsset (asset, assetPathAndName);
 		AssetDatabase.SaveAssets ();
