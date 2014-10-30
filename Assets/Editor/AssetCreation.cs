@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEditor;
 using System.Collections;
 using System.IO;
@@ -40,7 +40,7 @@ public class AssetCreation
 	[MenuItem("Assets/Create/Goal/Endless")]
 	public static void CreateEndless()
 	{
-		CreateAsset<Endless>();
+		CreateAsset<Arcade>();
 	}
 
 	[MenuItem("Assets/Create/Selected Scriptable")]

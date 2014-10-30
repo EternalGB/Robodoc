@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections;
 
-public class Endless : Goal
+public class Arcade : Goal
 {
 
 	public float initTime;

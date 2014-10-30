@@ -43,7 +43,7 @@ public class GameGUI : MonoBehaviour
 	void Start()
 	{
 		Time.timeScale = 0;
-		if(Application.loadedLevelName == "Endless") {
+		if(Application.loadedLevelName == "Arcade") {
 			screen = GameScreen.GAME;
 			difficulty = 1;
 			Time.timeScale = 1;
@@ -64,8 +64,8 @@ public class GameGUI : MonoBehaviour
 
 		if(goal.GetType().BaseType == typeof(TimeLimitGoal)) {
 			timeRemaining = ((TimeLimitGoal)goal).timeLimit;
-		} else if(goal.GetType() == typeof(Endless)){
-			timeRemaining = ((Endless)goal).timeRemaining;
+		} else if(goal.GetType() == typeof(Arcade)){
+			timeRemaining = ((Arcade)goal).timeRemaining;
 		} else {
 			countUpwards = true;
 		}
@@ -75,8 +75,8 @@ public class GameGUI : MonoBehaviour
 
 	void Update()
 	{
-		if(goal.GetType() == typeof(Endless)) {
-			timeRemaining = ((Endless)goal).displayTime;
+		if(goal.GetType() == typeof(Arcade)) {
+			timeRemaining = ((Arcade)goal).displayTime;
 		} else
 			timeRemaining -= Time.deltaTime;
 		if(Input.GetButtonDown("Pause")) {

@@ -28,15 +28,20 @@ public class PoolManager : MonoBehaviour
 	{
 		return currentPools[name];
 	}
-	
+
+	string GetKeyFromRep(GameObject rep)
+	{
+		return rep.gameObject.name + rep.gameObject.GetInstanceID() + "Pool";
+	}
+
 	public ObjectPool GetPoolByRepresentative(GameObject rep)
 	{	
 		ObjectPool pool = null;
-		if(!currentPools.TryGetValue(rep.gameObject.name + "Pool", out pool)) {
+		if(!currentPools.TryGetValue(GetKeyFromRep(rep), out pool)) {
 			pool = ((GameObject)GameObject.Instantiate(poolPrefab))
 				.GetComponent<ObjectPool>();
 			pool.Init(rep,10,true);
-			pool.gameObject.name = rep.gameObject.name + "Pool";
+			pool.gameObject.name = GetKeyFromRep(rep);
 			currentPools.Add(pool.gameObject.name, pool);
 		}
 		return pool;
@@ -57,7 +62,7 @@ public class PoolManager : MonoBehaviour
 		ObjectPool pool = ((GameObject)GameObject.Instantiate(poolPrefab))
 			.GetComponent<ObjectPool>();
 		pool.Init(pooledObject,pooledAmount,growable);
-		pool.gameObject.name = pooledObject.gameObject.name + "Pool";
+		pool.gameObject.name = GetKeyFromRep(pooledObject);
 		return pool;
 	}
 
