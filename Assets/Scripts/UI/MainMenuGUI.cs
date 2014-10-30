@@ -104,7 +104,7 @@ public class MainMenuGUI : MonoBehaviour
 		GUILayout.BeginArea(new Rect(800,300,320,480));
 
 		if(GUILayout.Button ("Arcade Mode",defaultSkin.GetStyle("LargeButton"))) {
-			Application.LoadLevel("Endless");
+			Application.LoadLevel("Arcade");
 			PlayerPrefs.SetInt("Controller",controller);
 			PlayerPrefs.Save();
 		}
