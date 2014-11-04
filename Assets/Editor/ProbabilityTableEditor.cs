@@ -3,7 +3,7 @@ using UnityEditor;
 using System.Collections.Generic;
 
 [CustomEditor(typeof(ProbabilityTable))]
-public class WeightedProbabilityEditor : Editor
+public class ProbabilityTableEditor : Editor
 {
 
 	public override void OnInspectorGUI ()

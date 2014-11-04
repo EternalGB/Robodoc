@@ -104,18 +104,22 @@ public class ProbabilityTable : ScriptableObject
 
 	public Object GetRandom()
 	{
-		float rand;
-		int k = 0;
-		bool notAccepted = true;
-		while(notAccepted) {
-			rand = Random.value;
-			k = (int)(rand*items.Count)+1;
-			rand = Random.value;
-			if(rand < probabilities[k]/maxProb)
-				notAccepted = false;
+		float[] cumuProb = new float[Size];
+		cumuProb[0] = probabilities[0];
+		for(int i = 1; i < Size; i++) {
+			cumuProb[i] = cumuProb[i-1]+probabilities[i];
 		}
-		return items[k];
+
+		float randProb = Random.value;
+		int index = System.Array.BinarySearch<float>(cumuProb,randProb);
+		//convert negative index
+		if(index < 0) {
+			index = Mathf.Abs(index+1);
+		}
+
+		return items[index];
 	}
+	
 
 	public void ResetProbabilities()
 	{

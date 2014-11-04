@@ -1,0 +1,54 @@
+Balls Game Art Requirements
+
+Colour Balls
+- These are mostly harmless bacteria/germs
+- 3ish variations
+- Kinda derpy/neutral/cute expressions
+- You can colour them if you want but it would be super cool if they were greyscale so I can colour them programmatically
+(But not necessary)
+- Basic animations (2-3 frames, blinks, jiggling tentacles, that kind of thing)
+- Examples:
+http://img2.wikia.nocookie.net/__cb20110117004002/nintendo/en/images/7/71/ThreeViruses.gif
+http://st.depositphotos.com/1967477/3506/v/950/depositphotos_35062677-Virus-cartoon-collection.jpg
+http://image.shutterstock.com/display_pic_with_logo/318685/318685,1246889523,4/stock-vector-viruses-cartoon-vector-33240070.jpg
+
+I don't really want the style from the pictures above this is just to demonstrate the kinda of variation I'm looking for
+
+Bonus Ball
+- It's the bigger white ball in the game
+- Similar to the colour balls just 1.5x bigger
+- Could reuse the colour ball art but would be nice to have a special one
+- Has a fixed colour
+
+Bad Balls
+- Angrier, more dangerous
+- In the game they have black cores and coloured borders but this is just to differentiate them from the colour balls (they are like inverses)
+- Important that they are very visually distinct from previous two ball types (different silhouettes)
+- Need at least 3 different types but no variations per type
+- Examples:
+http://www.clker.com/cliparts/f/x/y/r/f/g/cartoon-virus-hi.png
+ebola - http://static.businessinsider.com/image/53a9f056ecad04ef355eb9d2/image.jpg
+
+Player Ball
+- Will be the anti-virus
+- Somewhat unsure what it should be
+- Maybe something mechanical like a little robot or the capsule from Fantastic Voyage
+- Examples:
+http://cdn.phys.org/newman/gfx/news/hires/2009/md05_fo1g_tcm6-114687.jpg
+http://gateway-foundation.com/wp-content/uploads/2013/08/construction_pod.jpg
+Fantastic Voyage
+http://static.squarespace.com/static/53323bb4e4b0cebc6a28ffa2/t/53639299e4b0c6561be3e4dd/1399034521681/
+http://theredlist.com/media/database/settings/cinema/1960-1970/fantastic-voyage/021-fantastic-voyage-theredlist.jpg
+
+Resolution Requirements
+- Colour/Bonus Balls: 256x256 px
+- Bonus Balls: 384x384 px
+- Player Ball: 512x512 px
+If these resolutions are too small to work with you could probably go up to double the size but keeping the ratios between them the same would be good
+Also if you go too big we'll lose a bit of detail when I have to scale them back down
+
+Stretch Stuff (If you're feeling really generous)
+- Different sprites/animations for when the colour balls are attached vs. unattached (like maybe they change expression or something)
+- More animations/variations are always good
+- A circular overlay to match the art-style
+- A background that's like the inside of a human body (but can be very abstract/silly). Tileable/Scrollable would be good for this

@@ -86,6 +86,16 @@ public class Util
 		return Quaternion.AngleAxis(Random.Range(0,angle),Vector3.forward)*v1;
 	}
 
+	public static Quaternion RandomRotation()
+	{
+		return Quaternion.Euler(RandomVector3(0,360));
+	}
+
+	public static Quaternion RandomRotation(Vector3 axis, float minAngle, float maxAngle)
+	{
+		return Quaternion.AngleAxis(Random.Range(minAngle,maxAngle),axis);
+	}
+
 	public static void DestroyChildren(Transform transform)
 	{
 		List<Transform> toDestroy = new List<Transform>();
@@ -193,7 +203,14 @@ public class Util
 		PlayerPrefs.SetString(key,System.Convert.ToBase64String(m.GetBuffer()));
 	}
 	
-
+	public static bool ExistsWithinSphere(Vector3 point, float radius, string searchTag)
+	{
+		Collider[] cols = Physics.OverlapSphere(point,radius);
+		foreach(Collider col in cols)
+			if(col.CompareTag(searchTag))
+				return true;
+		return false;
+	}
 
 }
 

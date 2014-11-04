@@ -101,7 +101,7 @@ public class MainMenuGUI : MonoBehaviour
 	void MainGUI()
 	{
 		GUI.Label(new Rect(0,100,1920,100),"Balls!", defaultSkin.GetStyle("Title"));
-		GUILayout.BeginArea(new Rect(800,300,320,480));
+		GUILayout.BeginArea(new Rect(800,300,320,580));
 
 		if(GUILayout.Button ("Arcade Mode",defaultSkin.GetStyle("LargeButton"))) {
 			Application.LoadLevel("Arcade");

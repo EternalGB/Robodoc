@@ -40,6 +40,11 @@ public class BallMachine : MonoBehaviour
 		badBalls.Add(newBall);
 	}
 
+	public int NumGoodBalls()
+	{
+		return goodBalls.Count;
+	}
+
 	void SpawnBall()
 	{
 
