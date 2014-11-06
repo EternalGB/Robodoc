@@ -78,7 +78,7 @@ public class ArcadeManager : MonoBehaviour
 	{
 		GameObject newBall = (GameObject)GameObject.Instantiate(goodBallPrefab);
 		newBall.SetActive(false);
-		newBall.renderer.material = ballMats[matIndex];
+		newBall.GetComponent<SpriteRenderer>().material = ballMats[matIndex];
 		bm.AddGoodBall(newBall);
 	}
 }

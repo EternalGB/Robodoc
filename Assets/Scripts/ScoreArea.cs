@@ -12,13 +12,13 @@ public class ScoreArea : MonoBehaviour
 
 
 
-	void OnTriggerEnter(Collider col)
+	void OnTriggerEnter2D(Collider2D col)
 	{
 		if(col.gameObject.layer == LayerMask.NameToLayer("Player"))
 			scoreChargeStart = Time.time;
 	}
 	
-	void OnTriggerStay(Collider col)
+	void OnTriggerStay2D(Collider2D col)
 	{
 		if(col.gameObject.layer == LayerMask.NameToLayer("Player")) {
 			anim.fill = (Time.time - scoreChargeStart)/scoreChargeDuration;
@@ -31,7 +31,7 @@ public class ScoreArea : MonoBehaviour
 		}
 	}
 	
-	void OnTriggerExit(Collider col)
+	void OnTriggerExit2D(Collider2D col)
 	{
 		if(col.gameObject.layer == LayerMask.NameToLayer("Player"))
 			anim.fill = 0;

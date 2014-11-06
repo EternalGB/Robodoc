@@ -32,9 +32,9 @@ public class Ejector : BadBall
 			foreach(Transform c in child)
 				c.parent = ejected.transform;
 			child.SendMessage("Destroy");
-			Util.SetMaterialAllChildren(ejected.transform,ejected.renderer.sharedMaterial);
+			Util.SetMaterialAllChildren(ejected.transform,ejected.GetComponent<SpriteRenderer>().sharedMaterial);
 			ejected.SetActive(true);
-			ejected.rigidbody.velocity = (pos - parent.position).normalized*ejectionForce;
+			ejected.rigidbody2D.velocity = (pos - parent.position).normalized*ejectionForce;
 		}
 	}
 

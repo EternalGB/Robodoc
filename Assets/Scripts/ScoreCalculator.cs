@@ -139,11 +139,13 @@ public class ScoreCalculator : MonoBehaviour
 		return maxDepth;
 	}
 	
-	bool ComboValid(Transform parent, Transform child)
+	public static bool ComboValid(Transform parent, Transform child)
 	{
-		return child.renderer.sharedMaterial.name != "Infected" && parent.renderer.sharedMaterial.name != "Infected" &&
-			(child.renderer.sharedMaterial.name == "AnyColour" || parent.renderer.sharedMaterial.name == "AnyColour" ||
-			 child.renderer.sharedMaterial.Equals(parent.renderer.sharedMaterial));
+		Material childMat = child.GetComponent<SpriteRenderer>().sharedMaterial;
+		Material parentMat = parent.GetComponent<SpriteRenderer>().sharedMaterial;
+		return childMat.name != "Infected" && parentMat.name != "Infected" &&
+			(childMat.name == "AnyColour" || parentMat.name == "AnyColour" ||
+			 childMat.Equals(parentMat));
 	}
 	
 	public void ComboUp()
@@ -164,12 +166,14 @@ public class ScoreCalculator : MonoBehaviour
 	{
 		if(parent.GetComponent<PlayerBall>())
 			return false;
-		bool infected = (child.renderer.sharedMaterial.name == "Infected" || parent.renderer.sharedMaterial.name == "Infected");
+		Material childMat = child.GetComponent<SpriteRenderer>().sharedMaterial;
+		Material parentMat = parent.GetComponent<SpriteRenderer>().sharedMaterial;
+		bool infected = (childMat.name == "Infected" || parentMat.name == "Infected");
 		if(infected)
-			return (child.renderer.sharedMaterial.name == "Infected" && parent.renderer.sharedMaterial.name == "Infected");
+			return (childMat.name == "Infected" && parentMat.name == "Infected");
 		else
-			return (child.renderer.sharedMaterial.name == "AnyColour" || parent.renderer.sharedMaterial.name == "AnyColour" ||
-				 child.renderer.sharedMaterial.Equals(parent.renderer.sharedMaterial));
+			return (childMat.name == "AnyColour" || parentMat.name == "AnyColour" ||
+				 childMat.Equals(parentMat));
 	}
 
 	void CreateScoringBalls(Transform root, Transform lastScoringParent)
@@ -190,9 +194,8 @@ public class ScoreCalculator : MonoBehaviour
 			}
 			ball.transform.position = child.position;
 			ball.transform.rotation = child.rotation;
-			ball.GetComponent<MeshFilter>().mesh = child.GetComponent<MeshFilter>().mesh;
-			ball.renderer.sharedMaterial = child.renderer.sharedMaterial;
-			//ball.particleSystem.startColor = child.renderer.sharedMaterial.color;
+			ball.GetComponent<SpriteRenderer>().sprite = child.GetComponent<SpriteRenderer>().sprite;
+			ball.GetComponent<SpriteRenderer>().material = child.GetComponent<SpriteRenderer>().sharedMaterial;
 
 			ball.SetActive(true);
 			ball.SendMessage("Arm",SendMessageOptions.DontRequireReceiver);

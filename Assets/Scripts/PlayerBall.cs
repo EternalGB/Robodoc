@@ -27,10 +27,10 @@ public class PlayerBall : MonoBehaviour
 		if(PlayerPrefs.GetInt("Controller") == 1) {
 			//move towards the mouse
 			mousePos = Util.MouseToWorldPos(0);
-			rigidbody.velocity = Vector3.ClampMagnitude((mousePos - transform.position)*speed,speed);
+			rigidbody2D.velocity = Vector3.ClampMagnitude((mousePos - transform.position)*speed,speed);
 		} else {
 			//use the keyboard
-			rigidbody.velocity = new Vector3(Input.GetAxis("Horizontal")*speed,Input.GetAxis("Vertical")*speed);
+			rigidbody2D.velocity = new Vector3(Input.GetAxis("Horizontal")*speed,Input.GetAxis("Vertical")*speed);
 		}
 
 		if(Input.GetButtonDown("Bomb")) {
@@ -40,7 +40,7 @@ public class PlayerBall : MonoBehaviour
 		//spin left or right
 		rotAngle = Mathf.Repeat(rotAngle + Input.GetAxisRaw("Spin")*rotSpeed*Time.deltaTime,360);
 		transform.rotation = Quaternion.AngleAxis(rotAngle,Vector3.forward);
-		//rigidbody.angularVelocity += new Vector3(0,0,rigidbody.velocity.x + rigidbody.velocity.y)*-0.1f;
+		//rigidbody2D.angularVelocity += new Vector3(0,0,rigidbody2D.velocity.x + rigidbody2D.velocity.y)*-0.1f;
 
 
 
@@ -50,33 +50,33 @@ public class PlayerBall : MonoBehaviour
 	void FixedUpdate()
 	{
 		if(!playArea.OverlapPoint(transform.position)) {
-			if( Vector2.Distance(playArea.transform.position,transform.position + rigidbody.velocity) >
+			if( Vector2.Distance(playArea.transform.position,(Vector2)transform.position + rigidbody2D.velocity) >
 			   Vector2.Distance(playArea.transform.position,transform.position)) {
-				rigidbody.velocity = rigidbody.velocity - transform.position.normalized*rigidbody.velocity.magnitude;
+				rigidbody2D.velocity = rigidbody2D.velocity - (Vector2)transform.position.normalized*rigidbody2D.velocity.magnitude;
 			}
 		}
 	}
 
-	void OnCollisionEnter(Collision col)
+	void OnCollisionEnter2D(Collision2D col)
 	{
 		if(col.gameObject.layer == LayerMask.NameToLayer("GoodBall")) {
 			PointBall pb;
 			if(pb = col.gameObject.GetComponent<PointBall>()) {
-				ContactPoint[] cps = col.contacts;
+				ContactPoint2D[] cps = col.contacts;
 				Vector3 pos = pb.transform.position;
 				Quaternion rot = pb.transform.rotation;
 				Vector3 scale = pb.transform.localScale;
-				Material mat = pb.renderer.sharedMaterial;
-				Mesh mesh = pb.GetComponent<MeshFilter>().mesh;
+				Material mat = pb.GetComponent<SpriteRenderer>().sharedMaterial;
+				Sprite sprite = pb.GetComponent<SpriteRenderer>().sprite;
 				pb.Destroy();
 				AttachedBall ball = ballPool.GetPooled().GetComponent<AttachedBall>();
 				//make sure it's not bringing any friends
 				Util.DestroyChildren(ball.transform);
 				ball.transform.position = pos;
 				ball.transform.rotation = rot;
-				ball.GetComponent<MeshFilter>().mesh = mesh;
+				ball.GetComponent<SpriteRenderer>().sprite = sprite;
 				//ball.transform.localScale = scale;
-				ball.renderer.sharedMaterial = mat;
+				ball.GetComponent<SpriteRenderer>().sharedMaterial = mat;
 				ball.gameObject.SetActive(true);
 				Transform parent = GetCorrectParent(cps);
 				ball.transform.parent = parent;
@@ -97,8 +97,8 @@ public class PlayerBall : MonoBehaviour
 				}
 			}
 		} else if(col.gameObject.layer == LayerMask.NameToLayer("BadBall")) {
-			ContactPoint[] cps = col.contacts;
-			col.gameObject.GetComponent<BadBall>().ApplyEffect(cps[0].thisCollider.transform);
+			ContactPoint2D[] cps = col.contacts;
+			col.gameObject.GetComponent<BadBall>().ApplyEffect(cps[0].collider.transform);
 			//recalculate score
 			ScoreCalculator.Instance.SetScorePrediction();
 			SoundEffectManager.Instance.PlayClipOnce("BadHit",Vector3.zero,1,1);
@@ -106,12 +106,12 @@ public class PlayerBall : MonoBehaviour
 	}
 
 	//returns the first transform that is the player or an attached ball
-	Transform GetCorrectParent(ContactPoint[] cps)
+	Transform GetCorrectParent(ContactPoint2D[] cps)
 	{
 
-		foreach(ContactPoint cp in cps) {
-			if(cp.thisCollider.GetComponent<AttachedBall>() || cp.thisCollider.GetComponent<PlayerBall>())
-				return cp.thisCollider.transform;
+		foreach(ContactPoint2D cp in cps) {
+			if(cp.collider.GetComponent<AttachedBall>() || cp.collider.GetComponent<PlayerBall>())
+				return cp.collider.transform;
 			if(cp.otherCollider.GetComponent<AttachedBall>() || cp.otherCollider.GetComponent<PlayerBall>())
 				return cp.otherCollider.transform;
 		}
@@ -125,10 +125,7 @@ public class PlayerBall : MonoBehaviour
 		int depth = 0;
 		while(cursor.parent != null) {
 			//Debug.Log ("Non-null parent " + cursor.parent.GetInstanceID());
-			if(cursor.renderer.sharedMaterial.name == "AnyColour" ||
-			   cursor.parent.renderer.sharedMaterial.name == "PlayerBall" ||
-			   cursor.parent.renderer.sharedMaterial.name == "AnyColour" || 
-			   cursor.parent.renderer.sharedMaterial.Equals(cursor.renderer.sharedMaterial)) {
+			if(ScoreCalculator.ComboValid(cursor.parent,cursor)) {
 				//Debug.Log ("Materials match");
 				depth++;
 			} else
@@ -136,22 +133,6 @@ public class PlayerBall : MonoBehaviour
 			cursor = cursor.parent;
 		}
 		return depth;
-
-		/*
-		foreach(Transform c in parent) {
-			if(c.GetInstanceID() == child.GetInstanceID())
-				return depth+1;
-			else {
-				if(c.renderer.sharedMaterial.name == "AnyColour" || child.renderer.sharedMaterial.name == "AnyColour" ||
-				   c.renderer.sharedMaterial.Equals(child.renderer.sharedMaterial)) {
-					return FindDepth(child,c,depth+1);
-				} else {
-					return FindDepth(child,c,0);
-				}
-			}
-		}
-		return -1;
-		*/
 	}
 
 	void FireBomb()
@@ -159,8 +140,8 @@ public class PlayerBall : MonoBehaviour
 		SoundEffectManager.Instance.PlayClipOnce("Bomb",Vector3.zero,1,1);
 		GameObject[] balls = GameObject.FindGameObjectsWithTag("Ball");
 		foreach(GameObject ball in balls) {
-			if(ball.rigidbody) {
-				ball.rigidbody.AddExplosionForce(bombForce,Vector3.zero,200);
+			if(ball.rigidbody2D) {
+				ball.rigidbody2D.velocity += (Vector2)ball.transform.position.normalized*bombForce;
 			}
 		}
 		numBombs--;

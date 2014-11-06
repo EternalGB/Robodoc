@@ -13,7 +13,7 @@ public class AttachedBall : PoolableObject
 	void Start()
 	{
 		origScale = transform.localScale;
-		origMat = renderer.sharedMaterial;
+		origMat = GetComponent<SpriteRenderer>().sharedMaterial;
 	}
 
 
@@ -27,7 +27,7 @@ public class AttachedBall : PoolableObject
 	{
 		transform.parent = null;
 		//transform.localScale = origScale;
-		renderer.sharedMaterial = origMat;
+		GetComponent<SpriteRenderer>().sharedMaterial = origMat;
 	}
 
 	public void SetPointValue(float value)
@@ -37,7 +37,7 @@ public class AttachedBall : PoolableObject
 
 	public void GetInfected(Material infectionMat, float spreadInterval)
 	{
-		renderer.sharedMaterial = infectionMat;
+		GetComponent<SpriteRenderer>().sharedMaterial = infectionMat;
 		SetPointValue(0);
 		ScoreCalculator.Instance.SetScorePrediction();
 		if(transform.parent != null)
@@ -58,9 +58,9 @@ public class AttachedBall : PoolableObject
 			ejected.transform.rotation = rot;
 			foreach(Transform c in transform)
 				c.parent = ejected.transform;
-			Util.SetMaterialAllChildren(ejected.transform,ejected.renderer.sharedMaterial);
+			Util.SetMaterialAllChildren(ejected.transform,ejected.GetComponent<SpriteRenderer>().sharedMaterial);
 			ejected.SetActive(true);
-			ejected.rigidbody.velocity = (pos - transform.parent.position).normalized*20;
+			ejected.rigidbody2D.velocity = (pos - transform.parent.position).normalized*20;
 			Destroy();
 		}
 		ScoreCalculator.Instance.SetScorePrediction();
