@@ -30,6 +30,7 @@ public class ArcadeManager : MonoBehaviour
 		for(int i = 0; i < ballMats.Length; i++) {
 			ballMats[i] = new Material(baseMat);
 			ballMats[i].color = colors.GetColor(i);
+			ballMats[i].name = ballMats[i].color.ToString();
 		}
 		for(matIndex = 0; matIndex < numInitColors; matIndex++) {
 			AddColorBall(matIndex);
