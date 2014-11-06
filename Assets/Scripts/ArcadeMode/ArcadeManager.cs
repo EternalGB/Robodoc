@@ -24,7 +24,7 @@ public class ArcadeManager : MonoBehaviour
 
 	void Awake()
 	{
-		colors =  new Palette(maxColors,0.99f,0.99f);
+		colors =  new Palette(maxColors,0.99f,0.75f,0.05f);
 		ballMats = new Material[maxColors];
 		for(int i = 0; i < ballMats.Length; i++) {
 			ballMats[i] = new Material(baseMat);
@@ -51,8 +51,8 @@ public class ArcadeManager : MonoBehaviour
 				AddBadBall();
 			//+1 because of bonus ball
 			if(bm.NumGoodBalls() < maxColors+1) {
-				matIndex++;
 				AddColorBall(matIndex);
+				matIndex++;
 			}
 
 

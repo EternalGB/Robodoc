@@ -26,6 +26,34 @@ public class Palette
 		}
 	}
 
+	public Palette(int numColors, float saturation, float luminance, float similarityTolerance)
+	{
+		colors = new Color[numColors];
+		float[] hueValues = new float[numColors];
+		float h = Random.value;
+		for(int i = 0; i < colors.Length; i++) {
+			h += 1/phi;
+			h %= 1;
+			//make sure the new hue isn't too close to another colour
+			//this will become increasingly difficulty
+			float diff = 0;
+			int maxTries = 10;
+			int tries = 0;
+			do {
+				for(int j = 0; j < i; j++) {
+					diff = Mathf.Abs(h - hueValues[j]);
+					if(diff < similarityTolerance) {
+						h += Random.value;
+						h %= 1;
+						break;
+					}
+				}
+				tries++;
+			} while(diff <= similarityTolerance && tries < maxTries);
+			hueValues[i] = h;
+			colors[i] = (new HSBColor(h,saturation,luminance)).ToColor();
+		}
+	}
 
 	public Palette(Color firstColor, int numColors, float maxOffset)
 	{

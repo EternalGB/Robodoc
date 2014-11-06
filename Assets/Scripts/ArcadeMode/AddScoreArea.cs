@@ -5,14 +5,21 @@ public class AddScoreArea : LevelModifier
 {
 
 	public GameObject scoreAreaPrefab;
+	int tryLimit = 10;
 
 	public override void DoModification ()
 	{
 		GameObject scoreArea = (GameObject)GameObject.Instantiate(scoreAreaPrefab);
+		Collider2D allowableArea = GameObject.Find ("PlayArea").collider2D;
 		Vector3 pos;
 		float radius = scoreArea.transform.localScale.x*scoreArea.GetComponent<SphereCollider>().radius;
+		int tries = 0;
 		do {
-			pos = Util.RandomPointInside(GameObject.Find ("PlayArea").collider2D);
+			pos = Util.RandomPointInside(allowableArea);
+			tries++;
+			//bail out if we try too many times
+			if(tries >= tryLimit)
+				return;
 		} while (Util.ExistsWithinSphere(pos,radius,"ScoreArea"));
 		scoreArea.transform.position = pos;
 	}

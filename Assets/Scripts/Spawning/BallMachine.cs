@@ -10,6 +10,9 @@ public class BallMachine : MonoBehaviour
 	public float ballsPerSec;
 	public float minInitSpeed,maxInitSpeed;
 	public float badBallChance;
+	public float pointsPerIncr;
+	public float ballRateIncr;
+	public float badChanceIncr;
 
 	public Collider2D playArea;
 
@@ -67,8 +70,8 @@ public class BallMachine : MonoBehaviour
 
 	void UpdateDifficulty(float scoreIncrease)
 	{
-		ballsPerSec = Mathf.Clamp (ballsPerSec + 1f*scoreIncrease/1000,0,20);
-		badBallChance = Mathf.Clamp (badBallChance + 0.05f*scoreIncrease/1000,0,0.5f);
+		ballsPerSec = Mathf.Clamp (ballsPerSec + ballRateIncr*scoreIncrease/pointsPerIncr,0,20);
+		badBallChance = Mathf.Clamp (badBallChance + badChanceIncr*scoreIncrease/pointsPerIncr,0,0.5f);
 	}
 
 	Vector2 GetInitVelocity(Vector2 spawnPos, float minSpeed, float maxSpeed)
