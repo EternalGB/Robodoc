@@ -21,6 +21,7 @@ public class ArcadeManager : MonoBehaviour
 	public float initMilestone;
 	float milestone;
 	int milestoneIndex = 0;
+	public float milestoneIncreaseRate;
 
 	void Awake()
 	{
@@ -57,13 +58,13 @@ public class ArcadeManager : MonoBehaviour
 
 
 			milestoneIndex++;
-			milestone = GenMileStone(initMilestone,milestoneIndex);
+			milestone = GenMileStone(initMilestone,milestoneIncreaseRate,milestoneIndex);
 		}
 	}
 
-	float GenMileStone(float initMilestone, int index)
+	float GenMileStone(float initMilestone, float incrSpeed, int index)
 	{
-		return initMilestone*Mathf.Exp(index);
+		return initMilestone*Mathf.Exp(incrSpeed*index);
 	}
 
 	void AddBadBall()
