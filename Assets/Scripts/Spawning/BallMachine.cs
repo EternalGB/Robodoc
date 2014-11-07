@@ -62,6 +62,7 @@ public class BallMachine : MonoBehaviour
 		ball.SetActive(true);
 		//always send the ball towards the screen-ish
 		ball.rigidbody2D.velocity = GetInitVelocity(pos,minInitSpeed,maxInitSpeed);	
+		ball.rigidbody2D.angularVelocity = ball.rigidbody2D.velocity.magnitude*10;
 		//ball.rigidbody2D.velocity = Util.RandomVectorBetween(pos,screenTopLeft,screenBottomRight).normalized*Random.Range (minInitSpeed,maxInitSpeed);
 		Invoke("SpawnBall",1/ballsPerSec);
 	}

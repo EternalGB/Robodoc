@@ -67,7 +67,7 @@ public class ScoreCalculator : MonoBehaviour
 		nextScore = 0;
 		CancelInvoke("ResetCombo");
 		CreateScoringBalls(player.transform,null);
-		Util.DestroyChildren(player.transform);
+		Util.DestroyChildrenWithComponent<AttachedBall>(player.transform);
 		ResetCombo();
 		//GameObject.FindWithTag("BallMachine").SendMessage("UpdateDifficulty",amount);
 		PlayerScored(amount);
@@ -100,8 +100,10 @@ public class ScoreCalculator : MonoBehaviour
 	{
 		float points = 0;
 		int depth = 0;
-		foreach(Transform child in t)
-			points += ScoreChild(child,1, ref depth);
+		foreach(Transform child in t) {
+			if(child.GetComponent<AttachedBall>() != null)
+				points += ScoreChild(child,1, ref depth);
+		}
 		maxChain = depth;
 		return points;
 	}
@@ -113,11 +115,13 @@ public class ScoreCalculator : MonoBehaviour
 		AttachedBall ab = child.GetComponent<AttachedBall>();
 		float points = depth*ab.pointValue;
 		foreach(Transform c in child) {
-			//if a connecting ball is golden or the same colour then continue the chain
-			if(ComboValid(child,c)) {
-				points += ScoreChild(c, depth+1, ref maxChain);
-			} else {
-				points += ScoreChild(c, 1, ref maxChain);
+			if(c.GetComponent<AttachedBall>() != null) {
+				//if a connecting ball is golden or the same colour then continue the chain
+				if(ComboValid(child,c)) {
+					points += ScoreChild(c, depth+1, ref maxChain);
+				} else {
+					points += ScoreChild(c, 1, ref maxChain);
+				}
 			}
 		}
 		//Debug.Log (child.name + child.GetInstanceID() + " scoring for " + points);
@@ -128,13 +132,16 @@ public class ScoreCalculator : MonoBehaviour
 	{
 		int maxDepth = depth;
 		foreach(Transform child in t) {
-			int newDepth = 0;
-			if(ComboValid(t,child))
-				newDepth = GetMaxChainLength(child,depth+1);
-			else
-				newDepth = GetMaxChainLength(child,1);
-			if(newDepth > maxDepth)
-				maxDepth = newDepth;
+			if(child.GetComponent<AttachedBall>()) {
+				int newDepth = 0;
+				if(ComboValid(t,child))
+					newDepth = GetMaxChainLength(child,depth+1);
+				else
+					newDepth = GetMaxChainLength(child,1);
+				if(newDepth > maxDepth)
+					maxDepth = newDepth;
+			}
+
 		}
 		return maxDepth;
 	}
@@ -179,27 +186,29 @@ public class ScoreCalculator : MonoBehaviour
 	void CreateScoringBalls(Transform root, Transform lastScoringParent)
 	{
 		foreach(Transform child in root) {
-			GameObject ball;
-			if(ScoringBallComboValid(root,child)) {
-				ball = PoolManager.Instance.GetPoolByRepresentative(scoringBallChildPrefab).GetPooled();
-				ball.transform.parent = lastScoringParent;
-			} else {
-				ball = PoolManager.Instance.GetPoolByRepresentative(scoringBallPrefab).GetPooled();
-				ScoringBall sb = ball.GetComponent<ScoringBall>();
-				sb.lifeTime = Random.Range(0.5f,1f);
-				sb.speed = Random.Range(10f,20f);
-				sb.rotSpeed = Random.Range(180f,360f);
-				sb.travelDir = Quaternion.AngleAxis(Random.Range (-45f,45f),Vector3.forward)
-					*(ball.transform.position - root.transform.position).normalized;
+			if(child.GetComponent<AttachedBall>()) {
+				GameObject ball;
+				if(ScoringBallComboValid(root,child)) {
+					ball = PoolManager.Instance.GetPoolByRepresentative(scoringBallChildPrefab).GetPooled();
+					ball.transform.parent = lastScoringParent;
+				} else {
+					ball = PoolManager.Instance.GetPoolByRepresentative(scoringBallPrefab).GetPooled();
+					ScoringBall sb = ball.GetComponent<ScoringBall>();
+					sb.lifeTime = Random.Range(0.5f,1f);
+					sb.speed = Random.Range(10f,20f);
+					sb.rotSpeed = Random.Range(180f,360f);
+					sb.travelDir = Quaternion.AngleAxis(Random.Range (-45f,45f),Vector3.forward)
+						*(ball.transform.position - root.transform.position).normalized;
+				}
+				ball.transform.position = child.position;
+				ball.transform.rotation = child.rotation;
+				ball.GetComponent<SpriteRenderer>().sprite = child.GetComponent<SpriteRenderer>().sprite;
+				ball.GetComponent<SpriteRenderer>().material = child.GetComponent<SpriteRenderer>().sharedMaterial;
+				
+				ball.SetActive(true);
+				ball.SendMessage("Arm",SendMessageOptions.DontRequireReceiver);
+				CreateScoringBalls(child, ball.transform);
 			}
-			ball.transform.position = child.position;
-			ball.transform.rotation = child.rotation;
-			ball.GetComponent<SpriteRenderer>().sprite = child.GetComponent<SpriteRenderer>().sprite;
-			ball.GetComponent<SpriteRenderer>().material = child.GetComponent<SpriteRenderer>().sharedMaterial;
-
-			ball.SetActive(true);
-			ball.SendMessage("Arm",SendMessageOptions.DontRequireReceiver);
-			CreateScoringBalls(child, ball.transform);
 		}
 	}
 

@@ -96,12 +96,13 @@ public class Util
 		return Quaternion.AngleAxis(Random.Range(minAngle,maxAngle),axis);
 	}
 
-	public static void DestroyChildren(Transform transform)
+	public static void DestroyChildrenWithComponent<T>(Transform transform)
 	{
 		List<Transform> toDestroy = new List<Transform>();
 		CollectChildrenToBeDestroyed(transform, ref toDestroy);
 		foreach(Transform t in toDestroy)
-			t.SendMessage("Destroy", SendMessageOptions.DontRequireReceiver);
+			if(t.GetComponent(typeof(T)))
+				t.SendMessage("Destroy", SendMessageOptions.DontRequireReceiver);
 	}
 	
 	static void CollectChildrenToBeDestroyed(Transform t, ref List<Transform> toDestroy)
@@ -168,11 +169,12 @@ public class Util
 		return Vector3.Angle(v1-origin,v2-origin);
 	}
 
-	public static void SetMaterialAllChildren(Transform t, Material mat)
+	public static void SetMaterialAllAttachedBalls(Transform t, Material mat)
 	{
-		t.renderer.sharedMaterial = mat;
+		t.GetComponent<SpriteRenderer>().sharedMaterial = mat;
 		foreach(Transform child in t)
-			SetMaterialAllChildren(child,mat);
+			if(child.GetComponent<AttachedBall>())
+				SetMaterialAllAttachedBalls(child,mat);
 	}
 
 	public static bool TryLoadFromPlayerPrefs<T>(string key, out T obj)

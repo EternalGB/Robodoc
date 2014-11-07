@@ -29,7 +29,7 @@ public class ScoringBall : PoolableObject
 		particles.gameObject.SetActive(true);
 		particles.particleSystem.startColor = renderer.sharedMaterial.color;
 		particles.Play();
-		Util.DestroyChildren(transform);
+		Util.DestroyChildrenWithComponent<ScoringBallChild>(transform);
 		base.Destroy();
 	}
 

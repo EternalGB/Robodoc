@@ -42,7 +42,7 @@ public class PlayerBall : MonoBehaviour
 		transform.rotation = Quaternion.AngleAxis(rotAngle,Vector3.forward);
 		//rigidbody2D.angularVelocity += new Vector3(0,0,rigidbody2D.velocity.x + rigidbody2D.velocity.y)*-0.1f;
 
-
+		Debug.DrawLine(transform.position,(Vector2)transform.position+rigidbody2D.velocity,Color.blue,0f);
 
 
 	}
@@ -71,7 +71,7 @@ public class PlayerBall : MonoBehaviour
 				pb.Destroy();
 				AttachedBall ball = ballPool.GetPooled().GetComponent<AttachedBall>();
 				//make sure it's not bringing any friends
-				Util.DestroyChildren(ball.transform);
+				Util.DestroyChildrenWithComponent<AttachedBall>(ball.transform);
 				ball.transform.position = pos;
 				ball.transform.rotation = rot;
 				ball.GetComponent<SpriteRenderer>().sprite = sprite;
@@ -97,8 +97,9 @@ public class PlayerBall : MonoBehaviour
 				}
 			}
 		} else if(col.gameObject.layer == LayerMask.NameToLayer("BadBall")) {
+			Debug.Log ("BadBall Collision");
 			ContactPoint2D[] cps = col.contacts;
-			col.gameObject.GetComponent<BadBall>().ApplyEffect(cps[0].collider.transform);
+			col.gameObject.GetComponent<BadBall>().ApplyEffect(cps[0].otherCollider.transform);
 			//recalculate score
 			ScoreCalculator.Instance.SetScorePrediction();
 			SoundEffectManager.Instance.PlayClipOnce("BadHit",Vector3.zero,1,1);

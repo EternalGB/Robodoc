@@ -9,14 +9,15 @@ public class Delinker : BadBall
 	public override void ApplyEffect (Transform target)
 	{
 		if(!(target.gameObject.layer == LayerMask.NameToLayer("Player"))) {
+			Debug.Log ("Delinker Ball Applying Effect - Target: " + target.GetInstanceID());
 			target.parent = transform;
-			Util.SetMaterialAllChildren(target,ejectedMat);
+			Util.SetMaterialAllAttachedBalls(target,ejectedMat);
 		}
 	}
 
 	public override void Destroy ()
 	{
-		Util.DestroyChildren(transform);
+		Util.DestroyChildrenWithComponent<AttachedBall>(transform);
 		base.Destroy ();
 	}
 	

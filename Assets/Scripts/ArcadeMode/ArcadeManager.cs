@@ -40,6 +40,8 @@ public class ArcadeManager : MonoBehaviour
 	void Start()
 	{
 		ScoreCalculator.PlayerScored += UpdateDifficulty;
+		milestone = GenMileStone(initMilestone,milestoneIncreaseRate,milestoneIndex);
+		milestoneIndex++;
 	}
 
 	void UpdateDifficulty(float scoreIncrease)
@@ -57,8 +59,8 @@ public class ArcadeManager : MonoBehaviour
 			}
 
 
-			milestoneIndex++;
 			milestone = GenMileStone(initMilestone,milestoneIncreaseRate,milestoneIndex);
+			milestoneIndex++;
 		}
 	}
 

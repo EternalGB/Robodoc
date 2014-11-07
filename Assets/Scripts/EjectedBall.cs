@@ -6,7 +6,7 @@ public class EjectedBall : PoolableScreenObj
 
 	public override void Destroy ()
 	{
-		Util.DestroyChildren(transform);
+		Util.DestroyChildrenWithComponent<AttachedBall>(transform);
 		base.Destroy ();
 	}
 }

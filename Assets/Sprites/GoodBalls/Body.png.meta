@@ -1,8 +1,8 @@
 fileFormatVersion: 2
-guid: dfa420fafecd9e4409ef29f81602013c
+guid: be56a673f1d5d114c8b2caf9a364ede3
 TextureImporter:
   fileIDToRecycleName:
-    21300000: BadBall
+    21300000: Body
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0

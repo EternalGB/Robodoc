@@ -58,7 +58,7 @@ public class AttachedBall : PoolableObject
 			ejected.transform.rotation = rot;
 			foreach(Transform c in transform)
 				c.parent = ejected.transform;
-			Util.SetMaterialAllChildren(ejected.transform,ejected.GetComponent<SpriteRenderer>().sharedMaterial);
+			Util.SetMaterialAllAttachedBalls(ejected.transform,ejected.GetComponent<SpriteRenderer>().sharedMaterial);
 			ejected.SetActive(true);
 			ejected.rigidbody2D.velocity = (pos - transform.parent.position).normalized*20;
 			Destroy();

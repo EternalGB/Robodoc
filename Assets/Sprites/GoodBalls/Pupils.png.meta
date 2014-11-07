@@ -1,8 +1,9 @@
 fileFormatVersion: 2
-guid: dfa420fafecd9e4409ef29f81602013c
+guid: 3e619cfa9dafc9543a2d09ad0ce0522c
 TextureImporter:
   fileIDToRecycleName:
-    21300000: BadBall
+    21300000: Eyes
+    21300002: Pupils
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0

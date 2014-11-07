@@ -12,6 +12,7 @@ public class Infector : BadBall
 	{
 		AttachedBall ball;
 		if(ball = target.GetComponent<AttachedBall>()) {
+			Debug.Log ("Infector Ball Applying Effect");
 			ball.GetInfected(infectionMat,spreadInterval);
 			Destroy();
 		}
