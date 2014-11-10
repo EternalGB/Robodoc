@@ -178,6 +178,7 @@ public class GameGUI : MonoBehaviour
 
 			GUILayout.EndArea ();
 		} else if(screen == GameScreen.END) {
+
 			GUILayout.BeginArea(new Rect(640,360,640,360),defaultSkin.GetStyle("MenuBox"));
 			GUILayout.Label("Game Over",defaultSkin.GetStyle("Title"));
 			goal.DisplaySuccess(defaultSkin.GetStyle("Score"));
@@ -186,10 +187,11 @@ public class GameGUI : MonoBehaviour
 				Time.timeScale = 1;
 				Application.LoadLevel(Application.loadedLevel);
 			}
-			if(GUILayout.Button ("Level Select",defaultSkin.GetStyle("MediumButton"))) {
-				Time.timeScale = 1;
-				GoToMainMenu(MainMenuGUI.MenuScreen.LEVELSELECT);
-			}
+			if(Application.loadedLevelName != "Arcade")
+				if(GUILayout.Button ("Level Select",defaultSkin.GetStyle("MediumButton"))) {
+					Time.timeScale = 1;
+					GoToMainMenu(MainMenuGUI.MenuScreen.LEVELSELECT);
+				}
 			if(GUILayout.Button ("Main Menu",defaultSkin.GetStyle("MediumButton"))) {
 				Time.timeScale = 1;
 				GoToMainMenu(MainMenuGUI.MenuScreen.MAIN);
@@ -243,7 +245,8 @@ public class GameGUI : MonoBehaviour
 	{
 		if(!doneGoalCompleted) {
 			level.SetHighScore(goal,difficulty,goal.EvaluateSuccess());
-			ProgressionManager.UpdateProgression(PlayerPrefs.GetInt("LevelIndex"),PlayerPrefs.GetInt("GoalIndex"));
+			if(Application.loadedLevelName != "Arcade")
+				ProgressionManager.UpdateProgression(PlayerPrefs.GetInt("LevelIndex"),PlayerPrefs.GetInt("GoalIndex"));
 			doneGoalCompleted = true;
 		}
 	}

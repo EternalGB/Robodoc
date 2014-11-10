@@ -105,6 +105,8 @@ public class MainMenuGUI : MonoBehaviour
 
 		if(GUILayout.Button ("Arcade Mode",defaultSkin.GetStyle("LargeButton"))) {
 			Application.LoadLevel("Arcade");
+			PlayerPrefs.SetInt ("LevelIndex",-1);
+			PlayerPrefs.SetString("LevelName","Arcade");
 			PlayerPrefs.SetInt("Controller",controller);
 			PlayerPrefs.Save();
 		}
