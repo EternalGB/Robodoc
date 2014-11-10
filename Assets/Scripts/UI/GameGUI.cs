@@ -135,9 +135,9 @@ public class GameGUI : MonoBehaviour
 			GUILayout.BeginArea(new Rect(640,320,640,480),defaultSkin.GetStyle("MenuBox"));
 			GUILayout.Label ("Paused",defaultSkin.GetStyle("Score"));
 			GUILayout.Label ("Controls",defaultSkin.GetStyle("SmallerText"));
-			GUILayout.BeginVertical(defaultSkin.GetStyle("GridBox"));
-			controller = GUILayout.SelectionGrid(controller,MainMenuGUI.controlSchemes,1,defaultSkin.GetStyle("MediumButton"));
-			GUILayout.EndVertical();
+			controller = GUILayoutExtras.ArrowedSelector(controller,MainMenuGUI.controlSchemes,
+			                                new GUIStyle[] {defaultSkin.GetStyle("ArrowButtonLeft"),defaultSkin.GetStyle("ArrowButtonRight")},
+			defaultSkin.GetStyle("MediumButton"));
 			if(GUILayout.Button ("Restart",defaultSkin.GetStyle("MediumButton"))) {
 				screen = GameScreen.GAME;
 				Time.timeScale = 1;

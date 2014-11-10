@@ -10,10 +10,10 @@ public class MainMenuGUI : MonoBehaviour
 		MAIN,LEVELSELECT,CONTROLS,HELP
 	};
 
-	public static GUIContent[] controlSchemes = new GUIContent[]
+	public static string[] controlSchemes = new string[]
 	{
-		new GUIContent("Keyboard"),
-		new GUIContent("Mouse")
+		"Keyboard",
+		"Mouse"
 	};
 
 	public GUISkin defaultSkin;
@@ -117,16 +117,12 @@ public class MainMenuGUI : MonoBehaviour
 		if(GUILayout.Button ("How To Play",defaultSkin.GetStyle("MediumButton"))) {
 			screen = MenuScreen.HELP;
 		}
-		if(GUILayout.Button ("Controls",defaultSkin.GetStyle("MediumButton"))) {
+		if(GUILayout.Button ("View Controls",defaultSkin.GetStyle("MediumButton"))) {
 			screen = MenuScreen.CONTROLS;
 		}
 
 
-		GUILayout.Label ("Control Scheme",defaultSkin.GetStyle("Text"));
-		GUILayout.BeginVertical(defaultSkin.GetStyle ("GridBox"));
-		
-		controller = GUILayout.SelectionGrid(controller,controlSchemes,1,defaultSkin.GetStyle("MediumButton"));
-		GUILayout.EndVertical();
+		ControlSchemeSelectGUI();
 
 		GUILayout.Box ("",defaultSkin.GetStyle("EmptySpace"),GUILayout.Height (10));
 
@@ -141,6 +137,21 @@ public class MainMenuGUI : MonoBehaviour
 		GUILayout.EndArea ();
 	}
 
+
+
+	void ControlSchemeSelectGUI()
+	{
+		GUILayout.Label ("Control Scheme",defaultSkin.GetStyle("Text"));
+		/*
+		GUILayout.BeginVertical(defaultSkin.GetStyle ("GridBox"));
+		
+		controller = GUILayout.SelectionGrid(controller,controlSchemes,1,defaultSkin.GetStyle("MediumButton"));
+		GUILayout.EndVertical();
+		*/
+		controller = GUILayoutExtras.ArrowedSelector(controller,controlSchemes,
+		                                new GUIStyle[] {defaultSkin.GetStyle("ArrowButtonLeft"),defaultSkin.GetStyle("ArrowButtonRight")},
+										defaultSkin.GetStyle("MediumButton"));
+	}
 
 	void LevelSelectGUI()
 	{
