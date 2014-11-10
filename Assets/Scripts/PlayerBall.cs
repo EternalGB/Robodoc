@@ -138,14 +138,16 @@ public class PlayerBall : MonoBehaviour
 
 	void FireBomb()
 	{
-		SoundEffectManager.Instance.PlayClipOnce("Bomb",Vector3.zero,1,1);
-		GameObject[] balls = GameObject.FindGameObjectsWithTag("Ball");
-		foreach(GameObject ball in balls) {
-			if(ball.rigidbody2D) {
-				ball.rigidbody2D.velocity += (Vector2)ball.transform.position.normalized*bombForce;
+		if(numBombs > 0) {
+			SoundEffectManager.Instance.PlayClipOnce("Bomb",Vector3.zero,1,1);
+			GameObject[] balls = GameObject.FindGameObjectsWithTag("Ball");
+			foreach(GameObject ball in balls) {
+				if(ball.rigidbody2D) {
+					ball.rigidbody2D.velocity += (Vector2)ball.transform.position.normalized*bombForce;
+				}
 			}
+			numBombs--;
 		}
-		numBombs--;
 	}
 }
 
