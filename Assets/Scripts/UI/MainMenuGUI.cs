@@ -150,7 +150,7 @@ public class MainMenuGUI : MonoBehaviour
 		*/
 		controller = GUILayoutExtras.ArrowedSelector(controller,controlSchemes,
 		                                new GUIStyle[] {defaultSkin.GetStyle("ArrowButtonLeft"),defaultSkin.GetStyle("ArrowButtonRight")},
-										defaultSkin.GetStyle("MediumButton"));
+										defaultSkin.GetStyle("ArrowedSelectorLabel"));
 	}
 
 	void LevelSelectGUI()

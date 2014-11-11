@@ -137,7 +137,7 @@ public class GameGUI : MonoBehaviour
 			GUILayout.Label ("Controls",defaultSkin.GetStyle("SmallerText"));
 			controller = GUILayoutExtras.ArrowedSelector(controller,MainMenuGUI.controlSchemes,
 			                                new GUIStyle[] {defaultSkin.GetStyle("ArrowButtonLeft"),defaultSkin.GetStyle("ArrowButtonRight")},
-			defaultSkin.GetStyle("MediumButton"));
+			defaultSkin.GetStyle("ArrowedSelectorLabel"));
 			if(GUILayout.Button ("Restart",defaultSkin.GetStyle("MediumButton"))) {
 				screen = GameScreen.GAME;
 				Time.timeScale = 1;
