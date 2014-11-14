@@ -9,14 +9,6 @@ public class GameGUI : MonoBehaviour
 		GAME,PAUSE,START,END
 	};
 
-	public GUISkin defaultSkin;
-
-
-	
-
-	float origWidth = 1920;
-	float origHeight = 1080;
-	Vector3 scale;
 
 	PlayerBall pb;
 	ScoreArea scoreArea;
@@ -25,8 +17,7 @@ public class GameGUI : MonoBehaviour
 
 	public Level level;
 	public Goal goal;
-	bool countUpwards = false;
-	float timeRemaining;
+	public float timeRemaining;
 
 	int controller;
 
@@ -38,7 +29,10 @@ public class GameGUI : MonoBehaviour
 	public int difficulty = 0;
 
 	bool doneGoalCompleted;
-	
+
+	public TextList controlScheme;
+	public GameObject gameUI;
+	public GameObject pauseUI;
 
 	void Start()
 	{
@@ -55,7 +49,8 @@ public class GameGUI : MonoBehaviour
 		//timeRemaining += Time.timeSinceLevelLoad;
 
 
-		controller = PlayerPrefs.GetInt("Controller",0);
+		controlScheme.DisplayText(PlayerPrefs.GetInt("Controller",1));
+		PlayerPrefs.SetInt("Controller",controlScheme.index);
 
 		if(level == null) {
 			level = Resources.Load<Level>("Levels/" + PlayerPrefs.GetString("LevelName","01-Circle"));
@@ -66,8 +61,6 @@ public class GameGUI : MonoBehaviour
 			timeRemaining = ((TimeLimitGoal)goal).timeLimit;
 		} else if(goal.GetType() == typeof(Arcade)){
 			timeRemaining = ((Arcade)goal).timeRemaining;
-		} else {
-			countUpwards = true;
 		}
 
 		doneGoalCompleted = false;
@@ -109,130 +102,17 @@ public class GameGUI : MonoBehaviour
 		return screen != GameScreen.GAME;
 	}
 
-	void TogglePause()
+	public void TogglePause()
 	{
 		if(screen == GameScreen.PAUSE) {
 			screen = GameScreen.GAME;
-			PlayerPrefs.SetInt("Controller",controller);
+			PlayerPrefs.SetInt("Controller",controlScheme.index);
 			PlayerPrefs.Save();
-		} else if(screen == GameScreen.GAME)
-			screen = GameScreen.PAUSE;
-	}
-
-	void OnGUI()
-	{
-		scale.x = Screen.width/origWidth;
-		scale.y = Screen.height/origHeight;
-		scale.z = 1;
-		Matrix4x4 lastMat = GUI.matrix;
-		GUI.matrix = Matrix4x4.TRS (Vector3.zero,Quaternion.identity,scale);
-		GUISkin unityDef = GUI.skin;
-		GUI.skin = defaultSkin;
-
-		GUI.BeginGroup(new Rect(0,0,1920,1080),defaultSkin.GetStyle("Overlay"));
-
-		if(screen == GameScreen.PAUSE) {
-			GUILayout.BeginArea(new Rect(640,320,640,480),defaultSkin.GetStyle("MenuBox"));
-			GUILayout.Label ("Paused",defaultSkin.GetStyle("Score"));
-			GUILayout.Label ("Controls",defaultSkin.GetStyle("SmallerText"));
-			controller = GUILayoutExtras.ArrowedSelector(controller,MainMenuGUI.controlSchemes,
-			                                new GUIStyle[] {defaultSkin.GetStyle("ArrowButtonLeft"),defaultSkin.GetStyle("ArrowButtonRight")},
-			defaultSkin.GetStyle("ArrowedSelectorLabel"));
-			if(GUILayout.Button ("Restart",defaultSkin.GetStyle("MediumButton"))) {
-				screen = GameScreen.GAME;
-				Time.timeScale = 1;
-				Application.LoadLevel(Application.loadedLevel);
-			}
-			if(GUILayout.Button ("Level Select",defaultSkin.GetStyle("MediumButton"))) {
-				Time.timeScale = 1;
-				GoToMainMenu(MainMenuGUI.MenuScreen.LEVELSELECT);
-			}
-			if(GUILayout.Button ("Main Menu",defaultSkin.GetStyle("MediumButton"))) {
-				Time.timeScale = 1;
-				GoToMainMenu(MainMenuGUI.MenuScreen.MAIN);
-			}
-			GUILayout.EndArea ();
-		} else if(screen == GameScreen.START) {
-			GUILayout.BeginArea(new Rect(640,360,640,360),defaultSkin.GetStyle("MenuBox"));
-
-			if(GUILayout.Button ("Start",defaultSkin.GetStyle("LargeButton"))) {
-				StartLevel(difficulty);
-			}
-			if(GUILayout.Button ("Level Select",defaultSkin.GetStyle("MediumButton"))) {
-				Time.timeScale = 1;
-				GoToMainMenu(MainMenuGUI.MenuScreen.LEVELSELECT);
-			}
-			if(GUILayout.Button ("Main Menu",defaultSkin.GetStyle("MediumButton"))) {
-				Time.timeScale = 1;
-				GoToMainMenu(MainMenuGUI.MenuScreen.MAIN);
-			}
-
-			GUILayout.Label("Difficulty",defaultSkin.GetStyle("Title"));
-			GUILayout.BeginVertical(defaultSkin.GetStyle("GridBox"));
-			//difficulty = GUILayout.SelectionGrid(difficulty,difficulties,1,defaultSkin.GetStyle("MediumButton"));
-			difficulty = GUILayoutExtras.ArrowedSelector(
-				difficulty,difficulties,
-				new GUIStyle[] {defaultSkin.GetStyle("ArrowButtonLeft"),defaultSkin.GetStyle("ArrowButtonRight")},
-			defaultSkin.GetStyle("MediumButton"));
-			GUILayout.EndVertical();
-
-			GUILayout.EndArea ();
-		} else if(screen == GameScreen.END) {
-
-			GUILayout.BeginArea(new Rect(640,360,640,360),defaultSkin.GetStyle("MenuBox"));
-			GUILayout.Label("Game Over",defaultSkin.GetStyle("Title"));
-			goal.DisplaySuccess(defaultSkin.GetStyle("Score"));
-			if(GUILayout.Button ("Retry",defaultSkin.GetStyle("MediumButton"))) {
-				screen = GameScreen.GAME;
-				Time.timeScale = 1;
-				Application.LoadLevel(Application.loadedLevel);
-			}
-			if(Application.loadedLevelName != "Arcade")
-				if(GUILayout.Button ("Level Select",defaultSkin.GetStyle("MediumButton"))) {
-					Time.timeScale = 1;
-					GoToMainMenu(MainMenuGUI.MenuScreen.LEVELSELECT);
-				}
-			if(GUILayout.Button ("Main Menu",defaultSkin.GetStyle("MediumButton"))) {
-				Time.timeScale = 1;
-				GoToMainMenu(MainMenuGUI.MenuScreen.MAIN);
-			}
-			GUILayout.EndArea ();
+			pauseUI.SetActive(false);
 		} else if(screen == GameScreen.GAME) {
-			//Top left area
-			GUILayout.BeginArea(new Rect(20,20,400,400));
-			if(countUpwards) {
-				GUILayout.Label("Time",defaultSkin.GetStyle ("Score"));
-				GUILayout.Label(Util.FormatTime(Time.timeSinceLevelLoad),defaultSkin.GetStyle("Score"));
-			} else {
-				GUILayout.Label("Time Remaining",defaultSkin.GetStyle ("Score"));
-				GUILayout.Label(Util.FormatTime(timeRemaining),defaultSkin.GetStyle("Score"));
-			}
-			GUILayout.EndArea();
-
-			//top right area
-			GUILayout.BeginArea(new Rect(1500,20,400,400));
-			GUILayout.Label("Combo Multiplier",defaultSkin.GetStyle ("Score"));
-			GUILayout.Label("X" + ScoreCalculator.Instance.comboMulti.ToString(), defaultSkin.GetStyle("Score"));
-			GUILayout.EndArea();
-
-			//bottom left area
-			GUILayout.BeginArea(new Rect(20,660,400,400));
-			GUILayout.FlexibleSpace();
-			goal.DisplayProgress(defaultSkin.GetStyle("Score"),defaultSkin.GetStyle ("NextScore"));
-			GUILayout.EndArea();
-
-			//bottom right area
-			GUILayout.BeginArea(new Rect(1500,660,400,400));
-			GUILayout.FlexibleSpace();
-			GUILayout.Label ("Bombs",defaultSkin.GetStyle("Score"));
-			GUILayout.Label (pb.numBombs.ToString(),defaultSkin.GetStyle("Score"));
-			GUILayout.EndArea();
-
+			screen = GameScreen.PAUSE;
+			pauseUI.SetActive(true);
 		}
-
-		GUI.EndGroup();
-		GUI.skin = unityDef;
-		GUI.matrix = lastMat;
 	}
 
 	void OnDisable()
@@ -251,7 +131,7 @@ public class GameGUI : MonoBehaviour
 		}
 	}
 
-	void GoToMainMenu(MainMenuGUI.MenuScreen screen)
+	public void GoToMainMenu()
 	{
 		PlayerPrefs.SetInt("FromGameGUI",1);
 		PlayerPrefs.SetString("MenuScreen",screen.ToString());
@@ -265,6 +145,7 @@ public class GameGUI : MonoBehaviour
 		GameObject.Instantiate(difficultyPrefabs[difficulty]);
 		GameObject.Find("BGMusic").GetComponent<AudioSource>().Play();
 	}
+	
 
 
 	/*

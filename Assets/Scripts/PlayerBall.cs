@@ -13,7 +13,7 @@ public class PlayerBall : MonoBehaviour
 	
 
 	public Collider2D playArea;
-	public float edgeOffset = 20;
+	//public float edgeOffset = 20;
 	float rotAngle = 0;
 
 	void Start()
@@ -26,8 +26,12 @@ public class PlayerBall : MonoBehaviour
 
 		if(PlayerPrefs.GetInt("Controller") == 1) {
 			//move towards the mouse
+
 			mousePos = Util.MouseToWorldPos(0);
-			rigidbody2D.velocity = Vector3.ClampMagnitude((mousePos - transform.position)*speed,speed);
+			if(Vector2.Distance(mousePos,transform.position) >= 2)
+				rigidbody2D.velocity = (mousePos - transform.position).normalized*speed;
+			else
+				rigidbody2D.velocity = Vector2.zero;
 		} else {
 			//use the keyboard
 			rigidbody2D.velocity = new Vector3(Input.GetAxis("Horizontal")*speed,Input.GetAxis("Vertical")*speed);
@@ -52,7 +56,7 @@ public class PlayerBall : MonoBehaviour
 		if(!playArea.OverlapPoint(transform.position)) {
 			if( Vector2.Distance(playArea.transform.position,(Vector2)transform.position + rigidbody2D.velocity) >
 			   Vector2.Distance(playArea.transform.position,transform.position)) {
-				rigidbody2D.velocity = rigidbody2D.velocity - (Vector2)transform.position.normalized*rigidbody2D.velocity.magnitude;
+				rigidbody2D.velocity = Vector2.zero;//rigidbody2D.velocity - (Vector2)transform.position.normalized*rigidbody2D.velocity.magnitude;
 			}
 		}
 	}

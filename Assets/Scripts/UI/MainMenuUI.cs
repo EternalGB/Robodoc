@@ -13,7 +13,7 @@ public class MainMenuUI : MonoBehaviour
 
 	void Start()
 	{
-		controlScheme.DisplayText(PlayerPrefs.GetInt("Controller",1));
+
 		arcadeScoreDisplay.text = HighScores.GetScore("Arcade","Arcade",0).ToString();
 	}
 

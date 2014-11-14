@@ -57,12 +57,12 @@ public class BallMachine : MonoBehaviour
 		} else {
 			ball = PoolManager.Instance.GetPoolByRepresentative(Util.GetRandomElement(goodBalls)).GetPooled();
 		}
-		Vector3 pos = PointOutside(Vector2.zero,playArea.transform.localScale.x/2,playArea.transform.localScale.x*1.25f);
+		Vector3 pos = PointOutside(Vector2.zero,playArea.transform.localScale.x/2,playArea.transform.localScale.x*1.5f);
 		ball.transform.position = pos;
 		ball.SetActive(true);
 		//always send the ball towards the screen-ish
 		ball.rigidbody2D.velocity = GetInitVelocity(pos,minInitSpeed,maxInitSpeed);	
-		ball.rigidbody2D.angularVelocity = ball.rigidbody2D.velocity.magnitude*10;
+		ball.rigidbody2D.angularVelocity = Mathf.Sign (ball.rigidbody2D.velocity.x)*ball.rigidbody2D.velocity.magnitude;
 		//ball.rigidbody2D.velocity = Util.RandomVectorBetween(pos,screenTopLeft,screenBottomRight).normalized*Random.Range (minInitSpeed,maxInitSpeed);
 		Invoke("SpawnBall",1/ballsPerSec);
 	}

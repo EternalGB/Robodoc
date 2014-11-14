@@ -19,7 +19,8 @@ public class Ejector : BadBall
 
 		List<Transform> toEject = new List<Transform>();
 		foreach(Transform child in parent) {
-			toEject.Add(child);
+			if(child.GetComponent<AttachedBall>())
+				toEject.Add(child);
 		}
 		//have to do two passes because we need to set parent to null
 		//and this modifies what we're enumerating through
@@ -29,9 +30,11 @@ public class Ejector : BadBall
 			Quaternion rot = child.rotation;
 			ejected.transform.position = pos;
 			ejected.transform.rotation = rot;
+			ejected.GetComponent<SpriteRenderer>().sprite = child.GetComponent<SpriteRenderer>().sprite;
 			foreach(Transform c in child)
 				c.parent = ejected.transform;
 			child.SendMessage("Destroy");
+
 			Util.SetMaterialAllAttachedBalls(ejected.transform,ejected.GetComponent<SpriteRenderer>().sharedMaterial);
 			ejected.SetActive(true);
 			ejected.rigidbody2D.velocity = (pos - parent.position).normalized*ejectionForce;
