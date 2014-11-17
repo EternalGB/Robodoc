@@ -5,8 +5,16 @@ public abstract class Goal : ScriptableObject
 {
 
 	public string displayName;
+	public float initTime;
+	protected float timeRemaining;
+	public float displayTime;
+	protected float lerpTimer;
+	protected float lerpSpeed = 0.25f;
 
-	public abstract bool Completed();
+	public virtual bool Completed()
+	{
+		return timeRemaining <= 0;
+	}
 
 	public abstract float EvaluateSuccess();
 
@@ -15,6 +23,21 @@ public abstract class Goal : ScriptableObject
 	public abstract void DisplaySuccess(GUIStyle textStyle);
 
 	public abstract string FormatSuccess(float score);
+
+	protected void OnEnable()
+	{
+		lerpTimer = 0;
+		timeRemaining = initTime;
+
+	}
+
+	public void UpdateTime()
+	{
+		//kinda doing weird stuff here because UpdateTime will always be called every update by GameGUI
+		displayTime = Mathf.Floor(Mathf.Lerp (displayTime,timeRemaining,lerpTimer));
+		lerpTimer = Mathf.Clamp (lerpTimer + lerpSpeed*Time.deltaTime,0,1f);
+		timeRemaining -= Time.deltaTime;
+	}
 
 }
 

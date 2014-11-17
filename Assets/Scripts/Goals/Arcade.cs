@@ -4,19 +4,14 @@ using System.Collections;
 public class Arcade : Goal
 {
 
-	public float initTime;
-	public float timeRemaining;
 	public float initRatio;
 	public float timeToScoreRatio;
 	public float ratioDegradeRate;
-	float lerpTimer;
-	float lerpSpeed = 0.25f;
-	public float displayTime;
+
 
 	void OnEnable()
 	{
-		lerpTimer = 0;
-		timeRemaining = initTime;
+		base.OnEnable();
 		timeToScoreRatio = initRatio;
 		ScoreCalculator.PlayerScored += AddTime;
 	}
@@ -33,16 +28,7 @@ public class Arcade : Goal
 		timeRemaining += Mathf.Ceil(scoreIncrease/timeToScoreRatio);
 		timeToScoreRatio += scoreIncrease/ratioDegradeRate;
 	}
-
-	public override bool Completed ()
-	{
-		//kinda doing weird stuff here because Completed will always be called every update by GameGUI
-		displayTime = Mathf.Floor(Mathf.Lerp (displayTime,timeRemaining,lerpTimer));
-		lerpTimer = Mathf.Clamp (lerpTimer + lerpSpeed*Time.deltaTime,0,1f);
-		timeRemaining -= Time.deltaTime;
-		return timeRemaining <= 0;
-	}
-
+	
 	public override float EvaluateSuccess ()
 	{
 		return ScoreCalculator.Instance.score;

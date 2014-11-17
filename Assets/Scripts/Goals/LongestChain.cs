@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections;
 
-public class LongestChain : TimeLimitGoal
+public class LongestChain : Goal
 {
 
 	public override float EvaluateSuccess ()

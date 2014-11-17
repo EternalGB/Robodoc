@@ -17,7 +17,6 @@ public class GameGUI : MonoBehaviour
 
 	public Level level;
 	public Goal goal;
-	public float timeRemaining;
 	
 
 	public List<GameObject> difficultyPrefabs;
@@ -32,6 +31,8 @@ public class GameGUI : MonoBehaviour
 	public TextList controlScheme;
 	public GameObject gameUI;
 	public GameObject pauseUI;
+
+	public float displayTime;
 
 	void Start()
 	{
@@ -55,21 +56,15 @@ public class GameGUI : MonoBehaviour
 			goal = level.possibleGoals[PlayerPrefs.GetInt("GoalIndex",0)];
 		}
 
-		if(goal.GetType().BaseType == typeof(TimeLimitGoal)) {
-			timeRemaining = ((TimeLimitGoal)goal).timeLimit;
-		} else if(goal.GetType() == typeof(Arcade)){
-			timeRemaining = ((Arcade)goal).timeRemaining;
-		}
 
 		doneGoalCompleted = false;
 	}
 
 	void Update()
 	{
-		if(goal.GetType() == typeof(Arcade)) {
-			timeRemaining = ((Arcade)goal).displayTime;
-		} else
-			timeRemaining -= Time.deltaTime;
+		goal.UpdateTime();
+		displayTime = goal.displayTime;
+
 		if(Input.GetButtonDown("Pause")) {
 			TogglePause();
 		}

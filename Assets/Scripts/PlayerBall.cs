@@ -102,7 +102,7 @@ public class PlayerBall : MonoBehaviour
 				}
 			}
 		} else if(col.gameObject.layer == LayerMask.NameToLayer("BadBall")) {
-			Debug.Log ("BadBall Collision");
+			//Debug.Log ("BadBall Collision");
 			ContactPoint2D[] cps = col.contacts;
 			col.gameObject.GetComponent<BadBall>().ApplyEffect(cps[0].otherCollider.transform);
 			//recalculate score

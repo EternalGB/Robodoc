@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections;
 
-public class BiggestCombo : TimeLimitGoal
+public class BiggestCombo : Goal
 {
 
 	public override float EvaluateSuccess ()
