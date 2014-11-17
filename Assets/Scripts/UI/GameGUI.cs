@@ -25,8 +25,8 @@ public class GameGUI : MonoBehaviour
 	public GameObject gameUI;
 	public GameObject pauseUI;
 
+	public BGController BGImage;
 	public float displayTime;
-
 	bool paused = false;
 
 	void Start()
@@ -57,6 +57,7 @@ public class GameGUI : MonoBehaviour
 	{
 		goal.UpdateTime();
 		displayTime = goal.displayTime;
+		BGImage.UpdatePos(Mathf.Clamp(1 - displayTime/120f,0,1));
 
 		if(Input.GetButtonDown("Pause")) {
 			TogglePause();
