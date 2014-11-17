@@ -8,7 +8,7 @@ public class ArcadeManager : MonoBehaviour
 	public int maxColors;
 	public int numInitColors;
 	public Material baseMat;
-	public GameObject goodBallPrefab;
+	public List<GameObject> goodBallPrefabs;
 	public List<GameObject> badBalls;
 
 	public ProbabilityTable modifications;
@@ -78,7 +78,7 @@ public class ArcadeManager : MonoBehaviour
 
 	void AddColorBall(int matIndex)
 	{
-		GameObject newBall = (GameObject)GameObject.Instantiate(goodBallPrefab);
+		GameObject newBall = (GameObject)GameObject.Instantiate(Util.GetRandomElement(goodBallPrefabs));
 		newBall.SetActive(false);
 		newBall.GetComponent<SpriteRenderer>().material = ballMats[matIndex];
 		bm.AddGoodBall(newBall);
