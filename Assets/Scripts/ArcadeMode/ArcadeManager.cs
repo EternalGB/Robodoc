@@ -47,7 +47,7 @@ public class ArcadeManager : MonoBehaviour
 	void UpdateDifficulty(float scoreIncrease)
 	{
 		scoreTotal += scoreIncrease;
-		if(scoreTotal >= milestone) {
+		if(modifications != null && modifications.Size > 0 && scoreTotal >= milestone) {
 			//do some stuff
 			((LevelModifier)modifications.GetRandom()).DoModification();
 			if(badBalls.Count > 0)
