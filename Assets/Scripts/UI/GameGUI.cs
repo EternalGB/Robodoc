@@ -4,16 +4,9 @@ using System.Collections.Generic;
 public class GameGUI : MonoBehaviour
 {
 
-	enum GameScreen
-	{
-		GAME,PAUSE,START,END
-	};
-
 
 	PlayerBall pb;
 	ScoreArea scoreArea;
-
-	GameScreen screen;
 
 	public Level level;
 	public Goal goal;
@@ -34,17 +27,17 @@ public class GameGUI : MonoBehaviour
 
 	public float displayTime;
 
+	bool paused = false;
+
 	void Start()
 	{
 		Time.timeScale = 0;
 		if(Application.loadedLevelName == "Arcade") {
-			screen = GameScreen.GAME;
 			difficulty = 1;
 			Time.timeScale = 1;
 			//GameObject.Instantiate(difficultyPrefabs[difficulty]);
 			GameObject.Find("BGMusic").GetComponent<AudioSource>().Play();
-		} else
-			screen = GameScreen.START;
+		}
 		pb = GameObject.Find ("PlayerBall").GetComponent<PlayerBall>();
 		//timeRemaining += Time.timeSinceLevelLoad;
 
@@ -77,14 +70,12 @@ public class GameGUI : MonoBehaviour
 
 		if(goal.Completed()) {
 			Time.timeScale = 0;
-			screen = GameScreen.END;
 			OnGoalCompleted();
 		}
 
 #if UNITY_EDITOR
 		if(Input.GetKeyDown(KeyCode.F1)) {
 			Time.timeScale = 0;
-			screen = GameScreen.END;
 			OnGoalCompleted();
 		}
 #endif
@@ -92,19 +83,19 @@ public class GameGUI : MonoBehaviour
 
 	bool Paused()
 	{
-		return screen != GameScreen.GAME;
+		return paused;
 	}
 
 	public void TogglePause()
 	{
-		if(screen == GameScreen.PAUSE) {
-			screen = GameScreen.GAME;
+		if(paused) {
 			PlayerPrefs.SetInt("Controller",controlScheme.index);
 			PlayerPrefs.Save();
 			pauseUI.SetActive(false);
-		} else if(screen == GameScreen.GAME) {
-			screen = GameScreen.PAUSE;
+			paused = false;
+		} else if(!paused) {
 			pauseUI.SetActive(true);
+			paused = true;
 			controlScheme.DisplayText(PlayerPrefs.GetInt("Controller",1));
 		}
 	}
@@ -124,13 +115,11 @@ public class GameGUI : MonoBehaviour
 	public void GoToMainMenu()
 	{
 		PlayerPrefs.SetInt("FromGameGUI",1);
-		PlayerPrefs.SetString("MenuScreen",screen.ToString());
 		Application.LoadLevel("MainMenu");
 	}
 
 	void StartLevel(int difficulty)
 	{
-		screen = GameScreen.GAME;
 		Time.timeScale = 1;
 		GameObject.Instantiate(difficultyPrefabs[difficulty]);
 		GameObject.Find("BGMusic").GetComponent<AudioSource>().Play();
