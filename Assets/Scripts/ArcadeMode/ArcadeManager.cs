@@ -25,7 +25,7 @@ public class ArcadeManager : MonoBehaviour
 
 	void Awake()
 	{
-		colors =  new Palette(maxColors,0.99f,1f,0.05f);
+		colors =  new Palette(maxColors,0.5f,1f,0.05f);
 		ballMats = new Material[maxColors];
 		for(int i = 0; i < ballMats.Length; i++) {
 			ballMats[i] = new Material(baseMat);
