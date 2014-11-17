@@ -15,6 +15,7 @@ public class MainMenuUI : MonoBehaviour
 	{
 
 		arcadeScoreDisplay.text = HighScores.GetScore("Arcade","Arcade",0).ToString();
+		controlScheme.DisplayText(PlayerPrefs.GetInt("Controller",1));
 	}
 
 	public void LaunchArcade()
@@ -22,7 +23,7 @@ public class MainMenuUI : MonoBehaviour
 		Application.LoadLevel("Arcade");
 		PlayerPrefs.SetInt ("LevelIndex",-1);
 		PlayerPrefs.SetString("LevelName","Arcade");
-		PlayerPrefs.SetInt("Controller",controlScheme.index);
+
 		PlayerPrefs.Save();
 	}
 
@@ -36,6 +37,11 @@ public class MainMenuUI : MonoBehaviour
 	{
 		mainMenu.SetActive(false);
 		levelSelect.SetActive(true);
+	}
+
+	public void UpdateControlScheme()
+	{
+		PlayerPrefs.SetInt("Controller",controlScheme.index);
 	}
 
 }

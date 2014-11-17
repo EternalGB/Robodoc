@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class TextList : MonoBehaviour
 {
 
-	public int index = 0;
+	public int index;
 	public List<string> texts;
 	public Text displayText;
 

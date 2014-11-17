@@ -18,8 +18,7 @@ public class GameGUI : MonoBehaviour
 	public Level level;
 	public Goal goal;
 	public float timeRemaining;
-
-	int controller;
+	
 
 	public List<GameObject> difficultyPrefabs;
 	static string[] difficulties = 
@@ -49,8 +48,7 @@ public class GameGUI : MonoBehaviour
 		//timeRemaining += Time.timeSinceLevelLoad;
 
 
-		controlScheme.DisplayText(PlayerPrefs.GetInt("Controller",1));
-		PlayerPrefs.SetInt("Controller",controlScheme.index);
+
 
 		if(level == null) {
 			level = Resources.Load<Level>("Levels/" + PlayerPrefs.GetString("LevelName","01-Circle"));
@@ -112,14 +110,11 @@ public class GameGUI : MonoBehaviour
 		} else if(screen == GameScreen.GAME) {
 			screen = GameScreen.PAUSE;
 			pauseUI.SetActive(true);
+			controlScheme.DisplayText(PlayerPrefs.GetInt("Controller",1));
 		}
 	}
 
-	void OnDisable()
-	{
-		PlayerPrefs.SetInt("Controller",controller);
-		PlayerPrefs.Save();
-	}
+
 
 	void OnGoalCompleted()
 	{
