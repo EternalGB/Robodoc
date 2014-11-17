@@ -23,7 +23,8 @@ public class PlayerBall : MonoBehaviour
 
 	void Update()
 	{
-
+		//to stop new colliders changing the center of mass
+		rigidbody2D.centerOfMass = Vector2.zero;
 		if(PlayerPrefs.GetInt("Controller") == 1) {
 			//move towards the mouse
 
