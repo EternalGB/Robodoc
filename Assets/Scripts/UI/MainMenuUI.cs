@@ -44,5 +44,10 @@ public class MainMenuUI : MonoBehaviour
 		PlayerPrefs.SetInt("Controller",controlScheme.index);
 	}
 
+	public void ShowCredits()
+	{
+		Application.LoadLevel("Credits");
+	}
+
 }
 
