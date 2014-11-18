@@ -34,7 +34,7 @@ public class GameGUI : MonoBehaviour
 	{
 		Time.timeScale = 0;
 		if(Application.loadedLevelName == "Arcade") {
-			difficulty = 1;
+			difficulty = 0;
 			Time.timeScale = 1;
 			//GameObject.Instantiate(difficultyPrefabs[difficulty]);
 			GameObject.Find("BGMusic").GetComponent<AudioSource>().Play();

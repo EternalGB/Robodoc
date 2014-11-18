@@ -9,6 +9,7 @@ public class HighScores
 
 	public static void SetScore(Level level, Goal goal, int difficulty, float score) 
 	{
+		Debug.Log ("Attempting to set High Score for " + level.displayName + " with goal " + goal.displayName + " to " + score);
 		if(scores == null)
 			LoadScores();
 		List<float> oldScores;
@@ -55,8 +56,7 @@ public class HighScores
 
 	public static Dictionary<string,List<float>> GetAllScores()
 	{
-		if(scores == null)
-			LoadScores();
+		LoadScores();
 		return scores;
 	}
 
