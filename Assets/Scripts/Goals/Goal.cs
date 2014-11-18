@@ -26,8 +26,7 @@ public abstract class Goal : ScriptableObject
 
 	protected void OnEnable()
 	{
-		lerpTimer = 0;
-		timeRemaining = initTime;
+		ResetGoal();
 
 	}
 
@@ -37,6 +36,12 @@ public abstract class Goal : ScriptableObject
 		displayTime = Mathf.Lerp (displayTime,timeRemaining,lerpTimer);
 		lerpTimer = Mathf.Clamp (lerpTimer + lerpSpeed*Time.deltaTime,0,1f);
 		timeRemaining -= Time.deltaTime;
+	}
+
+	public virtual void ResetGoal()
+	{
+		lerpTimer = 0;
+		timeRemaining = initTime;
 	}
 
 }

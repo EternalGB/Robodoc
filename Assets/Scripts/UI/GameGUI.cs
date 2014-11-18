@@ -24,6 +24,7 @@ public class GameGUI : MonoBehaviour
 	public TextList controlScheme;
 	public GameObject gameUI;
 	public GameObject pauseUI;
+	public GameObject endUI;
 
 	public BGController BGImage;
 	public float displayTime;
@@ -82,7 +83,7 @@ public class GameGUI : MonoBehaviour
 #endif
 	}
 
-	bool Paused()
+	public bool Paused()
 	{
 		return paused;
 	}
@@ -109,6 +110,8 @@ public class GameGUI : MonoBehaviour
 			level.SetHighScore(goal,difficulty,goal.EvaluateSuccess());
 			if(Application.loadedLevelName != "Arcade")
 				ProgressionManager.UpdateProgression(PlayerPrefs.GetInt("LevelIndex"),PlayerPrefs.GetInt("GoalIndex"));
+			endUI.SetActive(true);
+			paused = true;
 			doneGoalCompleted = true;
 		}
 	}
@@ -126,7 +129,11 @@ public class GameGUI : MonoBehaviour
 		GameObject.Find("BGMusic").GetComponent<AudioSource>().Play();
 	}
 	
-
+	public void RetryLevel()
+	{
+		Application.LoadLevel(Application.loadedLevel);
+		goal.ResetGoal();
+	}
 
 	/*
 	 * 
