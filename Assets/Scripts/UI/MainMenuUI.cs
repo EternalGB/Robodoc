@@ -43,10 +43,11 @@ public class MainMenuUI : MonoBehaviour
 	{
 		PlayerPrefs.SetInt("Controller",controlScheme.index);
 	}
+	
 
-	public void ShowCredits()
+	public void GoToScene(string sceneName)
 	{
-		Application.LoadLevel("Credits");
+		Application.LoadLevel(sceneName);
 	}
 
 }
