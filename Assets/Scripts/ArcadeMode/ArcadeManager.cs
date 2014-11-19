@@ -13,9 +13,7 @@ public class ArcadeManager : MonoBehaviour
 
 	public ProbabilityTable modifications;
 
-	Palette colors;
-	Material[] ballMats;
-	int matIndex = 0;
+
 
 	float scoreTotal;
 	public float initMilestone;
@@ -25,14 +23,8 @@ public class ArcadeManager : MonoBehaviour
 
 	void Awake()
 	{
-		colors =  new Palette(maxColors,0.5f,1f,0.05f);
-		ballMats = new Material[maxColors];
-		for(int i = 0; i < ballMats.Length; i++) {
-			ballMats[i] = new Material(baseMat);
-			ballMats[i].color = colors.GetColor(i);
-		}
-		for(matIndex = 0; matIndex < numInitColors; matIndex++) {
-			AddColorBall(matIndex);
+		for(int i = 0; i < numInitColors; i++) {
+			AddColorBall();
 		}
 		AddBadBall();
 	}
@@ -54,8 +46,7 @@ public class ArcadeManager : MonoBehaviour
 				AddBadBall();
 			//+1 because of bonus ball
 			if(bm.NumGoodBalls() < maxColors+1) {
-				AddColorBall(matIndex);
-				matIndex++;
+				AddColorBall();
 			}
 
 
@@ -76,12 +67,11 @@ public class ArcadeManager : MonoBehaviour
 		badBalls.RemoveAt(badBallIndex);
 	}
 
-	void AddColorBall(int matIndex)
+	void AddColorBall()
 	{
-		GameObject newBall = (GameObject)GameObject.Instantiate(Util.GetRandomElement(goodBallPrefabs));
-		newBall.SetActive(false);
-		newBall.GetComponent<SpriteRenderer>().material = ballMats[matIndex];
-		bm.AddGoodBall(newBall);
+		int ballIndex = Random.Range (0,goodBallPrefabs.Count);
+		bm.AddGoodBall(goodBallPrefabs[ballIndex]);
+		goodBallPrefabs.RemoveAt(ballIndex);
 	}
 }
 
