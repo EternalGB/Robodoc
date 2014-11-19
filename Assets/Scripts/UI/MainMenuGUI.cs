@@ -110,7 +110,7 @@ public class MainMenuGUI : MonoBehaviour
 			PlayerPrefs.SetInt("Controller",controller);
 			PlayerPrefs.Save();
 		}
-		GUILayout.Label("Arcade Score: " + HighScores.GetScore("Endless","Endless",0),defaultSkin.GetStyle("YourBest"));
+		GUILayout.Label("Arcade Score: " + ChallengeHighScores.GetScore("Endless","Endless",0),defaultSkin.GetStyle("YourBest"));
 		if(GUILayout.Button ("Challenges",defaultSkin.GetStyle("LargeButton"))) {
 			screen = MenuScreen.LEVELSELECT;
 		}
@@ -183,7 +183,7 @@ public class MainMenuGUI : MonoBehaviour
 						}
 						GUILayout.BeginHorizontal(defaultSkin.GetStyle("HighScoreBox"));
 
-						List<float> scores = HighScores.GetScores(levels[i],levels[i].possibleGoals[j]);
+						List<float> scores = ChallengeHighScores.GetScores(levels[i],levels[i].possibleGoals[j]);
 						for(int k = 0; k < scores.Count; k++) {
 							GUILayout.Label(DifficultyToString(k) + ": " + scores[k],defaultSkin.GetStyle("YourBest"));
 						}

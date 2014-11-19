@@ -107,9 +107,14 @@ public class GameGUI : MonoBehaviour
 	void OnGoalCompleted()
 	{
 		if(!doneGoalCompleted) {
-			level.SetHighScore(goal,difficulty,goal.EvaluateSuccess());
-			if(Application.loadedLevelName != "Arcade")
-				ProgressionManager.UpdateProgression(PlayerPrefs.GetInt("LevelIndex"),PlayerPrefs.GetInt("GoalIndex"));
+			if(Application.loadedLevelName == "Arcade") {
+				ArcadeStats.HighScore = goal.EvaluateSuccess();
+			} else {
+				level.SetHighScore(goal,difficulty,goal.EvaluateSuccess());
+			}
+
+			//if(Application.loadedLevelName != "Arcade")
+			//	ProgressionManager.UpdateProgression(PlayerPrefs.GetInt("LevelIndex"),PlayerPrefs.GetInt("GoalIndex"));
 			endUI.SetActive(true);
 			paused = true;
 			doneGoalCompleted = true;

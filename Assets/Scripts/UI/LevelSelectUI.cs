@@ -62,7 +62,7 @@ public class LevelSelectUI : MonoBehaviour
 				gb.onClick.AddListener(() => {LaunchLevel(levelIndex,goalIndex);});
 
 				//add the high scores
-				List<float> scores = HighScores.GetScores(levels[i],levels[i].possibleGoals[j]);
+				List<float> scores = ChallengeHighScores.GetScores(levels[i],levels[i].possibleGoals[j]);
 				GameObject scoreGroup = (GameObject)GameObject.Instantiate(highScoreGroupPrefab);
 				scoreGroup.GetComponent<RectTransform>().SetParent(goalGroup.transform);
 				for(int k = 0; k < scores.Count; k++) {

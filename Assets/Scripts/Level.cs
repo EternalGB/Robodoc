@@ -15,7 +15,7 @@ public class Level : ScriptableObject
 
 	public void SetHighScore(Goal goal, int diff, float score)
 	{
-		HighScores.SetScore(this,goal,diff,score);
+		ChallengeHighScores.SetScore(this,goal,diff,score);
 	}
 
 	/*
