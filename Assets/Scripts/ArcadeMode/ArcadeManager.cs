@@ -5,11 +5,12 @@ public class ArcadeManager : MonoBehaviour
 {
 
 	public BallMachine bm;
-	public int maxColors;
+	int maxColors;
 	public int numInitColors;
 	public Material baseMat;
 	public List<GameObject> goodBallPrefabs;
 	public List<GameObject> badBalls;
+	int badBallIndex = 1;
 
 	public ProbabilityTable modifications;
 
@@ -23,10 +24,13 @@ public class ArcadeManager : MonoBehaviour
 
 	void Awake()
 	{
+		maxColors = ArcadeProgression.MaxColorBalls;
 		for(int i = 0; i < numInitColors; i++) {
 			AddColorBall();
 		}
-		AddBadBall();
+		badBallIndex = ArcadeProgression.BadBallIndex;
+		for(int i = 0; i <= badBallIndex; i++)
+			AddBadBall();
 	}
 
 	void Start()
@@ -69,7 +73,7 @@ public class ArcadeManager : MonoBehaviour
 
 	void AddColorBall()
 	{
-		int ballIndex = Random.Range (0,goodBallPrefabs.Count);
+		int ballIndex = 0;//Random.Range (0,goodBallPrefabs.Count);
 		bm.AddGoodBall(goodBallPrefabs[ballIndex]);
 		goodBallPrefabs.RemoveAt(ballIndex);
 	}
