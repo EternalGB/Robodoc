@@ -62,7 +62,7 @@ public class ArcadeManager : MonoBehaviour
 
 	void AddBadBall()
 	{
-		int badBallIndex = Random.Range(0,badBalls.Count);
+		int badBallIndex = 0;//Random.Range(0,badBalls.Count);
 		bm.AddBadBall(badBalls[badBallIndex]);
 		badBalls.RemoveAt(badBallIndex);
 	}

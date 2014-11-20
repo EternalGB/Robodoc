@@ -1,21 +1,21 @@
 using UnityEngine;
 using System.Collections;
 
-public class Freezer : BadBall
+public class Shocker : BadBall
 {
 
-	public float freezeDuration;
-	public Material frozenMat;
+	public float shockDuration;
+	public Material shockMat;
 
 	public override void ApplyEffect (Transform target)
 	{
 		GameObject player = GameObject.Find("PlayerBall");
 		if(player) {
-			player.GetComponent<PlayerBall>().GetFrozen(freezeDuration,frozenMat);
+			player.GetComponent<PlayerBall>().GetShocked(shockDuration,shockMat);
 			Destroy();
 		}
 	}
-
+	
 
 }
 

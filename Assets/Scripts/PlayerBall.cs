@@ -16,6 +16,10 @@ public class PlayerBall : MonoBehaviour
 	//public float edgeOffset = 20;
 	float rotAngle = 0;
 
+	bool movFreeze = false;
+	bool rotFreeze = false;
+	public bool glooped = true;
+
 	void Start()
 	{
 		ballPool = PoolManager.Instance.GetPoolByRepresentative(ballPrefab);
@@ -25,27 +29,34 @@ public class PlayerBall : MonoBehaviour
 	{
 		//to stop new colliders changing the center of mass
 		rigidbody2D.centerOfMass = Vector2.zero;
-		if(PlayerPrefs.GetInt("Controller") == 1) {
-			//move towards the mouse
 
-			mousePos = Util.MouseToWorldPos(0);
-			if(Vector2.Distance(mousePos,transform.position) >= 2)
-				rigidbody2D.velocity = (mousePos - transform.position).normalized*speed;
-			else
-				rigidbody2D.velocity = Vector2.zero;
-		} else {
-			//use the keyboard
-			rigidbody2D.velocity = new Vector3(Input.GetAxis("Horizontal")*speed,Input.GetAxis("Vertical")*speed);
+		if(!movFreeze ){
+			if(PlayerPrefs.GetInt("Controller") == 1) {
+				//move towards the mouse
+				
+				mousePos = Util.MouseToWorldPos(0);
+				if(Vector2.Distance(mousePos,transform.position) >= 2)
+					rigidbody2D.velocity = (mousePos - transform.position).normalized*speed;
+				else
+					rigidbody2D.velocity = Vector2.zero;
+			} else {
+				//use the keyboard
+				rigidbody2D.velocity = new Vector3(Input.GetAxis("Horizontal")*speed,Input.GetAxis("Vertical")*speed);
+			}
 		}
+
 
 		if(Input.GetButtonDown("Bomb")) {
 			FireBomb();
 		}
 
 		//spin left or right
-		rotAngle = Mathf.Repeat(rotAngle + Input.GetAxisRaw("Spin")*rotSpeed*Time.deltaTime,360);
-		transform.rotation = Quaternion.AngleAxis(rotAngle,Vector3.forward);
-		//rigidbody2D.angularVelocity += new Vector3(0,0,rigidbody2D.velocity.x + rigidbody2D.velocity.y)*-0.1f;
+		if(!rotFreeze) {
+			rotAngle = Mathf.Repeat(rotAngle + Input.GetAxisRaw("Spin")*rotSpeed*Time.deltaTime,360);
+			transform.rotation = Quaternion.AngleAxis(rotAngle,Vector3.forward);
+			//rigidbody2D.angularVelocity += new Vector3(0,0,rigidbody2D.velocity.x + rigidbody2D.velocity.y)*-0.1f;
+		}
+
 
 		Debug.DrawLine(transform.position,(Vector2)transform.position+rigidbody2D.velocity,Color.blue,0f);
 
@@ -64,50 +75,52 @@ public class PlayerBall : MonoBehaviour
 
 	void OnCollisionEnter2D(Collision2D col)
 	{
-		if(col.gameObject.layer == LayerMask.NameToLayer("GoodBall")) {
-			PointBall pb;
-			if(pb = col.gameObject.GetComponent<PointBall>()) {
+		if(!glooped) {
+			if(col.gameObject.layer == LayerMask.NameToLayer("GoodBall")) {
+				PointBall pb;
+				if(pb = col.gameObject.GetComponent<PointBall>()) {
+					ContactPoint2D[] cps = col.contacts;
+					Vector3 pos = pb.transform.position;
+					Quaternion rot = pb.transform.rotation;
+					Vector3 scale = pb.transform.localScale;
+					Material mat = pb.GetComponent<SpriteRenderer>().sharedMaterial;
+					Sprite sprite = pb.GetComponent<SpriteRenderer>().sprite;
+					pb.Destroy();
+					AttachedBall ball = ballPool.GetPooled().GetComponent<AttachedBall>();
+					//make sure it's not bringing any friends
+					Util.DestroyChildrenWithComponent<AttachedBall>(ball.transform);
+					ball.transform.position = pos;
+					ball.transform.rotation = rot;
+					ball.GetComponent<SpriteRenderer>().sprite = sprite;
+					//ball.transform.localScale = scale;
+					ball.GetComponent<SpriteRenderer>().sharedMaterial = mat;
+					ball.gameObject.SetActive(true);
+					Transform parent = GetCorrectParent(cps);
+					ball.transform.parent = parent;
+					if(parent == null)
+						Debug.LogError("No correct parent could be found");
+					ball.SetPointValue(pb.pointValue);
+					
+					//Debug.Log ("Creating Attached Ball at " + pos + " parent: " + ball.transform.parent.GetInstanceID());
+					
+					ScoreCalculator.Instance.ComboUp();
+					//recalculate score
+					ScoreCalculator.Instance.SetScorePrediction();
+					
+					int depth = FindDepth(ball.transform);
+					//Debug.Log ("Depth of " + ball.transform.GetInstanceID() + " " + depth);
+					if(depth > 0) {
+						SoundEffectManager.Instance.PlayClipOnce("BallGet",Vector3.zero,1,1 + depth/2f);
+					}
+				}
+			} else if(col.gameObject.layer == LayerMask.NameToLayer("BadBall")) {
+				//Debug.Log ("BadBall Collision");
 				ContactPoint2D[] cps = col.contacts;
-				Vector3 pos = pb.transform.position;
-				Quaternion rot = pb.transform.rotation;
-				Vector3 scale = pb.transform.localScale;
-				Material mat = pb.GetComponent<SpriteRenderer>().sharedMaterial;
-				Sprite sprite = pb.GetComponent<SpriteRenderer>().sprite;
-				pb.Destroy();
-				AttachedBall ball = ballPool.GetPooled().GetComponent<AttachedBall>();
-				//make sure it's not bringing any friends
-				Util.DestroyChildrenWithComponent<AttachedBall>(ball.transform);
-				ball.transform.position = pos;
-				ball.transform.rotation = rot;
-				ball.GetComponent<SpriteRenderer>().sprite = sprite;
-				//ball.transform.localScale = scale;
-				ball.GetComponent<SpriteRenderer>().sharedMaterial = mat;
-				ball.gameObject.SetActive(true);
-				Transform parent = GetCorrectParent(cps);
-				ball.transform.parent = parent;
-				if(parent == null)
-					Debug.LogError("No correct parent could be found");
-				ball.SetPointValue(pb.pointValue);
-
-				//Debug.Log ("Creating Attached Ball at " + pos + " parent: " + ball.transform.parent.GetInstanceID());
-
-				ScoreCalculator.Instance.ComboUp();
+				col.gameObject.GetComponent<BadBall>().ApplyEffect(cps[0].otherCollider.transform);
 				//recalculate score
 				ScoreCalculator.Instance.SetScorePrediction();
-				
-				int depth = FindDepth(ball.transform);
-				//Debug.Log ("Depth of " + ball.transform.GetInstanceID() + " " + depth);
-				if(depth > 0) {
-					SoundEffectManager.Instance.PlayClipOnce("BallGet",Vector3.zero,1,1 + depth/2f);
-				}
+				SoundEffectManager.Instance.PlayClipOnce("BadHit",Vector3.zero,1,1);
 			}
-		} else if(col.gameObject.layer == LayerMask.NameToLayer("BadBall")) {
-			//Debug.Log ("BadBall Collision");
-			ContactPoint2D[] cps = col.contacts;
-			col.gameObject.GetComponent<BadBall>().ApplyEffect(cps[0].otherCollider.transform);
-			//recalculate score
-			ScoreCalculator.Instance.SetScorePrediction();
-			SoundEffectManager.Instance.PlayClipOnce("BadHit",Vector3.zero,1,1);
 		}
 	}
 
@@ -154,5 +167,52 @@ public class PlayerBall : MonoBehaviour
 			numBombs--;
 		}
 	}
+
+	public void GetFrozen(float duration, Material frozenMat)
+	{
+		if(!movFreeze) {
+			movFreeze = true;
+			rigidbody2D.velocity = Vector2.zero;
+			rigidbody2D.isKinematic = true;
+			Util.SetMaterialAllAttachedBallsTemp(transform,frozenMat,duration);
+			StartCoroutine(Timers.Countdown(duration,() => {
+				movFreeze = false;
+				rigidbody2D.isKinematic = false;
+			}));
+		}
+	}
+
+	public void GetShocked(float duration, Material shockedMat)
+	{
+		if(!rotFreeze) {
+			rotFreeze = true;
+			Util.SetMaterialAllAttachedBallsTemp(transform,shockedMat,duration);
+			StartCoroutine(Timers.Countdown(duration,() => {rotFreeze = false;}));
+		}
+	}
+
+	public void GetGlooped(float duration, Material gloopMaterial)
+	{
+		if(!glooped) {
+			glooped = true;
+			//we make copies so the delegate we create keeps its own state
+			/*
+			Material oldMat = GetComponent<SpriteRenderer>().sharedMaterial;
+			Transform trans = transform;
+			GetComponent<SpriteRenderer>().sharedMaterial = gloopMaterial;
+			StartCoroutine(Timers.Countdown(duration,() => {
+				Debug.Log ("Resetting mat to " + oldMat.name + " " + oldMat.GetInstanceID());
+				trans.GetComponent<SpriteRenderer>().sharedMaterial = oldMat;
+			}));
+			*/
+			Util.SetMaterialAllAttachedBallsTemp(transform,gloopMaterial,duration);
+			StartCoroutine(Timers.Countdown(duration,() => glooped = false));
+
+		}
+	}
+
+
+
+
 }
 
