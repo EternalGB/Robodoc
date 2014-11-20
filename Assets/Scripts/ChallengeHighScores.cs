@@ -75,5 +75,10 @@ public class ChallengeHighScores
 		return GetAllScores()[levelName + goalName][difficulty];
 	}
 
+	public static void Clear()
+	{
+		PlayerPrefs.DeleteKey("HighScores");
+	}
+
 }
 

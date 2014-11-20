@@ -14,7 +14,7 @@ public class MainMenuUI : MonoBehaviour
 	void Start()
 	{
 
-		arcadeScoreDisplay.text = ChallengeHighScores.GetScore("Arcade","Arcade",0).ToString();
+		arcadeScoreDisplay.text = ArcadeStats.HighScore.ToString();
 		controlScheme.DisplayText(PlayerPrefs.GetInt("Controller",1));
 	}
 
@@ -49,7 +49,13 @@ public class MainMenuUI : MonoBehaviour
 	{
 		Application.LoadLevel(sceneName);
 	}
-	
+
+	public void ResetProgress()
+	{
+		ChallengeHighScores.Clear();
+		ArcadeStats.Clear();
+		Application.LoadLevel(Application.loadedLevel);
+	}
 
 }
 

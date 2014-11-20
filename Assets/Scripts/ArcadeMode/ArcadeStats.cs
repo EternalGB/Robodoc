@@ -41,5 +41,11 @@ public class ArcadeStats
 		}
 	}
 
+	public static void Clear()
+	{
+		PlayerPrefs.DeleteKey("ArcadeTotalScore");
+		PlayerPrefs.DeleteKey("ArcadeHighScore");
+	}
+
 }
 

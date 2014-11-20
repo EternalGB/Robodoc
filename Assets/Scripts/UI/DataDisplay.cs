@@ -52,8 +52,8 @@ public class DataDisplay : MonoBehaviour
 
 	static string MinutesSeconds(string seconds)
 	{
-		float fseconds = float.Parse(seconds);
-		System.TimeSpan ts = new System.TimeSpan(0,0,(int)fseconds);
+		float intSeconds = float.Parse(seconds);
+		System.TimeSpan ts = new System.TimeSpan(0,0,(int)intSeconds);
 		string secs = ts.Seconds.ToString();
 		if(ts.Seconds < 10)
 			secs = "0" + secs;
