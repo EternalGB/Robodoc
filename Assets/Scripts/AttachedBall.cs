@@ -4,11 +4,17 @@ using System.Collections;
 public class AttachedBall : PoolableObject 
 {
 
+	public enum BallTypeNames
+	{
+		Green,LightBlue,Pink,Red,Yellow,BonusBall,Infected
+	}
+
 	public GameObject ejectedBallPrefab;
 	public float pointValue = 1;
 	Vector3 origScale;
 	Material origMat;
 
+	public BallTypeNames type;
 
 	void Start()
 	{
@@ -16,6 +22,10 @@ public class AttachedBall : PoolableObject
 		origMat = GetComponent<SpriteRenderer>().sharedMaterial;
 	}
 
+	public void SetType(string typeName)
+	{
+		type = (BallTypeNames)System.Enum.Parse(typeof(BallTypeNames),typeName);
+	}
 
 	public override void Destroy ()
 	{
@@ -38,6 +48,7 @@ public class AttachedBall : PoolableObject
 	public void GetInfected(Material infectionMat, float spreadInterval)
 	{
 		GetComponent<SpriteRenderer>().sharedMaterial = infectionMat;
+		type = BallTypeNames.Infected;
 		SetPointValue(0);
 		ScoreCalculator.Instance.SetScorePrediction();
 		if(transform.parent != null)

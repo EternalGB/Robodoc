@@ -22,6 +22,8 @@ public class ArcadeManager : MonoBehaviour
 	int milestoneIndex = 0;
 	public float milestoneIncreaseRate;
 
+
+
 	void Awake()
 	{
 		maxColors = ArcadeProgression.MaxColorBalls;

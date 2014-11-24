@@ -31,7 +31,7 @@ public class PlayerBall : MonoBehaviour
 		rigidbody2D.centerOfMass = Vector2.zero;
 
 		if(!movFreeze ){
-			if(PlayerPrefs.GetInt("Controller") == 1) {
+			if(PlayerPrefs.GetInt("Controller",1) == 1) {
 				//move towards the mouse
 				
 				mousePos = Util.MouseToWorldPos(0);
@@ -100,6 +100,7 @@ public class PlayerBall : MonoBehaviour
 					if(parent == null)
 						Debug.LogError("No correct parent could be found");
 					ball.SetPointValue(pb.pointValue);
+					ball.SetType(pb.gameObject.name);
 					
 					//Debug.Log ("Creating Attached Ball at " + pos + " parent: " + ball.transform.parent.GetInstanceID());
 					

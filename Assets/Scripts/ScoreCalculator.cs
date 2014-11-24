@@ -148,11 +148,14 @@ public class ScoreCalculator : MonoBehaviour
 	
 	public static bool ComboValid(Transform parent, Transform child)
 	{
-		Material childMat = child.GetComponent<SpriteRenderer>().sharedMaterial;
-		Material parentMat = parent.GetComponent<SpriteRenderer>().sharedMaterial;
-		return childMat.name != "Infected" && parentMat.name != "Infected" &&
-			(childMat.name == "AnyColour" || parentMat.name == "AnyColour" ||
-			 childMat.Equals(parentMat));
+		AttachedBall childBall = child.GetComponent<AttachedBall>();
+		AttachedBall parentBall = child.GetComponent<AttachedBall>();
+		if(childBall && parentBall) {
+			return childBall.type != AttachedBall.BallTypeNames.Infected && parentBall.type != AttachedBall.BallTypeNames.Infected &&
+			   (childBall.type == AttachedBall.BallTypeNames.BonusBall || parentBall.type == AttachedBall.BallTypeNames.BonusBall ||
+					childBall.type == parentBall.type);
+		} else
+			return false;
 	}
 	
 	public void ComboUp()

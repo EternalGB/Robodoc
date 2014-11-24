@@ -23,7 +23,7 @@ public class MainMenuUI : MonoBehaviour
 		Application.LoadLevel("Arcade");
 		PlayerPrefs.SetInt ("LevelIndex",-1);
 		PlayerPrefs.SetString("LevelName","Arcade");
-
+		UpdateControlScheme();
 		PlayerPrefs.Save();
 	}
 

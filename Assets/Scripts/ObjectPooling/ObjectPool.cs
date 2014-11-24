@@ -20,9 +20,7 @@ public class ObjectPool : MonoBehaviour
 		this.pooledAmount = pooledAmount;
 		this.growable = growable;
 		for(int i = 0; i < pooledAmount; i++) {
-			GameObject obj = (GameObject)Instantiate(pooledObject);
-			obj.SetActive(false);
-			pool.Add(obj);
+			pool.Add(GetNewObject());
 		}
 	}
 
@@ -35,7 +33,7 @@ public class ObjectPool : MonoBehaviour
 		}
 
 		if(growable) {
-			GameObject obj = (GameObject)Instantiate(pooledObject);
+			GameObject obj = GetNewObject();
 			pool.Add(obj);
 			return obj;
 		}
@@ -51,6 +49,14 @@ public class ObjectPool : MonoBehaviour
 			}
 		}
 		return false;
+	}
+
+	GameObject GetNewObject()
+	{
+		GameObject obj = (GameObject)Instantiate(pooledObject);
+		obj.name = pooledObject.name;
+		obj.SetActive(false);
+		return obj;
 	}
 
 }
