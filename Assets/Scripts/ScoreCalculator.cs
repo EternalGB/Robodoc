@@ -149,8 +149,8 @@ public class ScoreCalculator : MonoBehaviour
 	public static bool ComboValid(Transform parent, Transform child)
 	{
 		AttachedBall childBall = child.GetComponent<AttachedBall>();
-		AttachedBall parentBall = child.GetComponent<AttachedBall>();
-		if(childBall && parentBall) {
+		AttachedBall parentBall = parent.GetComponent<AttachedBall>();
+		if(childBall != null && parentBall != null) {
 			return childBall.type != AttachedBall.BallTypeNames.Infected && parentBall.type != AttachedBall.BallTypeNames.Infected &&
 			   (childBall.type == AttachedBall.BallTypeNames.BonusBall || parentBall.type == AttachedBall.BallTypeNames.BonusBall ||
 					childBall.type == parentBall.type);
@@ -191,7 +191,7 @@ public class ScoreCalculator : MonoBehaviour
 		foreach(Transform child in root) {
 			if(child.GetComponent<AttachedBall>()) {
 				GameObject ball;
-				if(ScoringBallComboValid(root,child)) {
+				if(ComboValid(root,child)) {
 					ball = PoolManager.Instance.GetPoolByRepresentative(scoringBallChildPrefab).GetPooled();
 					ball.transform.parent = lastScoringParent;
 				} else {
@@ -206,7 +206,7 @@ public class ScoreCalculator : MonoBehaviour
 				ball.transform.position = child.position;
 				ball.transform.rotation = child.rotation;
 				ball.GetComponent<SpriteRenderer>().sprite = child.GetComponent<SpriteRenderer>().sprite;
-				ball.GetComponent<SpriteRenderer>().material = child.GetComponent<SpriteRenderer>().sharedMaterial;
+
 				
 				ball.SetActive(true);
 				ball.SendMessage("Arm",SendMessageOptions.DontRequireReceiver);

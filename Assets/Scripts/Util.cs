@@ -226,5 +226,10 @@ public class Util
 		return false;
 	}
 
+	public static Color GetRandomPixel(Texture2D texture)
+	{
+		return texture.GetPixel(Random.Range(0,texture.width),Random.Range(0,texture.height));
+	}
+
 }
 

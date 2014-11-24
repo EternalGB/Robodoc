@@ -124,7 +124,8 @@ public class GameGUI : MonoBehaviour
 	public void GoToMainMenu()
 	{
 		PlayerPrefs.SetInt("FromGameGUI",1);
-		TogglePause();
+		paused = false;
+		Time.timeScale = 1;
 		Application.LoadLevel("MainMenu");
 	}
 

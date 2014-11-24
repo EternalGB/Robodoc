@@ -11,7 +11,8 @@ public class ScoringBall : PoolableObject
 	public Vector3 travelDir;
 	public float rotSpeed;
 	//public Vector3 rotCenter;
-	
+
+	public AttachedBall.BallTypeNames type;
 
 	void Update()
 	{
@@ -27,7 +28,7 @@ public class ScoringBall : PoolableObject
 			GetPoolByRepresentative(particleBurstPrefab).GetPooled().GetComponent<PoolableParticleBurst>();
 		particles.transform.position = transform.position;
 		particles.gameObject.SetActive(true);
-		particles.particleSystem.startColor = renderer.sharedMaterial.color;
+		particles.particleSystem.startColor = Util.GetRandomPixel(GetComponent<SpriteRenderer>().sprite.texture);
 		particles.Play();
 		Util.DestroyChildrenWithComponent<ScoringBallChild>(transform);
 		base.Destroy();

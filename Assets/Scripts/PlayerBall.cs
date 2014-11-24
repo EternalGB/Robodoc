@@ -9,7 +9,7 @@ public class PlayerBall : MonoBehaviour
 	public float speed, rotSpeed;
 	Vector3 mousePos;
 	public int numBombs = 3;
-	float bombForce = 10000;
+	float bombForce = 1000;
 	
 
 	public Collider2D playArea;
