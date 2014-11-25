@@ -31,7 +31,7 @@ public abstract class GameGUI : MonoBehaviour
 
 	protected abstract void InitGame();
 
-	void Update()
+	protected void Update()
 	{
 		goal.UpdateTime();
 		displayTime = goal.displayTime;

@@ -1,0 +1,1 @@
+This guided simulation will provide you will all the necessary information to operate the XB7629 Robodoc. You may quit this tutorial at any time using the pause menu.

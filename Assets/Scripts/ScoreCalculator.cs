@@ -20,15 +20,13 @@ public class ScoreCalculator : MonoBehaviour
 
 
 	}
-
-	GameGUI gui;
+	
 	PlayerBall player;
 	public delegate void ScoreEvent(float scoreIncrease);
 	public static event ScoreEvent PlayerScored;
 
 	void Start()
 	{
-		gui = GameObject.FindWithTag("GameGUI").GetComponent<GameGUI>();
 		player = GameObject.Find ("PlayerBall").GetComponent<PlayerBall>();
 	}
 

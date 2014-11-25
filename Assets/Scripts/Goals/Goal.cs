@@ -18,9 +18,6 @@ public abstract class Goal : ScriptableObject
 
 	public abstract float EvaluateSuccess();
 
-	public abstract void DisplayProgress(GUIStyle textStyle, GUIStyle predictionStyle);
-
-	public abstract void DisplaySuccess(GUIStyle textStyle);
 
 	public abstract string FormatSuccess(float score);
 

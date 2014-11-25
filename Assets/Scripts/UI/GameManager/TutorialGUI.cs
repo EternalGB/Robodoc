@@ -1,19 +1,32 @@
 using UnityEngine;
-using System.Collections;
+using System.Collections.Generic;
 
-public class TutorialGUI : MonoBehaviour
+public class TutorialGUI : GameGUI
 {
 
-		// Use this for initialization
-		void Start ()
-		{
-	
-		}
-	
-		// Update is called once per frame
-		void Update ()
-		{
-	
-		}
+	public GameObject messageBox;
+	public GameObject targetPrefab;
+
+	public TutorialEventManager tutorialManager;
+
+
+	protected override void InitGame ()
+	{
+		paused = true;
+		tutorialManager.BeginTutorial();
+	}
+
+	void Update()
+	{
+		base.Update();
+		if(tutorialManager.Finished)
+			messageBox.SetActive(false);
+	}
+
+	protected override void DoGameEnd ()
+	{
+		throw new System.NotImplementedException ();
+	}
+
 }
 

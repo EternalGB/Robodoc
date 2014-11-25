@@ -1,17 +1,18 @@
 using UnityEngine;
 using System.Collections;
 
-public class HighScore : Goal
+public class Tutorial : Goal
 {
 
 	public override float EvaluateSuccess ()
 	{
-		return ScoreCalculator.Instance.score;
+		return 0;
 	}
 
 	public override string FormatSuccess (float score)
 	{
-		return score.ToString();
+		return "";
 	}
+
 }
 
