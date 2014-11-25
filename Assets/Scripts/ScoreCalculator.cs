@@ -28,7 +28,7 @@ public class ScoreCalculator : MonoBehaviour
 
 	void Start()
 	{
-		gui = GameObject.Find("GameGUI").GetComponent<GameGUI>();
+		gui = GameObject.FindWithTag("GameGUI").GetComponent<GameGUI>();
 		player = GameObject.Find ("PlayerBall").GetComponent<PlayerBall>();
 	}
 
