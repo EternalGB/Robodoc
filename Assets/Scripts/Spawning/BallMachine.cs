@@ -58,15 +58,33 @@ public class BallMachine : MonoBehaviour
 		return goodBalls.Count;
 	}
 
+	bool HaveGoodBalls()
+	{
+		return goodBalls != null && goodBalls.Count > 0;
+	}
+
+	bool HaveBadBalls()
+	{
+		return badBalls != null && badBalls.Count > 0;
+	}
+
 	public void Spawn()
 	{
-		GameObject ball;
-		if(Random.value < badBallChance) {
-			ball = PoolManager.Instance.GetPoolByRepresentative(Util.GetRandomElement(badBalls)).GetPooled();
-		} else {
+		GameObject ball = null;
+		if(HaveGoodBalls() && HaveBadBalls()) {
+			if(Random.value < badBallChance) {
+				ball = PoolManager.Instance.GetPoolByRepresentative(Util.GetRandomElement(badBalls)).GetPooled();
+			} else {
+				ball = PoolManager.Instance.GetPoolByRepresentative(Util.GetRandomElement(goodBalls)).GetPooled();
+			}
+		} else if(HaveGoodBalls()) {
 			ball = PoolManager.Instance.GetPoolByRepresentative(Util.GetRandomElement(goodBalls)).GetPooled();
+		} else if(HaveBadBalls()) {
+			ball = PoolManager.Instance.GetPoolByRepresentative(Util.GetRandomElement(badBalls)).GetPooled();
 		}
-		SpawnBall(ball);
+
+		if(ball != null)
+			SpawnBall(ball);
 		Invoke("Spawn",1/ballsPerSec);
 	}
 

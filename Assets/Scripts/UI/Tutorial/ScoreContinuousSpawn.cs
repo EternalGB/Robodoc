@@ -12,6 +12,7 @@ public class ScoreContinuousSpawn : GoalTutorialEvent
 	protected override void InitEvent ()
 	{
 		ballPool = PoolManager.Instance.GetPoolByRepresentative(ball);
+		ScoreCalculator.PlayerScored += HandleScoreEvent;
 	}
 	
 	public override void Activate ()
@@ -28,11 +29,14 @@ public class ScoreContinuousSpawn : GoalTutorialEvent
 	public override void Deactivate ()
 	{
 		CancelInvoke("Spawn");
+		ScoreCalculator.PlayerScored -= HandleScoreEvent;
 	}
 	
 	void HandleScoreEvent(float score)
 	{
-		SetCompleted();
+		Debug.Log (name + " receiving score event");
+		if(score > 0)
+			SetCompleted();
 	}
 }
 

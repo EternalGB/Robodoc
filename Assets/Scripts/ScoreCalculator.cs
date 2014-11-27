@@ -68,7 +68,8 @@ public class ScoreCalculator : MonoBehaviour
 		Util.DestroyChildrenWithComponent<AttachedBall>(player.transform);
 		ResetCombo();
 		//GameObject.FindWithTag("BallMachine").SendMessage("UpdateDifficulty",amount);
-		PlayerScored(amount);
+		if(PlayerScored != null)
+			PlayerScored(amount);
 	}
 
 	public void SetScorePrediction()

@@ -20,7 +20,7 @@ public class PlayerBall : MonoBehaviour
 	bool rotFreeze = false;
 	public bool glooped = true;
 
-	public delegate void BallCollectHandler(GameObject player, GameObject playerPart, GameObject ball);
+	public delegate void BallCollectHandler(GameObject player, GameObject playerPart, GameObject bal);
 	public event BallCollectHandler BallCollect;
 
 	void Start()
@@ -83,6 +83,8 @@ public class PlayerBall : MonoBehaviour
 			Transform parent = GetCorrectParent(cps);
 			GameObject playerPart = parent.gameObject;
 			GameObject collidingBall = col.gameObject;
+			if(BallCollect != null)
+				BallCollect(this.gameObject,playerPart,collidingBall);
 			if(col.gameObject.layer == LayerMask.NameToLayer("GoodBall")) {
 				PointBall pb;
 				if(pb = col.gameObject.GetComponent<PointBall>()) {
@@ -128,7 +130,7 @@ public class PlayerBall : MonoBehaviour
 				ScoreCalculator.Instance.SetScorePrediction();
 				SoundEffectManager.Instance.PlayClipOnce("BadHit",Vector3.zero,1,1);
 			}
-			BallCollect(gameObject,playerPart,collidingBall);
+
 		}
 	}
 

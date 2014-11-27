@@ -29,6 +29,7 @@ public class BallCollectMessage : GoalTutorialEvent
 	public override void Deactivate ()
 	{
 		textArea.text = "";
+		playerBall.BallCollect -= BallCollectionHandler;
 	}
 	
 }

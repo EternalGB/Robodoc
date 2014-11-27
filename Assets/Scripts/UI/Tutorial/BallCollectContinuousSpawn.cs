@@ -38,6 +38,7 @@ public class BallCollectContinuousSpawn : GoalTutorialEvent
 	public override void Deactivate ()
 	{
 		CancelInvoke("Spawn");
+		playerBall.BallCollect -= BallCollectionHandler;
 	}
 
 }
