@@ -30,10 +30,19 @@ public class BallMachine : MonoBehaviour
 		goodBalls.AddRange(colourBalls);
 		goodBalls.AddRange(bonusBalls);
 
-		Invoke("Spawn",1/ballsPerSec);
 		ScoreCalculator.PlayerScored += UpdateDifficulty;
 	}
-	
+
+	public void StartSpawning()
+	{
+		Invoke("Spawn",1/ballsPerSec);
+	}
+
+	public void StopSpawning()
+	{
+		CancelInvoke("Spawn");
+	}
+
 	public void AddGoodBall(GameObject newBall)
 	{
 		goodBalls.Add(newBall);

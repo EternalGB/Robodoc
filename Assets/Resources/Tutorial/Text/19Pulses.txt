@@ -1,0 +1,1 @@
+The Robodoc comes equipped with Electric Pulse Waves to prevent it from becoming overwhelmed. Pulses can be activated with "Space" or the middle mouse button. Remaining Pulses are displayed in the bottom right.

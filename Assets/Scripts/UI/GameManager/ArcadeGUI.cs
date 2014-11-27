@@ -9,6 +9,7 @@ public class ArcadeGUI : GameGUI
 		Time.timeScale = 1;
 		//GameObject.Instantiate(difficultyPrefabs[difficulty]);
 		GameObject.Find("BGMusic").GetComponent<AudioSource>().Play();
+		GameObject.FindWithTag("BallMachine").GetComponent<BallMachine>().StartSpawning();
 	}
 
 	protected override void DoGameEnd ()

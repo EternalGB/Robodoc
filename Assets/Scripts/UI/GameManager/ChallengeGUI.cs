@@ -13,11 +13,11 @@ public class ChallengeGUI : GameGUI
 
 	protected override void InitGame ()
 	{
-		base.Start();
 		if(level == null) {
 			level = Resources.Load<Level>("Levels/" + PlayerPrefs.GetString("LevelName","01-Circle"));
 			goal = level.possibleGoals[PlayerPrefs.GetInt("GoalIndex",0)];
 		}
+		GameObject.FindWithTag("BallMachine").GetComponent<BallMachine>().StartSpawning();
 	}
 
 	protected override void DoGameEnd ()

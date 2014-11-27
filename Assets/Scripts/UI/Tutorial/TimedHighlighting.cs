@@ -16,9 +16,8 @@ public class TimedHighlighting : TimedTutorialEvent
 	protected override void StartEvent ()
 	{
 		if(target != null) {
-
 			highlight = (GameObject)GameObject.Instantiate(highlightPrefab,target.position,target.rotation);
-			highlight.transform.parent = transform;
+			highlight.transform.parent = target.transform;
 		}
 	}
 

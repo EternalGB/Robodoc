@@ -41,11 +41,13 @@ public abstract class GameGUI : MonoBehaviour
 			TogglePause();
 		}
 
+		/*
 		if(Paused()) {
 			Time.timeScale = 0;
 		} else {
 			Time.timeScale = 1;
 		}
+		*/
 
 		if(goal.Completed()) {
 			Time.timeScale = 0;
@@ -72,10 +74,12 @@ public abstract class GameGUI : MonoBehaviour
 			PlayerPrefs.Save();
 			pauseUI.SetActive(false);
 			paused = false;
+			Time.timeScale = 1;
 		} else if(!paused) {
 			pauseUI.SetActive(true);
 			paused = true;
 			controlScheme.DisplayText(PlayerPrefs.GetInt("Controller",1));
+			Time.timeScale = 0;
 		}
 	}
 

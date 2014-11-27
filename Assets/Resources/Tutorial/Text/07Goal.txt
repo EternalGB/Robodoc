@@ -1,0 +1,1 @@
+As an operator your duty is to collect and eliminate as many diseases as possible before your Robodoc runs out of power. The time until your power runs out is shown in the top left.

@@ -20,6 +20,9 @@ public class PlayerBall : MonoBehaviour
 	bool rotFreeze = false;
 	public bool glooped = true;
 
+	public delegate void BallCollectHandler(GameObject player, GameObject playerPart, GameObject ball);
+	public event BallCollectHandler BallCollect;
+
 	void Start()
 	{
 		ballPool = PoolManager.Instance.GetPoolByRepresentative(ballPrefab);
@@ -76,10 +79,14 @@ public class PlayerBall : MonoBehaviour
 	void OnCollisionEnter2D(Collision2D col)
 	{
 		if(!glooped) {
+			ContactPoint2D[] cps = col.contacts;
+			Transform parent = GetCorrectParent(cps);
+			GameObject playerPart = parent.gameObject;
+			GameObject collidingBall = col.gameObject;
 			if(col.gameObject.layer == LayerMask.NameToLayer("GoodBall")) {
 				PointBall pb;
 				if(pb = col.gameObject.GetComponent<PointBall>()) {
-					ContactPoint2D[] cps = col.contacts;
+
 					Vector3 pos = pb.transform.position;
 					Quaternion rot = pb.transform.rotation;
 					Vector3 scale = pb.transform.localScale;
@@ -95,7 +102,7 @@ public class PlayerBall : MonoBehaviour
 					//ball.transform.localScale = scale;
 					ball.GetComponent<SpriteRenderer>().sharedMaterial = mat;
 					ball.gameObject.SetActive(true);
-					Transform parent = GetCorrectParent(cps);
+
 					ball.transform.parent = parent;
 					if(parent == null)
 						Debug.LogError("No correct parent could be found");
@@ -116,12 +123,12 @@ public class PlayerBall : MonoBehaviour
 				}
 			} else if(col.gameObject.layer == LayerMask.NameToLayer("BadBall")) {
 				//Debug.Log ("BadBall Collision");
-				ContactPoint2D[] cps = col.contacts;
 				col.gameObject.GetComponent<BadBall>().ApplyEffect(cps[0].otherCollider.transform);
 				//recalculate score
 				ScoreCalculator.Instance.SetScorePrediction();
 				SoundEffectManager.Instance.PlayClipOnce("BadHit",Vector3.zero,1,1);
 			}
+			BallCollect(gameObject,playerPart,collidingBall);
 		}
 	}
 

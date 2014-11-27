@@ -4,17 +4,17 @@ using System.Collections.Generic;
 public class TutorialEventManager : MonoBehaviour
 {
 
+	public TutorialGUI ui;
 	public List<TutorialEvent> events;
 	public bool running;
-	public bool Finished
-	{
-		get; private set;
-	}
 
 	Queue<TutorialEvent> eventQueue;
 	List<TutorialEvent> currentEvents;
 	int currentPriority;
-	
+
+	public delegate void TutorialEndHandler();
+	public event TutorialEndHandler TutorialFinished;
+
 	public void BeginTutorial()
 	{
 		events.Sort((e1,e2) => e1.priority - e2.priority);
@@ -25,7 +25,7 @@ public class TutorialEventManager : MonoBehaviour
 
 	void Update()
 	{
-		if(running){
+		if(running && !ui.Paused()){
 			bool completed = true;
 			foreach(TutorialEvent te in currentEvents) {
 				completed &= te.Completed();
@@ -62,7 +62,7 @@ public class TutorialEventManager : MonoBehaviour
 			LaunchEvents(currentEvents);
 		} else {
 			running = false;
-			Finished = true;
+			TutorialFinished();
 		}
 	}
 

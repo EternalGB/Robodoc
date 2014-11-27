@@ -1,0 +1,1 @@
+This is a Shocker, it will short-circuit your Robodoc temporarily disabling its rotation.

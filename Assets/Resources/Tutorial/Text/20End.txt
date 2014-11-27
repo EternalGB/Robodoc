@@ -1,0 +1,1 @@
+You are now prepared to operate the XB7629 Robodoc. This program will continue to run a simulation of a live patient for you to practice with however you can exit at any time.

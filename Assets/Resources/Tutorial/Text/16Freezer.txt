@@ -1,0 +1,1 @@
+This is a Freezer, it will temporarily lock your Robodoc in place.
