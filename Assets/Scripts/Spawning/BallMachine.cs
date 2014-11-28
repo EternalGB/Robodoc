@@ -4,6 +4,8 @@ using System.Collections.Generic;
 public class BallMachine : MonoBehaviour
 {
 
+	public bool spawnOnStart = false;
+
 	public List<GameObject> colourBalls;
 	public List<GameObject> bonusBalls;
 	public List<GameObject> badBalls;
@@ -29,7 +31,8 @@ public class BallMachine : MonoBehaviour
 	{
 		goodBalls.AddRange(colourBalls);
 		goodBalls.AddRange(bonusBalls);
-
+		if(spawnOnStart)
+			StartSpawning();
 		ScoreCalculator.PlayerScored += UpdateDifficulty;
 	}
 
@@ -90,7 +93,8 @@ public class BallMachine : MonoBehaviour
 
 	public GameObject SpawnBall(GameObject ball)
 	{
-		Vector3 pos = PointOutside(Vector2.zero,playArea.transform.localScale.x/2,playArea.transform.localScale.x*1.5f);
+		float radius = playArea.transform.localScale.x/2;
+		Vector3 pos = PointOutside(Vector2.zero,1.05f*radius,1.2f*radius);
 		ball.transform.position = pos;
 		ball.SetActive(true);
 		//always send the ball towards the screen-ish
