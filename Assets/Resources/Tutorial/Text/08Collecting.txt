@@ -1,1 +1,0 @@
-To collect diseases simple collide the Robodoc with your target. The Robodoc's automatic bonding routines will take care of the rest. Collected diseases can be chained to collect further diseases.
