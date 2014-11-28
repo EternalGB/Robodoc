@@ -40,8 +40,10 @@ public class PlayerBall : MonoBehaviour
 				mousePos = Util.MouseToWorldPos(0);
 				if(Vector2.Distance(mousePos,transform.position) >= 2)
 					rigidbody2D.velocity = (mousePos - transform.position).normalized*speed;
-				else
+				else {
 					rigidbody2D.velocity = Vector2.zero;
+					transform.position = mousePos;
+				}
 			} else {
 				//use the keyboard
 				rigidbody2D.velocity = new Vector3(Input.GetAxis("Horizontal")*speed,Input.GetAxis("Vertical")*speed);
