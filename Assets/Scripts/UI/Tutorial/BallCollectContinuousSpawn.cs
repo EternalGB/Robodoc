@@ -15,7 +15,7 @@ public class BallCollectContinuousSpawn : GoalTutorialEvent
 	protected override void InitEvent ()
 	{
 		playerBall = GameObject.Find ("PlayerBall").GetComponent<PlayerBall>();
-		playerBall.BallCollect += BallCollectionHandler;
+
 		ballPool = PoolManager.Instance.GetPoolByRepresentative(ball);
 	}
 	
@@ -26,6 +26,7 @@ public class BallCollectContinuousSpawn : GoalTutorialEvent
 	
 	public override void Activate()
 	{
+		playerBall.BallCollect += BallCollectionHandler;
 		Invoke("Spawn",0);
 	}
 	

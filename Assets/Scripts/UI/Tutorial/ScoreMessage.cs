@@ -10,11 +10,12 @@ public class ScoreMessage : GoalTutorialEvent
 
 	protected override void InitEvent ()
 	{
-		ScoreCalculator.PlayerScored += HandleScoreEvent;
+
 	}
 
 	public override void Activate ()
 	{
+		ScoreCalculator.PlayerScored += HandleScoreEvent;
 		textArea.text = message.text;
 	}
 

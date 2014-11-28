@@ -1,0 +1,1 @@
+Press "Space" or the middle mouse button to fire a pulse. Remaining Pulses are displayed in the bottom right.

@@ -223,5 +223,22 @@ public class ScoreCalculator : MonoBehaviour
 		return total;
 	}
 
+	public void Reset()
+	{
+		comboMulti = 1;
+
+		score = 0;
+		nextScore = 0;
+		biggestScore = 0;
+		longestChain = 0;
+		nextLongestChain = 0;
+
+		displayScore = 0;
+		displayNextScore = 0;
+		displayBiggestScore = 0;
+		displayLongestChain = 0;
+		displayNextLongestChain = 0;
+	}
+
 }
 

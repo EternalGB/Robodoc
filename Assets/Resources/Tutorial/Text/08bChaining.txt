@@ -1,0 +1,1 @@
+Collected diseases become part of the Robodoc and can be used to collect more diseases. This is called "Chaining"

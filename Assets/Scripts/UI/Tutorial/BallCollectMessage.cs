@@ -13,7 +13,7 @@ public class BallCollectMessage : GoalTutorialEvent
 	protected override void InitEvent ()
 	{
 		playerBall = GameObject.Find ("PlayerBall").GetComponent<PlayerBall>();
-		playerBall.BallCollect += BallCollectionHandler;
+
 	}
 	
 	void BallCollectionHandler(GameObject player, GameObject playerPart, GameObject ball)
@@ -23,6 +23,7 @@ public class BallCollectMessage : GoalTutorialEvent
 
 	public override void Activate ()
 	{
+		playerBall.BallCollect += BallCollectionHandler;
 		textArea.text = message.text;
 	}
 

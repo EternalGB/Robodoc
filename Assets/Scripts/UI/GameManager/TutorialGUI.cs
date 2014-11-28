@@ -36,7 +36,7 @@ public class TutorialGUI : GameGUI
 
 	protected override void DoGameEnd ()
 	{
-		throw new System.NotImplementedException ();
+		endUI.SetActive(true);
 	}
 
 	void TutorialEnd()
@@ -45,6 +45,8 @@ public class TutorialGUI : GameGUI
 		forcedPause = false;
 		messageBox.SetActive(false);
 		SetTutorialCompleted();
+		ScoreCalculator.Instance.Reset();
+		GameObject.Find("PlayerBall").GetComponent<PlayerBall>().numBombs = 3;
 	}
 
 	public void SetTutorialCompleted()

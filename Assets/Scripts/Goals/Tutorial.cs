@@ -6,12 +6,12 @@ public class Tutorial : Goal
 
 	public override float EvaluateSuccess ()
 	{
-		return 0;
+		return ScoreCalculator.Instance.score;
 	}
 
 	public override string FormatSuccess (float score)
 	{
-		return "";
+		return score.ToString();
 	}
 
 }
