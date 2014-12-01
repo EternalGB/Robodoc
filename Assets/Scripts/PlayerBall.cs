@@ -19,6 +19,7 @@ public class PlayerBall : MonoBehaviour
 	bool movFreeze = false;
 	bool rotFreeze = false;
 	public bool glooped = true;
+	bool bombsEnabled = true;
 
 	public delegate void BallCollectHandler(GameObject player, GameObject playerPart, GameObject bal);
 	public event BallCollectHandler BallCollect;
@@ -51,7 +52,7 @@ public class PlayerBall : MonoBehaviour
 		}
 
 
-		if(Input.GetButtonDown("Bomb")) {
+		if(bombsEnabled && Input.GetButtonDown("Bomb")) {
 			FireBomb();
 		}
 
@@ -223,7 +224,15 @@ public class PlayerBall : MonoBehaviour
 		}
 	}
 
+	public void DisableBombs()
+	{
+		bombsEnabled = false;
+	}
 
+	public void EnableBombs()
+	{
+		bombsEnabled = true;
+	}
 
 
 }

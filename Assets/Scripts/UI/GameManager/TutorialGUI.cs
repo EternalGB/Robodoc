@@ -26,7 +26,19 @@ public class TutorialGUI : GameGUI
 			goal.UpdateTime();
 			displayTime = goal.displayTime;
 			BGImage.UpdatePos(Mathf.Clamp(1 - displayTime/120f,0,1));
+
+			if(goal.Completed()) {
+				Time.timeScale = 0;
+				OnGoalCompleted();
+			}
 		}
+
+		#if UNITY_EDITOR
+		if(Input.GetKeyDown(KeyCode.F1)) {
+			Time.timeScale = 0;
+			OnGoalCompleted();
+		}
+		#endif
 
 		if(Input.GetButtonDown("Pause")) {
 			TogglePause();
