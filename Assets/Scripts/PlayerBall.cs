@@ -21,7 +21,7 @@ public class PlayerBall : MonoBehaviour
 	public bool glooped = true;
 	bool bombsEnabled = true;
 
-	public delegate void BallCollectHandler(GameObject player, GameObject playerPart, GameObject bal);
+	public delegate void BallCollectHandler(GameObject player, GameObject playerPart, GameObject ball);
 	public event BallCollectHandler BallCollect;
 
 	void Start()

@@ -7,6 +7,7 @@ public class MainMenuUI : MonoBehaviour
 
 	public GameObject mainMenu;
 	public GameObject levelSelect;
+	public GameObject arcadeStatistics;
 
 	public GameObject tutorialButton;
 
@@ -53,11 +54,16 @@ public class MainMenuUI : MonoBehaviour
 		levelSelect.SetActive(true);
 	}
 
+	public void DisplayArcadeStats()
+	{
+		mainMenu.SetActive(false);
+		arcadeStatistics.SetActive(true);
+	}
+
 	public void UpdateControlScheme()
 	{
 		PlayerPrefs.SetInt("Controller",controlScheme.index);
 	}
-	
 
 	public void GoToScene(string sceneName)
 	{
