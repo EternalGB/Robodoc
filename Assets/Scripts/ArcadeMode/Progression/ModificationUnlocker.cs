@@ -1,11 +1,11 @@
 using UnityEngine;
 using System.Collections;
 
-public class ColorBallUnlocker : Unlockable
+public class ModificationUnlocker : Unlockable
 {
 
-	public ArcadeManager manager;
-	public GameObject ball;
+	public ProbabilityTable pt;
+	public LevelModifier mod;
 	public ArcadeStats.StatKeys stat;
 	public float unlockRequirement;
 
@@ -13,10 +13,11 @@ public class ColorBallUnlocker : Unlockable
 	{
 		return ArcadeStats.GetStat(stat) >= unlockRequirement;
 	}
-
+	
 	public override void UnlockEffect ()
 	{
-		manager.goodBallPrefabs.Add(ball);
+		if(!pt.Contains(mod))
+			pt.AddItem(mod);
 	}
 
 }

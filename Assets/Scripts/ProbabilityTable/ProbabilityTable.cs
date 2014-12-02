@@ -129,6 +129,15 @@ public class ProbabilityTable : ScriptableObject
 		}
 	}
 
+	public bool Contains(Object item)
+	{
+		foreach(Object o in items) {
+			if(o.Equals(item))
+				return true;
+		}
+		return false;
+	}
+
 
 
 }
