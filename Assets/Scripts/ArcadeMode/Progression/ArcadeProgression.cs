@@ -1,67 +1,65 @@
 using UnityEngine;
+using UnityEngine.UI;
 using System.Collections.Generic;
 
-public class ArcadeProgression 
+public class ArcadeProgression : MonoBehaviour
 {
 
-	static Unlockable[] initUnlockables = new Unlockable[]
-	{
-		new BadBallUnlocker(2,8000), new BadBallUnlocker(3,10000), new BadBallUnlocker(4,12000), new BadBallUnlocker(5,16000), new BadBallUnlocker(6,20000),
-		new ColorBallUnlocker(4,50000), new ColorBallUnlocker(5,100000)
-	};
+	public GameObject unlockMessageBox;
+	public Text unlockableHeadingText;
+	public Text unlockableNameText;
+	public Image unlockableIconImage;
+	public List<Unlockable> unlockables;
+	bool messageConfirmed = false;
 
-	static Unlockable[] unlockables;
-
-	public static int BadBallIndex
+	public System.Collections.IEnumerator UpdateProgression()
 	{
-		get
-		{
-			int index;
-			if(Util.TryLoadFromPlayerPrefs<int>("ArcadeBBIndex",out index))
-				return index;
-			else
-				return 1;
-		}
-		set
-		{
-			Util.SaveToPlayerPrefs<int>("ArcadeBBIndex",value);
-		}
-
-	}
-
-	public static int MaxColorBalls
-	{
-		get
-		{
-			int num;
-			if(Util.TryLoadFromPlayerPrefs<int>("ArcadeMCB",out num))
-				return num;
-			else
-				return 3;
-		}
-		set
-		{
-			Util.SaveToPlayerPrefs<int>("ArcadeMCB",value);
-		}
-	}
-	
-	public void UpdateProgression()
-	{
-		if(!Util.TryLoadFromPlayerPrefs<Unlockable[]>("ArcadeUnlocks",out unlockables))
-			unlockables = initUnlockables;
 		foreach(Unlockable unlock in unlockables) {
 			if(!unlock.Unlocked && unlock.ConditionMet()) {
 				unlock.Unlock();
+				yield return StartCoroutine(DisplayUnlockMessage(unlock));
 			}
 		}
-		Util.SaveToPlayerPrefs("ArcadeUnlocks",unlockables);
 	}
 
-	public void Clear()
+	public void ProcessUnlocked()
 	{
-		PlayerPrefs.DeleteKey("ArcadeUnlocks");
-		PlayerPrefs.DeleteKey("ArcadeMCB");
-		PlayerPrefs.DeleteKey("ArcadeBBIndex");
+		if(PlayerPrefs.GetInt("ArcadeProgressionCleared",0) == 1) {
+			foreach(Unlockable unlock in unlockables) {
+				unlock.Reset();
+			}
+			PlayerPrefs.SetInt("ArcadeProgressionCleared",0);
+		}
+		foreach(Unlockable unlock in unlockables) {
+			if(unlock.Unlocked) {
+				unlock.UnlockEffect();
+			}
+		}
+	}
+
+	System.Collections.IEnumerator DisplayUnlockMessage(Unlockable unlock)
+	{
+		while(!messageConfirmed) {
+			unlockMessageBox.SetActive(true);
+			unlockableHeadingText.text = unlock.heading;
+			unlockableNameText.text = unlock.unlockableName;
+			unlockableIconImage.sprite = unlock.unlockIcon;
+			yield return 0;
+		}
+
+		unlockMessageBox.SetActive(false);
+		unlockableNameText.text = "";
+		messageConfirmed = false;
+	}
+	
+	public void SetMessageConfirmed()
+	{
+		messageConfirmed = true;
+	}
+
+	public static void Clear()
+	{
+		PlayerPrefs.SetInt("ArcadeProgressionCleared",1);
 	}
 
 

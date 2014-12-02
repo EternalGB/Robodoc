@@ -5,12 +5,12 @@ public class ArcadeManager : MonoBehaviour
 {
 
 	public BallMachine bm;
-	int maxColors;
-	public int numInitColors;
+	public ArcadeProgression progression;
+
 	public Material baseMat;
 	public List<GameObject> goodBallPrefabs;
 	public List<GameObject> badBalls;
-	int badBallIndex = 1;
+	public int initBadBalls = 2;
 
 	public ProbabilityTable modifications;
 
@@ -26,13 +26,13 @@ public class ArcadeManager : MonoBehaviour
 
 	void Awake()
 	{
-		maxColors = ArcadeProgression.MaxColorBalls;
-		for(int i = 0; i < numInitColors; i++) {
+		progression.ProcessUnlocked();
+		while(goodBallPrefabs.Count > 0) {
 			AddColorBall();
 		}
-		badBallIndex = ArcadeProgression.BadBallIndex;
-		for(int i = 0; i <= badBallIndex; i++)
+		for(int i = 0; i < initBadBalls; i++) {
 			AddBadBall();
+		}
 	}
 
 	void Start()
@@ -46,15 +46,9 @@ public class ArcadeManager : MonoBehaviour
 	{
 		scoreTotal += scoreIncrease;
 		if(modifications != null && modifications.Size > 0 && scoreTotal >= milestone) {
-			//do some stuff
 			((LevelModifier)modifications.GetRandom()).DoModification();
 			if(badBalls.Count > 0)
 				AddBadBall();
-			//+1 because of bonus ball
-			if(bm.NumGoodBalls() < maxColors+1) {
-				AddColorBall();
-			}
-
 
 			milestone = GenMileStone(initMilestone,milestoneIncreaseRate,milestoneIndex);
 			milestoneIndex++;
@@ -68,14 +62,14 @@ public class ArcadeManager : MonoBehaviour
 
 	void AddBadBall()
 	{
-		int badBallIndex = 0;//Random.Range(0,badBalls.Count);
+		int badBallIndex = Random.Range(0,badBalls.Count);
 		bm.AddBadBall(badBalls[badBallIndex]);
 		badBalls.RemoveAt(badBallIndex);
 	}
 
 	void AddColorBall()
 	{
-		int ballIndex = 0;//Random.Range (0,goodBallPrefabs.Count);
+		int ballIndex = Random.Range (0,goodBallPrefabs.Count);
 		bm.AddGoodBall(goodBallPrefabs[ballIndex]);
 		goodBallPrefabs.RemoveAt(ballIndex);
 	}

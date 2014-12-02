@@ -4,24 +4,19 @@ using System.Collections;
 public class ColorBallUnlocker : Unlockable
 {
 
-	int index;
-	float totalScoreRequirement;
-
-	public ColorBallUnlocker (int index, float totalScoreRequirement)
-	{
-		this.index = index;
-		this.totalScoreRequirement = totalScoreRequirement;
-	}
-	
+	public ArcadeManager manager;
+	public GameObject ball;
+	public ArcadeStats.StatKeys stat;
+	public float unlockRequirement;
 
 	public override bool ConditionMet ()
 	{
-		return ArcadeStats.TotalScore >= totalScoreRequirement;
+		return ArcadeStats.TotalScore >= unlockRequirement;
 	}
 
-	protected override void UnlockEffect ()
+	public override void UnlockEffect ()
 	{
-		ArcadeProgression.MaxColorBalls = index;
+		manager.goodBallPrefabs.Add(ball);
 	}
 
 }

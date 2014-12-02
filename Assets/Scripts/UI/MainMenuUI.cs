@@ -24,6 +24,7 @@ public class MainMenuUI : MonoBehaviour
 
 	public void LaunchArcade()
 	{
+
 		if(PlayerPrefs.GetInt("TutorialCompleted",0) == 0)
 			LaunchTutorial();
 		else {
@@ -72,10 +73,16 @@ public class MainMenuUI : MonoBehaviour
 
 	public void ResetProgress()
 	{
+
 		ChallengeHighScores.Clear();
 		ArcadeStats.Clear();
 		PlayerPrefs.DeleteKey("TutorialCompleted");
 		Application.LoadLevel(Application.loadedLevel);
+		ArcadeProgression.Clear();
+
+		#if UNITY_EDITOR
+		PlayerPrefs.SetInt("TutorialCompleted",1);
+		#endif
 	}
 
 }

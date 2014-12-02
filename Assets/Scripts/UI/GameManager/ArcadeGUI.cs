@@ -4,7 +4,7 @@ using System.Collections.Generic;
 public class ArcadeGUI : GameGUI
 {
 
-
+	public ArcadeProgression progression;
 
 	protected override void InitGame ()
 	{
@@ -19,6 +19,8 @@ public class ArcadeGUI : GameGUI
 	{
 		ArcadeStats.HighScore = goal.EvaluateSuccess();
 		ArcadeStats.LongestChain = ScoreCalculator.Instance.longestChain;
+
+		StartCoroutine(progression.UpdateProgression());
 	}
 
 	void BallCollectHandler(GameObject player, GameObject playerPart, GameObject ball)
