@@ -138,6 +138,13 @@ public class ProbabilityTable : ScriptableObject
 		return false;
 	}
 
+	public void Clear()
+	{
+		items = new List<Object>();
+		probabilities = new List<float>();
+		maxProb = 0;
+	}
+
 
 
 }

@@ -26,6 +26,7 @@ public class ArcadeManager : MonoBehaviour
 
 	void Awake()
 	{
+		modifications.Clear();
 		progression.ProcessUnlocked();
 		while(goodBallPrefabs.Count > 0) {
 			AddColorBall();
@@ -45,11 +46,11 @@ public class ArcadeManager : MonoBehaviour
 	void UpdateDifficulty(float scoreIncrease)
 	{
 		scoreTotal += scoreIncrease;
-		if(modifications != null && modifications.Size > 0 && scoreTotal >= milestone) {
-			((LevelModifier)modifications.GetRandom()).DoModification();
+		if(scoreTotal >= milestone) {
+			if(modifications != null && modifications.Size > 0)
+				((LevelModifier)modifications.GetRandom()).DoModification();
 			if(badBalls.Count > 0)
 				AddBadBall();
-
 			milestone = GenMileStone(initMilestone,milestoneIncreaseRate,milestoneIndex);
 			milestoneIndex++;
 		}
