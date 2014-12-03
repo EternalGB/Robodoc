@@ -25,6 +25,9 @@ public class ScoreCalculator : MonoBehaviour
 	public delegate void ScoreEvent(float scoreIncrease);
 	public static event ScoreEvent PlayerScored;
 
+	public delegate void PredictionEvent(float score, int maxChain);
+	public static event PredictionEvent ScorePredictionUpdated;
+
 	void Start()
 	{
 		player = GameObject.Find ("PlayerBall").GetComponent<PlayerBall>();
@@ -77,6 +80,8 @@ public class ScoreCalculator : MonoBehaviour
 		int maxChain;
 		nextScore = GetPoints(player.transform,out maxChain);
 		nextLongestChain = Mathf.Max(nextLongestChain,maxChain);
+		if(ScorePredictionUpdated != null)
+			ScorePredictionUpdated(nextScore,nextLongestChain);
 	}
 
 	void Update()
@@ -141,6 +146,17 @@ public class ScoreCalculator : MonoBehaviour
 					maxDepth = newDepth;
 			}
 
+		}
+		return maxDepth;
+	}
+
+	public static int GetMaxActualDepth(Transform t, int depth)
+	{
+		int maxDepth = depth;
+		foreach(Transform child in t) {
+			int newDepth = GetMaxActualDepth(child,depth+1);
+			if(newDepth > maxDepth)
+				maxDepth = newDepth;
 		}
 		return maxDepth;
 	}

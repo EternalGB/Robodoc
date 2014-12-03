@@ -14,8 +14,11 @@ public class ScoreArea : MonoBehaviour
 
 	void OnTriggerEnter2D(Collider2D col)
 	{
-		if(col.gameObject.layer == LayerMask.NameToLayer("Player") && !col.GetComponent<PlayerBall>().glooped)
+		if(col.gameObject.layer == LayerMask.NameToLayer("Player") && !col.GetComponent<PlayerBall>().glooped) {
 			scoreChargeStart = Time.time;
+			Debug.Log ("Player entering score zone");
+		}
+			
 	}
 	
 	void OnTriggerStay2D(Collider2D col)
@@ -30,6 +33,7 @@ public class ScoreArea : MonoBehaviour
 					scoreChargeStart = Time.time;
 				}
 			} else {
+				Debug.Log("Player Gooped, restarting score fill");
 				scoreChargeStart = Time.time;
 				anim.fill = 0;
 			}

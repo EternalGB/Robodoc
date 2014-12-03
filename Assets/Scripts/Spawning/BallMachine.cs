@@ -16,14 +16,14 @@ public class BallMachine : MonoBehaviour
 	public float ballRateIncr;
 	public float badChanceIncr;
 
-	public Collider2D playArea;
+	public CircleCollider2D playArea;
 
 	List<GameObject> goodBalls;
 
 	void Awake()
 	{
 		if(playArea == null)
-			playArea = GameObject.Find("PlayArea").GetComponent<Collider2D>();
+			playArea = GameObject.Find("PlayArea").GetComponent<CircleCollider2D>();
 		goodBalls = new List<GameObject>();
 	}
 
@@ -93,7 +93,7 @@ public class BallMachine : MonoBehaviour
 
 	public GameObject SpawnBall(GameObject ball)
 	{
-		float radius = playArea.transform.localScale.x/2;
+		float radius = playArea.radius;
 		Vector3 pos = PointOutside(Vector2.zero,1.05f*radius,1.2f*radius);
 		ball.transform.position = pos;
 		ball.SetActive(true);

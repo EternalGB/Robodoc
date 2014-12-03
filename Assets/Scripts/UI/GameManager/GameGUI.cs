@@ -5,6 +5,7 @@ public abstract class GameGUI : MonoBehaviour
 {
 
 
+
 	protected PlayerBall pb;
 	protected ScoreArea scoreArea;
 
@@ -22,10 +23,20 @@ public abstract class GameGUI : MonoBehaviour
 	public float displayTime;
 	protected bool paused = false;
 
+	float initCameraPos;
+	public float maxCameraZoom;
+	float cameraZoom;
+	float actualCameraZoom;
+	float zoomLerpTimer;
+	float zoomLerpSpeed = 0.1f;
+
 	protected void Start()
 	{
 		pb = GameObject.Find ("PlayerBall").GetComponent<PlayerBall>();
 		doneGoalCompleted = false;
+		initCameraPos = Camera.main.transform.position.z;
+		ScoreCalculator.ScorePredictionUpdated += HandleScorePrediction;
+		ScoreCalculator.PlayerScored += HandlePlayerScored;
 		InitGame();
 	}
 
@@ -36,6 +47,10 @@ public abstract class GameGUI : MonoBehaviour
 		goal.UpdateTime();
 		displayTime = goal.displayTime;
 		BGImage.UpdatePos(Mathf.Clamp(1 - displayTime/120f,0,1));
+
+		actualCameraZoom = Mathf.Lerp (actualCameraZoom,cameraZoom,zoomLerpTimer);
+		zoomLerpTimer = Mathf.Clamp (zoomLerpTimer + zoomLerpSpeed*Time.deltaTime,0,1f);
+		Camera.main.transform.position = new Vector3(0,0,initCameraPos - actualCameraZoom);
 
 		if(Input.GetButtonDown("Pause")) {
 			TogglePause();
@@ -60,6 +75,24 @@ public abstract class GameGUI : MonoBehaviour
 			OnGoalCompleted();
 		}
 		#endif
+	}
+
+	void HandlePlayerScored(float scoreIncrease)
+	{
+		zoomLerpTimer = 0;
+		cameraZoom = 0;
+	}
+
+	void HandleScorePrediction(float scoreIncrease, int maxChain)
+	{
+		int maxDepth = ScoreCalculator.GetMaxActualDepth(pb.transform,0);
+		SetCameraZoom(maxDepth);
+	}
+
+	void SetCameraZoom(int maxChain)
+	{
+		cameraZoom = Mathf.Clamp ((maxCameraZoom/15f)*maxChain,0,maxCameraZoom);
+		zoomLerpTimer = 0;
 	}
 
 	public bool Paused()
@@ -99,6 +132,7 @@ public abstract class GameGUI : MonoBehaviour
 
 	public void GoToMainMenu()
 	{
+		goal.ResetGoal();
 		PlayerPrefs.SetInt("FromGameGUI",1);
 		paused = false;
 		Time.timeScale = 1;
