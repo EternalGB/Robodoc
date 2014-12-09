@@ -9,7 +9,7 @@ public class MainMenuUI : MonoBehaviour
 
 	public GameObject tutorialButton;
 
-	public TextList controlScheme;
+	public ArrowedSelector controlScheme;
 	public Text arcadeScoreDisplay;
 
 	public GameObject currentUI;
@@ -20,14 +20,16 @@ public class MainMenuUI : MonoBehaviour
 		currentUI.SetActive(true);
 
 		arcadeScoreDisplay.text = ArcadeStats.HighScore.ToString();
-		controlScheme.DisplayText(PlayerPrefs.GetInt("Controller",1));
+		controlScheme.ChangeText(PlayerPrefs.GetInt("Controller",1));
 		tutorialButton.SetActive(PlayerPrefs.GetInt("TutorialCompleted",0) != 0);
 	}
 
 	void Update()
 	{
+		/*
 		if(Input.anyKeyDown && UnityEngine.EventSystems.EventSystem.current.currentSelectedGameObject != null)
 			Debug.Log (UnityEngine.EventSystems.EventSystem.current.currentSelectedGameObject.name + " is now selected");
+			*/
 	}
 
 	public void LaunchArcade()

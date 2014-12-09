@@ -43,14 +43,15 @@ public class SoundEffectManager : MonoBehaviour
 
 	public static void PlayClipOnce(AudioClip clip, Vector3 position, float volume)
 	{
-		AudioSource.PlayClipAtPoint(clip,position,volume);
+
+		AudioSource.PlayClipAtPoint(clip,position,volume*GetVolume());
 	}
 
 	public void PlayClipOnce(AudioClip clip, Vector3 position, float volume, float pitch)
 	{
 		AudioSource asrc = GetAvailablePlayer();
 		asrc.clip = clip;
-		asrc.volume = volume;
+		asrc.volume = volume*GetVolume();
 		asrc.pitch = pitch;
 		asrc.Play();
 	}
@@ -60,6 +61,7 @@ public class SoundEffectManager : MonoBehaviour
 		AudioSource asrc = GetAvailablePlayer();
 		asrc.clip = clip;
 		asrc.loop = true;
+		asrc.volume = GetVolume();
 		asrc.Play();
 		return asrc;
 	}
@@ -68,11 +70,24 @@ public class SoundEffectManager : MonoBehaviour
 	{
 		AudioClip clip;
 		if(soundLibrary.TryGetValue(clipName,out clip)) {
-			PlayClipOnce(clip,position,volume,pitch);
+			PlayClipOnce(clip,position,volume*GetVolume(),pitch);
 		} else  {
 			throw new KeyNotFoundException("No clip called " + clipName + " in library");
 		}
 
+	}
+
+	static float GetVolume()
+	{
+		object master;
+		object sfx;
+		float fmaster = 1;
+		float fsfx = 1;
+		if(Settings.TryGetSetting(Settings.SettingName.MASTERVOL,out master))
+			fmaster = (float)master;
+		if(Settings.TryGetSetting(Settings.SettingName.SFXVOL,out sfx))
+			fsfx = (float)sfx;
+		return fmaster*fsfx;
 	}
 
 }

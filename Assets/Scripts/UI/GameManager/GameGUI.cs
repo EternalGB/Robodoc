@@ -14,7 +14,7 @@ public abstract class GameGUI : MonoBehaviour
 
 	protected bool doneGoalCompleted;
 
-	public TextList controlScheme;
+	public ArrowedSelector controlScheme;
 	public GameObject gameUI;
 	public GameObject pauseUI;
 	public GameObject endUI;
@@ -111,7 +111,7 @@ public abstract class GameGUI : MonoBehaviour
 		} else if(!paused) {
 			pauseUI.SetActive(true);
 			paused = true;
-			controlScheme.DisplayText(PlayerPrefs.GetInt("Controller",1));
+			controlScheme.ChangeText(PlayerPrefs.GetInt("Controller",1));
 			Time.timeScale = 0;
 		}
 	}
@@ -143,6 +143,11 @@ public abstract class GameGUI : MonoBehaviour
 	{
 		Application.LoadLevel(Application.loadedLevel);
 		goal.ResetGoal();
+	}
+
+	public void UpdateControlScheme()
+	{
+		PlayerPrefs.SetInt("Controller",controlScheme.index);
 	}
 
 

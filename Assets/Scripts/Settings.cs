@@ -50,21 +50,23 @@ public class Settings
 		settingValues = new Dictionary<SettingName, object>();
 		foreach(SettingName setting in Enum.GetValues(typeof(SettingName))) {
 			object value;
-			if(Util.TryLoadFromPlayerPrefs(Enum.GetName(typeof(SettingName),setting),out value)) {
+			if(Util.TryLoadFromPlayerPrefs("Settings" + Enum.GetName(typeof(SettingName),setting),out value)) {
 				settingValues.Add(setting,value);
-			}
+			} 
 		}
 	}
 
 	public static void Save()
 	{
-		if(settingValues != null) {
-			foreach(SettingName setting in settingValues.Keys) {
-				object value;
-				if(settingValues.TryGetValue(setting,out value))
-					Util.SaveToPlayerPrefs("Settings" + Enum.GetName(typeof(SettingName),setting),value);
-			}
+		if(settingValues == null) {
+			Load();
 		}
+		foreach(SettingName setting in settingValues.Keys) {
+			object value;
+			if(settingValues.TryGetValue(setting,out value))
+				Util.SaveToPlayerPrefs("Settings" + Enum.GetName(typeof(SettingName),setting),value);
+		}
+
 	}
 
 }
