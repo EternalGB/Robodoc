@@ -91,7 +91,8 @@ public class PlayerBall : MonoBehaviour
 			if(col.gameObject.layer == LayerMask.NameToLayer("GoodBall")) {
 				PointBall pb;
 				if(pb = col.gameObject.GetComponent<PointBall>()) {
-
+					if(pb.HasSound)
+						SoundEffectManager.PlayClipOnce(pb.CollectSound,Vector3.zero,1);
 					Vector3 pos = pb.transform.position;
 					Quaternion rot = pb.transform.rotation;
 					Vector3 scale = pb.transform.localScale;
@@ -119,19 +120,16 @@ public class PlayerBall : MonoBehaviour
 					ScoreCalculator.Instance.ComboUp();
 					//recalculate score
 					ScoreCalculator.Instance.SetScorePrediction();
-					
-					int depth = FindDepth(ball.transform);
-					//Debug.Log ("Depth of " + ball.transform.GetInstanceID() + " " + depth);
-					if(depth > 0) {
-						SoundEffectManager.Instance.PlayClipOnce("BallGet",Vector3.zero,1,1 + depth/2f);
-					}
+
 				}
 			} else if(col.gameObject.layer == LayerMask.NameToLayer("BadBall")) {
 				//Debug.Log ("BadBall Collision");
-				col.gameObject.GetComponent<BadBall>().ApplyEffect(cps[0].otherCollider.transform);
+				BadBall bb = col.gameObject.GetComponent<BadBall>();
+				bb.ApplyEffect(cps[0].otherCollider.transform);
+				if(bb.HasSound)
+					SoundEffectManager.PlayClipOnce(bb.HitSound,Vector3.zero,1);
 				//recalculate score
 				ScoreCalculator.Instance.SetScorePrediction();
-				SoundEffectManager.Instance.PlayClipOnce("BadHit",Vector3.zero,1,1);
 			}
 
 		}

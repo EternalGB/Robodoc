@@ -32,6 +32,7 @@ public abstract class GameGUI : MonoBehaviour
 
 	protected void Start()
 	{
+
 		pb = GameObject.Find ("PlayerBall").GetComponent<PlayerBall>();
 		doneGoalCompleted = false;
 		initCameraPos = Camera.main.transform.position.z;
@@ -143,6 +144,8 @@ public abstract class GameGUI : MonoBehaviour
 	{
 		Application.LoadLevel(Application.loadedLevel);
 		goal.ResetGoal();
+		ScoreCalculator.PlayerScored -= HandlePlayerScored;
+		ScoreCalculator.ScorePredictionUpdated -= HandleScorePrediction;
 	}
 
 	public void UpdateControlScheme()

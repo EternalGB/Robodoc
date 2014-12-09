@@ -40,6 +40,11 @@ public class Util
 		return list[Random.Range(0,list.Count)];
 	}
 
+	public static T GetRandomElement<T>(T[] array)
+	{
+		return array[Random.Range (0,array.Length)];
+	}
+
 	public static bool PointInside(Vector2 topLeft, Vector2 bottomRight, Vector2 point)
 	{
 		return point.x <= bottomRight.x && point.x >= topLeft.x &&
