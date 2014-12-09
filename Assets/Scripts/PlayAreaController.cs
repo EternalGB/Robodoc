@@ -16,8 +16,9 @@ public class PlayAreaController : MonoBehaviour
 
 	void Update()
 	{
-		//keeps the play area the same size as the viewable area on the screen
-		circleCollider.radius = Util.ScreenPointToWorld(Camera.main.WorldToScreenPoint(radiusPoint.position),0).x;
+		if(radiusPoint != null)
+			//keeps the play area the same size as the viewable area on the screen
+			circleCollider.radius = Util.ScreenPointToWorld(Camera.main.WorldToScreenPoint(radiusPoint.position),0).x;
 	}
 		
 }

@@ -6,20 +6,28 @@ public class MainMenuUI : MonoBehaviour
 {
 
 	public GameObject mainMenu;
-	public GameObject levelSelect;
-	public GameObject arcadeStatistics;
 
 	public GameObject tutorialButton;
 
 	public TextList controlScheme;
 	public Text arcadeScoreDisplay;
 
+	public GameObject currentUI;
+
 	void Start()
 	{
+
+		currentUI.SetActive(true);
 
 		arcadeScoreDisplay.text = ArcadeStats.HighScore.ToString();
 		controlScheme.DisplayText(PlayerPrefs.GetInt("Controller",1));
 		tutorialButton.SetActive(PlayerPrefs.GetInt("TutorialCompleted",0) != 0);
+	}
+
+	void Update()
+	{
+		if(Input.anyKeyDown && UnityEngine.EventSystems.EventSystem.current.currentSelectedGameObject != null)
+			Debug.Log (UnityEngine.EventSystems.EventSystem.current.currentSelectedGameObject.name + " is now selected");
 	}
 
 	public void LaunchArcade()
@@ -43,22 +51,14 @@ public class MainMenuUI : MonoBehaviour
 		PlayerPrefs.Save();
 	}
 
-	public void DisplayMainMenu()
+	public void SwapUI(GameObject ui)
 	{
-		mainMenu.SetActive(true);
-		levelSelect.SetActive(false);
-	}
 
-	public void DisplayLevelSelect()
-	{
-		mainMenu.SetActive(false);
-		levelSelect.SetActive(true);
-	}
-
-	public void DisplayArcadeStats()
-	{
-		mainMenu.SetActive(false);
-		arcadeStatistics.SetActive(true);
+		currentUI.SetActive(false);
+		ui.SetActive(true);
+		currentUI = ui;
+		UnityEngine.EventSystems.EventSystem.current.SetSelectedGameObject(currentUI);
+		//Debug.Log (UnityEngine.EventSystems.EventSystem.current.currentSelectedGameObject.name + " is now selected");
 	}
 
 	public void UpdateControlScheme()

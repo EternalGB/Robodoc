@@ -16,7 +16,7 @@ public class ScoreArea : MonoBehaviour
 	{
 		if(col.gameObject.layer == LayerMask.NameToLayer("Player") && !col.GetComponent<PlayerBall>().glooped) {
 			scoreChargeStart = Time.time;
-			Debug.Log ("Player entering score zone");
+			//Debug.Log ("Player entering score zone");
 		}
 			
 	}
@@ -33,7 +33,7 @@ public class ScoreArea : MonoBehaviour
 					scoreChargeStart = Time.time;
 				}
 			} else {
-				Debug.Log("Player Gooped, restarting score fill");
+				//Debug.Log("Player Gooped, restarting score fill");
 				scoreChargeStart = Time.time;
 				anim.fill = 0;
 			}
