@@ -74,5 +74,10 @@ public class ArcadeManager : MonoBehaviour
 		bm.AddGoodBall(goodBallPrefabs[ballIndex]);
 		goodBallPrefabs.RemoveAt(ballIndex);
 	}
+
+	void OnDisable()
+	{
+		ScoreCalculator.PlayerScored -= UpdateDifficulty;
+	}
 }
 

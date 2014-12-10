@@ -143,5 +143,10 @@ public class BallMachine : MonoBehaviour
 		return point;
 	}
 
+	void OnDisable()
+	{
+		ScoreCalculator.PlayerScored -= UpdateDifficulty;
+	}
+
 }
 
