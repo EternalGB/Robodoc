@@ -34,7 +34,6 @@ public abstract class GameGUI : MonoBehaviour
 	{
 
 		pb = GameObject.Find ("PlayerBall").GetComponent<PlayerBall>();
-		Debug.Log ("Got PlayerBall " + pb.GetInstanceID());
 		doneGoalCompleted = false;
 		initCameraPos = Camera.main.transform.position.z;
 		ScoreCalculator.ScorePredictionUpdated += HandleScorePrediction;
@@ -46,6 +45,9 @@ public abstract class GameGUI : MonoBehaviour
 
 	protected void Update()
 	{
+		if(Input.anyKeyDown && UnityEngine.EventSystems.EventSystem.current.currentSelectedGameObject != null)
+			Debug.Log (UnityEngine.EventSystems.EventSystem.current.currentSelectedGameObject.name + " is now selected");
+
 		goal.UpdateTime();
 		displayTime = goal.displayTime;
 		BGImage.UpdatePos(Mathf.Clamp(1 - displayTime/120f,0,1));
