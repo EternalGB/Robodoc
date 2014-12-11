@@ -182,16 +182,21 @@ public class Util
 				SetMaterialAllAttachedBalls(child,mat);
 	}
 
-	public static void SetMaterialAllAttachedBallsTemp(Transform t, Material mat, float duration)
+	public static void SetStatusAllAttachedBallsTemp(Transform t, BallStatus newStatus, Material mat, float duration)
 	{
-		//we make copies so the delegate we create keeps its own state
-		Material oldMat = t.GetComponent<SpriteRenderer>().sharedMaterial;
-		Transform trans = t;
-		t.GetComponent<SpriteRenderer>().sharedMaterial = mat;
-		t.GetComponent<MonoBehaviour>().StartCoroutine(Timers.Countdown(duration,() => {trans.GetComponent<SpriteRenderer>().sharedMaterial = oldMat;}));
+		AttachedBall ab;
+		if(ab = t.GetComponent<AttachedBall>()) {
+			//we make copies so the delegate we create keeps its own state
+			//Material oldMat = t.GetComponent<SpriteRenderer>().sharedMaterial;
+			//Transform trans = t;
+			ab.AddStatus(newStatus,mat);
+			ab.StartCoroutine(Timers.Countdown(duration,() => {
+				ab.RemoveStatus(newStatus);
+			}));
+		}
 		foreach(Transform child in t)
-			if(child.GetComponent<AttachedBall>())
-				SetMaterialAllAttachedBallsTemp(child,mat,duration);
+			SetStatusAllAttachedBallsTemp(child,newStatus,mat,duration);
+
 	}
 
 	public static bool TryLoadFromPlayerPrefs<T>(string key, out T obj)

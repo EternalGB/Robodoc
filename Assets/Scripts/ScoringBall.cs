@@ -47,7 +47,7 @@ public class ScoringBall : PoolableObject
 		HSBColor hColor = new HSBColor(color);
 		hColor.s = 1;
 		hColor.b = 1;
-		Debug.Log ("Sample color " + hColor.ToString());
+		//Debug.Log ("Sample color " + hColor.ToString());
 		return hColor.ToColor();
 	}
 

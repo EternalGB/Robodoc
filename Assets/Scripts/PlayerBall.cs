@@ -16,17 +16,20 @@ public class PlayerBall : MonoBehaviour
 	//public float edgeOffset = 20;
 	float rotAngle = 0;
 
-	bool movFreeze = false;
-	bool rotFreeze = false;
-	public bool glooped = true;
+	BallStatus status = BallStatus.NONE;
+	
 	bool bombsEnabled = true;
 
 	public delegate void BallCollectHandler(GameObject player, GameObject playerPart, GameObject ball);
 	public event BallCollectHandler BallCollect;
 
+
+	Material origMat;
+
 	void Start()
 	{
 		ballPool = PoolManager.Instance.GetPoolByRepresentative(ballPrefab);
+		origMat = GetComponent<SpriteRenderer>().sharedMaterial;
 	}
 
 	void Update()
@@ -34,7 +37,7 @@ public class PlayerBall : MonoBehaviour
 		//to stop new colliders changing the center of mass
 		rigidbody2D.centerOfMass = Vector2.zero;
 
-		if(!movFreeze ){
+		if(!FlagsHelper.IsSet<BallStatus>(status,BallStatus.FROZEN)) {
 			if(PlayerPrefs.GetInt("Controller",1) == 1) {
 				//move towards the mouse
 				
@@ -57,7 +60,7 @@ public class PlayerBall : MonoBehaviour
 		}
 
 		//spin left or right
-		if(!rotFreeze) {
+		if(!FlagsHelper.IsSet<BallStatus>(status,BallStatus.SHOCKED)) {
 			rotAngle = Mathf.Repeat(rotAngle + Input.GetAxisRaw("Spin")*rotSpeed*Time.deltaTime,360);
 			transform.rotation = Quaternion.AngleAxis(rotAngle,Vector3.forward);
 			//rigidbody2D.angularVelocity += new Vector3(0,0,rigidbody2D.velocity.x + rigidbody2D.velocity.y)*-0.1f;
@@ -81,7 +84,7 @@ public class PlayerBall : MonoBehaviour
 
 	void OnCollisionEnter2D(Collision2D col)
 	{
-		if(!glooped) {
+		if(!FlagsHelper.IsSet<BallStatus>(status,BallStatus.GLOOPED)) {
 			ContactPoint2D[] cps = col.contacts;
 			Transform parent = GetCorrectParent(cps);
 			GameObject playerPart = parent.gameObject;
@@ -181,13 +184,14 @@ public class PlayerBall : MonoBehaviour
 
 	public void GetFrozen(float duration, Material frozenMat)
 	{
-		if(!movFreeze) {
-			movFreeze = true;
+		if(!FlagsHelper.IsSet<BallStatus>(status,BallStatus.FROZEN)) {
+			renderer.sharedMaterial = frozenMat;
+			AddStatus(BallStatus.FROZEN,frozenMat);
 			rigidbody2D.velocity = Vector2.zero;
 			rigidbody2D.isKinematic = true;
-			Util.SetMaterialAllAttachedBallsTemp(transform,frozenMat,duration);
+			Util.SetStatusAllAttachedBallsTemp(transform,BallStatus.FROZEN,frozenMat,duration);
 			StartCoroutine(Timers.Countdown(duration,() => {
-				movFreeze = false;
+				RemoveStatus(BallStatus.FROZEN);
 				rigidbody2D.isKinematic = false;
 			}));
 		}
@@ -195,17 +199,19 @@ public class PlayerBall : MonoBehaviour
 
 	public void GetShocked(float duration, Material shockedMat)
 	{
-		if(!rotFreeze) {
-			rotFreeze = true;
-			Util.SetMaterialAllAttachedBallsTemp(transform,shockedMat,duration);
-			StartCoroutine(Timers.Countdown(duration,() => {rotFreeze = false;}));
+		if(!FlagsHelper.IsSet<BallStatus>(status,BallStatus.SHOCKED)) {
+			renderer.sharedMaterial = shockedMat;
+			AddStatus(BallStatus.SHOCKED,shockedMat);
+			Util.SetStatusAllAttachedBallsTemp(transform,BallStatus.SHOCKED,shockedMat,duration);
+			StartCoroutine(Timers.Countdown(duration,() => RemoveStatus(BallStatus.SHOCKED)));
 		}
 	}
 
-	public void GetGlooped(float duration, Material gloopMaterial)
+	public void GetGlooped(float duration, Material gloopMat)
 	{
-		if(!glooped) {
-			glooped = true;
+		if(!FlagsHelper.IsSet<BallStatus>(status,BallStatus.GLOOPED)) {
+			renderer.sharedMaterial = gloopMat;
+			AddStatus(BallStatus.GLOOPED,gloopMat);
 			//we make copies so the delegate we create keeps its own state
 			/*
 			Material oldMat = GetComponent<SpriteRenderer>().sharedMaterial;
@@ -216,10 +222,34 @@ public class PlayerBall : MonoBehaviour
 				trans.GetComponent<SpriteRenderer>().sharedMaterial = oldMat;
 			}));
 			*/
-			Util.SetMaterialAllAttachedBallsTemp(transform,gloopMaterial,duration);
-			StartCoroutine(Timers.Countdown(duration,() => glooped = false));
-
+			Util.SetStatusAllAttachedBallsTemp(transform,BallStatus.GLOOPED,gloopMat,duration);
+			StartCoroutine(Timers.Countdown(duration,() => RemoveStatus(BallStatus.GLOOPED)));
 		}
+	}
+
+	public void AddStatus(BallStatus newStatus, Material newMat)
+	{
+		if(newMat != null)
+			renderer.sharedMaterial = newMat;
+		FlagsHelper.Set<BallStatus>(ref status, newStatus);
+		CheckStatus();
+	}
+
+	public void RemoveStatus(BallStatus newStatus)
+	{
+		FlagsHelper.Unset<BallStatus>(ref status, newStatus);
+		CheckStatus();
+	}
+
+	public bool HasStatus(BallStatus checkStatus)
+	{
+		return FlagsHelper.IsSet(status,checkStatus);
+	}
+
+	void CheckStatus()
+	{
+		if(status == BallStatus.NONE)
+			renderer.sharedMaterial = origMat;
 	}
 
 	public void DisableBombs()

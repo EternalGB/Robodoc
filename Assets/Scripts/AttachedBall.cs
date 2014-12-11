@@ -9,17 +9,40 @@ public class AttachedBall : PoolableObject
 		Green,LightBlue,Pink,Red,Yellow,BonusBall,Infected
 	}
 
+
+
 	public GameObject ejectedBallPrefab;
 	public float pointValue = 1;
 	Vector3 origScale;
 	Material origMat;
 
 	public BallTypeNames type;
+	public BallStatus status;
 
 	void Start()
 	{
 		origScale = transform.localScale;
 		origMat = GetComponent<SpriteRenderer>().sharedMaterial;
+	}
+
+	public void AddStatus(BallStatus newStatus, Material newMat)
+	{
+		if(newMat != null)
+			renderer.sharedMaterial = newMat;
+		FlagsHelper.Set<BallStatus>(ref status, newStatus);
+		CheckStatus();
+	}
+	
+	public void RemoveStatus(BallStatus newStatus)
+	{
+		FlagsHelper.Unset<BallStatus>(ref status, newStatus);
+		CheckStatus();
+	}
+	
+	void CheckStatus()
+	{
+		if(status == BallStatus.NONE)
+			renderer.sharedMaterial = origMat;
 	}
 
 	public void SetType(string typeName)
