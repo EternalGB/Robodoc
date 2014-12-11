@@ -16,7 +16,6 @@ public class MainMenuUI : MonoBehaviour
 
 	void Start()
 	{
-		Time.timeScale = 0;
 		currentUI.SetActive(true);
 
 		arcadeScoreDisplay.text = ArcadeStats.HighScore.ToString();
