@@ -236,5 +236,25 @@ public class Util
 		return texture.GetPixel(Random.Range(0,texture.width),Random.Range(0,texture.height));
 	}
 
+	public static Color GetAverageColor(Texture2D texture, int sampleRate)
+	{
+		Color[] pixels = texture.GetPixels();
+		float r = 0;
+		float g = 0;
+		float b = 0;
+		int samples = 0;
+		for(int i = 0; i < pixels.Length; i += sampleRate) {
+			r += pixels[i].r;
+			g += pixels[i].g;
+			b += pixels[i].b;
+			samples++;
+		}
+		r = r/samples;
+		g = g/samples;
+		b = b/samples;
+		//Debug.Log ("Sample color " + (new Color(r,g,b)).ToString());
+		return new Color(r,g,b);
+	}
+
 }
 

@@ -13,7 +13,7 @@ public class ScoringBallChild : PoolableObject
 			GetPoolByRepresentative(particleBurstPrefab).GetPooled().GetComponent<PoolableParticleBurst>();
 		particles.transform.position = transform.position;
 		particles.gameObject.SetActive(true);
-		particles.particleSystem.startColor = Util.GetRandomPixel(GetComponent<SpriteRenderer>().sprite.texture);
+		particles.particleSystem.startColor = ScoringBall.GetParticleColor(GetComponent<SpriteRenderer>().sprite);
 		particles.Play();
 		base.Destroy();
 	}

@@ -14,6 +14,8 @@ public class ScoringBall : PoolableObject
 
 	public AttachedBall.BallTypeNames type;
 
+
+
 	void Update()
 	{
 		transform.position += travelDir*speed*Time.deltaTime;
@@ -28,7 +30,7 @@ public class ScoringBall : PoolableObject
 			GetPoolByRepresentative(particleBurstPrefab).GetPooled().GetComponent<PoolableParticleBurst>();
 		particles.transform.position = transform.position;
 		particles.gameObject.SetActive(true);
-		particles.particleSystem.startColor = Util.GetRandomPixel(GetComponent<SpriteRenderer>().sprite.texture);
+		particles.particleSystem.startColor = GetParticleColor(GetComponent<SpriteRenderer>().sprite);
 		particles.Play();
 		Util.DestroyChildrenWithComponent<ScoringBallChild>(transform);
 		base.Destroy();
@@ -38,5 +40,16 @@ public class ScoringBall : PoolableObject
 	{
 		StartCoroutine(Timers.Countdown(lifeTime,Destroy));
 	}
+
+	public static Color GetParticleColor(Sprite sprite)
+	{
+		Color color = Util.GetAverageColor(sprite.texture,2);
+		HSBColor hColor = new HSBColor(color);
+		hColor.s = 1;
+		hColor.b = 1;
+		Debug.Log ("Sample color " + hColor.ToString());
+		return hColor.ToColor();
+	}
+
 }
 
