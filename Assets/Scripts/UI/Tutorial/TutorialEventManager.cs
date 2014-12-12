@@ -62,7 +62,8 @@ public class TutorialEventManager : MonoBehaviour
 			LaunchEvents(currentEvents);
 		} else {
 			running = false;
-			TutorialFinished();
+			if(TutorialFinished != null)
+				TutorialFinished();
 		}
 	}
 

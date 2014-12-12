@@ -51,7 +51,7 @@ public class TutorialGUI : GameGUI
 		endUI.SetActive(true);
 	}
 
-	void TutorialEnd()
+	public void TutorialEnd()
 	{
 		tutorialFinished = true;
 		forcedPause = false;
@@ -64,6 +64,29 @@ public class TutorialGUI : GameGUI
 	public void SetTutorialCompleted()
 	{
 		PlayerPrefs.SetInt("TutorialCompleted",1);
+	}
+
+	public void TogglePause()
+	{
+		if(paused) {
+			PlayerPrefs.SetInt("Controller",controlScheme.index);
+			PlayerPrefs.Save();
+			pauseUI.SetActive(false);
+			paused = false;
+			if(!forcedPause) {
+
+				Time.timeScale = 1;
+			}
+
+		} else if(!paused) {
+			pauseUI.SetActive(true);
+			controlScheme.ChangeText(PlayerPrefs.GetInt("Controller",1));
+			paused = true;
+			if(!forcedPause) {
+				Time.timeScale = 0;
+
+			}
+		}
 	}
 
 	public void ToggleForcePause()
