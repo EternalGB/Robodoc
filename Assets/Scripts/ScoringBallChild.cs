@@ -5,7 +5,6 @@ public class ScoringBallChild : PoolableObject
 {
 
 	public GameObject particleBurstPrefab;
-	public AttachedBall.BallTypeNames type;
 
 	public override void Destroy()
 	{

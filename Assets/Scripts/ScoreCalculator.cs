@@ -166,7 +166,7 @@ public class ScoreCalculator : MonoBehaviour
 		AttachedBall childBall = child.GetComponent<AttachedBall>();
 		AttachedBall parentBall = parent.GetComponent<AttachedBall>();
 		if(childBall != null && parentBall != null) {
-			return childBall.type != AttachedBall.BallTypeNames.Infected && parentBall.type != AttachedBall.BallTypeNames.Infected &&
+			return !FlagsHelper.IsSet(childBall.status,BallStatus.INFECTED) && !FlagsHelper.IsSet(parentBall.status,BallStatus.INFECTED) &&
 			   (childBall.type == AttachedBall.BallTypeNames.BonusBall || parentBall.type == AttachedBall.BallTypeNames.BonusBall ||
 					childBall.type == parentBall.type);
 		} else

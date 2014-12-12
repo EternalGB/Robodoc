@@ -11,7 +11,7 @@ public class Delinker : BadBall
 		if(!(target.gameObject.layer == LayerMask.NameToLayer("Player"))) {
 			//Debug.Log ("Delinker Ball Applying Effect - Target: " + target.GetInstanceID());
 			target.parent = transform;
-			Util.SetMaterialAllAttachedBalls(target,ejectedMat);
+			AttachedBall.AddStatusAllAttachedBalls(target,BallStatus.EJECTED,ejectedMat);
 		}
 	}
 

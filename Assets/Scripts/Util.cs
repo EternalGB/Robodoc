@@ -174,30 +174,7 @@ public class Util
 		return Vector3.Angle(v1-origin,v2-origin);
 	}
 
-	public static void SetMaterialAllAttachedBalls(Transform t, Material mat)
-	{
-		t.GetComponent<SpriteRenderer>().sharedMaterial = mat;
-		foreach(Transform child in t)
-			if(child.GetComponent<AttachedBall>())
-				SetMaterialAllAttachedBalls(child,mat);
-	}
 
-	public static void SetStatusAllAttachedBallsTemp(Transform t, BallStatus newStatus, Material mat, float duration)
-	{
-		AttachedBall ab;
-		if(ab = t.GetComponent<AttachedBall>()) {
-			//we make copies so the delegate we create keeps its own state
-			//Material oldMat = t.GetComponent<SpriteRenderer>().sharedMaterial;
-			//Transform trans = t;
-			ab.AddStatus(newStatus,mat);
-			ab.StartCoroutine(Timers.Countdown(duration,() => {
-				ab.RemoveStatus(newStatus);
-			}));
-		}
-		foreach(Transform child in t)
-			SetStatusAllAttachedBallsTemp(child,newStatus,mat,duration);
-
-	}
 
 	public static bool TryLoadFromPlayerPrefs<T>(string key, out T obj)
 	{

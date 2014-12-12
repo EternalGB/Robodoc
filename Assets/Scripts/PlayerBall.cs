@@ -1,5 +1,5 @@
 using UnityEngine;
-using System.Collections;
+using System.Collections.Generic;
 
 public class PlayerBall : MonoBehaviour
 {
@@ -25,11 +25,14 @@ public class PlayerBall : MonoBehaviour
 
 
 	Material origMat;
+	List<Material> matQueue;
 
 	void Start()
 	{
 		ballPool = PoolManager.Instance.GetPoolByRepresentative(ballPrefab);
 		origMat = GetComponent<SpriteRenderer>().sharedMaterial;
+		matQueue = new List<Material>();
+		matQueue.Add(origMat);
 	}
 
 	void Update()
@@ -103,8 +106,7 @@ public class PlayerBall : MonoBehaviour
 					Sprite sprite = pb.GetComponent<SpriteRenderer>().sprite;
 					pb.Destroy();
 					AttachedBall ball = ballPool.GetPooled().GetComponent<AttachedBall>();
-					//make sure it's not bringing any friends
-					Util.DestroyChildrenWithComponent<AttachedBall>(ball.transform);
+
 					ball.transform.position = pos;
 					ball.transform.rotation = rot;
 					ball.GetComponent<SpriteRenderer>().sprite = sprite;
@@ -189,9 +191,9 @@ public class PlayerBall : MonoBehaviour
 			AddStatus(BallStatus.FROZEN,frozenMat);
 			rigidbody2D.velocity = Vector2.zero;
 			rigidbody2D.isKinematic = true;
-			Util.SetStatusAllAttachedBallsTemp(transform,BallStatus.FROZEN,frozenMat,duration);
+			AttachedBall.AddStatusAllAttachedBallsTemp(transform,BallStatus.FROZEN,frozenMat,duration);
 			StartCoroutine(Timers.Countdown(duration,() => {
-				RemoveStatus(BallStatus.FROZEN);
+				RemoveStatus(BallStatus.FROZEN,frozenMat);
 				rigidbody2D.isKinematic = false;
 			}));
 		}
@@ -202,8 +204,8 @@ public class PlayerBall : MonoBehaviour
 		if(!FlagsHelper.IsSet<BallStatus>(status,BallStatus.SHOCKED)) {
 			renderer.sharedMaterial = shockedMat;
 			AddStatus(BallStatus.SHOCKED,shockedMat);
-			Util.SetStatusAllAttachedBallsTemp(transform,BallStatus.SHOCKED,shockedMat,duration);
-			StartCoroutine(Timers.Countdown(duration,() => RemoveStatus(BallStatus.SHOCKED)));
+			AttachedBall.AddStatusAllAttachedBallsTemp(transform,BallStatus.SHOCKED,shockedMat,duration);
+			StartCoroutine(Timers.Countdown(duration,() => RemoveStatus(BallStatus.SHOCKED,shockedMat)));
 		}
 	}
 
@@ -222,34 +224,38 @@ public class PlayerBall : MonoBehaviour
 				trans.GetComponent<SpriteRenderer>().sharedMaterial = oldMat;
 			}));
 			*/
-			Util.SetStatusAllAttachedBallsTemp(transform,BallStatus.GLOOPED,gloopMat,duration);
-			StartCoroutine(Timers.Countdown(duration,() => RemoveStatus(BallStatus.GLOOPED)));
+			AttachedBall.AddStatusAllAttachedBallsTemp(transform,BallStatus.GLOOPED,gloopMat,duration);
+			StartCoroutine(Timers.Countdown(duration,() => RemoveStatus(BallStatus.GLOOPED,gloopMat)));
 		}
 	}
 
 	public void AddStatus(BallStatus newStatus, Material newMat)
 	{
-		if(newMat != null)
+		if(newMat != null) {
 			renderer.sharedMaterial = newMat;
+			matQueue.Add(newMat);
+		}
 		FlagsHelper.Set<BallStatus>(ref status, newStatus);
 		CheckStatus();
 	}
-
-	public void RemoveStatus(BallStatus newStatus)
+	
+	public void RemoveStatus(BallStatus newStatus, Material toRemove)
 	{
 		FlagsHelper.Unset<BallStatus>(ref status, newStatus);
-		CheckStatus();
+		if(toRemove != null && matQueue.Remove(toRemove)) {
+			CheckStatus();
+		}
+	}
+	
+	void CheckStatus()
+	{
+		if(matQueue.Count > 0)
+			renderer.sharedMaterial = matQueue[matQueue.Count-1];
 	}
 
 	public bool HasStatus(BallStatus checkStatus)
 	{
 		return FlagsHelper.IsSet(status,checkStatus);
-	}
-
-	void CheckStatus()
-	{
-		if(status == BallStatus.NONE)
-			renderer.sharedMaterial = origMat;
 	}
 
 	public void DisableBombs()

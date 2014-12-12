@@ -12,7 +12,6 @@ public class ScoringBall : PoolableObject
 	public float rotSpeed;
 	//public Vector3 rotCenter;
 
-	public AttachedBall.BallTypeNames type;
 
 
 

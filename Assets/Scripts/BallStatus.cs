@@ -6,7 +6,8 @@ public enum BallStatus
 	FROZEN = 1,
 	SHOCKED = 2,
 	GLOOPED = 4,
-	INFECTED = 8
+	INFECTED = 8,
+	EJECTED = 16
 }
 
 
