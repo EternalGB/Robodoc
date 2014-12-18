@@ -24,7 +24,7 @@ public abstract class GameGUI : MonoBehaviour
 	protected bool paused = false;
 
 	float initCameraPos;
-	public float maxCameraZoom;
+	float maxCameraZoom = 70;
 	float cameraZoom;
 	float actualCameraZoom;
 	float zoomLerpTimer;
