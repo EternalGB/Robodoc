@@ -1,12 +1,12 @@
 using UnityEngine;
 using System.Collections.Generic;
 
-public class AddBallsToBallMachineEvent : TutorialEvent
+public class AddBadBalls : TutorialEvent
 {
 
+	public List<GameObject> badBalls;
 	public BallMachine ballMachine;
-	public List<GameObject> balls;
-	public bool goodBalls;
+
 	bool completed = false;
 
 	protected override void InitEvent ()
@@ -16,12 +16,8 @@ public class AddBallsToBallMachineEvent : TutorialEvent
 
 	public override void Activate ()
 	{
-		if(goodBalls)
-			foreach(GameObject ball in balls)
-				ballMachine.AddGoodBall(ball);
-		else
-			foreach(GameObject ball in balls)
-				ballMachine.AddBadBall(ball);
+		foreach(GameObject badBall in badBalls)
+			ballMachine.AddBadBall(badBall);
 		completed = true;
 	}
 

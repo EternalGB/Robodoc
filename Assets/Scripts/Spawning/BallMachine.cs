@@ -20,6 +20,9 @@ public class BallMachine : MonoBehaviour
 
 	List<GameObject> goodBalls;
 
+	public delegate void BallSpawnedHandler(GameObject ball);
+	public event BallSpawnedHandler BallSpawned;
+
 	void Awake()
 	{
 		if(playArea == null)
@@ -101,6 +104,8 @@ public class BallMachine : MonoBehaviour
 		ball.rigidbody2D.velocity = GetInitVelocity(pos,minInitSpeed,maxInitSpeed);	
 		ball.rigidbody2D.angularVelocity = Mathf.Sign (ball.rigidbody2D.velocity.x)*ball.rigidbody2D.velocity.magnitude;
 		//ball.rigidbody2D.velocity = Util.RandomVectorBetween(pos,screenTopLeft,screenBottomRight).normalized*Random.Range (minInitSpeed,maxInitSpeed);
+		if(BallSpawned != null)
+			BallSpawned(ball);
 		return ball;
 	}
 

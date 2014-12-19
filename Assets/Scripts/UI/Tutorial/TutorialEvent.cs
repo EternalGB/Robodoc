@@ -7,7 +7,7 @@ public abstract class TutorialEvent : MonoBehaviour
 
 	public int priority;
 
-	void Start()
+	void Awake()
 	{
 		InitEvent();
 	}

@@ -1,12 +1,11 @@
 using UnityEngine;
 using System.Collections;
 
-public class CallNamedEvent : TutorialEvent
+public class ArrowedMessageTimed : ArrowedMessage
 {
 
-	public MonoBehaviour script;
-	public string methodName;
 	bool completed = false;
+	public float duration;
 
 	protected override void InitEvent ()
 	{
@@ -15,13 +14,8 @@ public class CallNamedEvent : TutorialEvent
 
 	public override void Activate ()
 	{
-		script.SendMessage(methodName);
-		completed = true;
-	}
-
-	public override void Deactivate ()
-	{
-
+		StartCoroutine(Timers.Countdown(duration,() => completed = true));
+		base.Activate ();
 	}
 
 	public override bool Completed ()
