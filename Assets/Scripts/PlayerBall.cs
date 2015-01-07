@@ -119,7 +119,17 @@ public class PlayerBall : MonoBehaviour
 						Debug.LogError("No correct parent could be found");
 					ball.SetPointValue(pb.pointValue);
 					ball.SetType(pb.gameObject.name);
-					
+
+					//if we current have any number of statuses, apply them to the new ball
+					if(status != BallStatus.NONE) {
+						//apply all current status to new ball
+						ball.status = status;
+						//include all materials (except the original material)
+						for(int i = 1; i < matQueue.Count; i++) {
+							ball.matQueue.Add(matQueue[i]);
+						}
+						ball.CheckStatus();
+					}
 					//Debug.Log ("Creating Attached Ball at " + pos + " parent: " + ball.transform.parent.GetInstanceID());
 					
 					ScoreCalculator.Instance.ComboUp();
@@ -191,7 +201,7 @@ public class PlayerBall : MonoBehaviour
 			AddStatus(BallStatus.FROZEN,frozenMat);
 			rigidbody2D.velocity = Vector2.zero;
 			rigidbody2D.isKinematic = true;
-			AttachedBall.AddStatusAllAttachedBallsTemp(transform,BallStatus.FROZEN,frozenMat,duration);
+			AttachedBall.AddStatusAllAttachedBalls(transform,BallStatus.FROZEN,frozenMat);
 			StartCoroutine(Timers.Countdown(duration,() => {
 				RemoveStatus(BallStatus.FROZEN,frozenMat);
 				rigidbody2D.isKinematic = false;
@@ -204,7 +214,7 @@ public class PlayerBall : MonoBehaviour
 		if(!FlagsHelper.IsSet<BallStatus>(status,BallStatus.SHOCKED)) {
 			renderer.sharedMaterial = shockedMat;
 			AddStatus(BallStatus.SHOCKED,shockedMat);
-			AttachedBall.AddStatusAllAttachedBallsTemp(transform,BallStatus.SHOCKED,shockedMat,duration);
+			AttachedBall.AddStatusAllAttachedBalls(transform,BallStatus.SHOCKED,shockedMat);
 			StartCoroutine(Timers.Countdown(duration,() => RemoveStatus(BallStatus.SHOCKED,shockedMat)));
 		}
 	}
@@ -224,7 +234,7 @@ public class PlayerBall : MonoBehaviour
 				trans.GetComponent<SpriteRenderer>().sharedMaterial = oldMat;
 			}));
 			*/
-			AttachedBall.AddStatusAllAttachedBallsTemp(transform,BallStatus.GLOOPED,gloopMat,duration);
+			AttachedBall.AddStatusAllAttachedBalls(transform,BallStatus.GLOOPED,gloopMat);
 			StartCoroutine(Timers.Countdown(duration,() => RemoveStatus(BallStatus.GLOOPED,gloopMat)));
 		}
 	}
@@ -245,6 +255,7 @@ public class PlayerBall : MonoBehaviour
 		if(toRemove != null && matQueue.Remove(toRemove)) {
 			CheckStatus();
 		}
+		AttachedBall.RemoveStatusAllAttachedBalls(transform,newStatus,toRemove);
 	}
 	
 	void CheckStatus()

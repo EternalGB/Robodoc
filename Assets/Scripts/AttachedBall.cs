@@ -18,7 +18,7 @@ public class AttachedBall : PoolableObject
 	public BallTypeNames type;
 	public BallStatus status;
 
-	List<Material> matQueue;
+	public List<Material> matQueue;
 
 	void OnEnable()
 	{
@@ -57,7 +57,7 @@ public class AttachedBall : PoolableObject
 		CheckStatus();
 	}
 
-	void CheckStatus()
+	public void CheckStatus()
 	{
 		if(matQueue.Count > 0)
 			renderer.sharedMaterial = matQueue[matQueue.Count-1];
@@ -128,6 +128,17 @@ public class AttachedBall : PoolableObject
 		foreach(Transform child in t)
 			AddStatusAllAttachedBalls(child,newStatus,mat);
 	}
+	
+	public static void RemoveStatusAllAttachedBalls(Transform t, BallStatus status, Material material)
+	{
+		AttachedBall ab;
+		if(ab = t.GetComponent<AttachedBall>()) {
+			ab.RemoveStatus(status,material);
+		}
+		foreach(Transform child in t)
+			RemoveStatusAllAttachedBalls(child,status,material);
+	}
+
 	
 	public static void AddStatusAllAttachedBallsTemp(Transform t, BallStatus newStatus, Material mat, float duration)
 	{
