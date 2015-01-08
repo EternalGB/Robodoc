@@ -14,6 +14,8 @@ public class MainMenuUI : MonoBehaviour
 
 	public GameObject currentUI;
 
+	public GameObject tutorialConfirmationWindow;
+
 	void Start()
 	{
 		currentUI.SetActive(true);
@@ -34,9 +36,10 @@ public class MainMenuUI : MonoBehaviour
 	public void LaunchArcade()
 	{
 
-		if(PlayerPrefs.GetInt("TutorialCompleted",0) == 0)
-			LaunchTutorial();
-		else {
+		if(PlayerPrefs.GetInt("TutorialCompleted",0) == 0) {
+			mainMenu.SetActive(false);
+			tutorialConfirmationWindow.SetActive(true);
+		} else {
 			Application.LoadLevel("Arcade");
 			PlayerPrefs.SetInt ("LevelIndex",-1);
 			PlayerPrefs.SetString("LevelName","Arcade");
@@ -81,9 +84,16 @@ public class MainMenuUI : MonoBehaviour
 		Application.LoadLevel(Application.loadedLevel);
 		ArcadeProgression.Clear();
 
+		/*
 		#if UNITY_EDITOR
 		PlayerPrefs.SetInt("TutorialCompleted",1);
 		#endif
+		*/
+	}
+
+	public void SetTutorialCompleted()
+	{
+		PlayerPrefs.SetInt("TutorialCompleted",1);
 	}
 
 }
