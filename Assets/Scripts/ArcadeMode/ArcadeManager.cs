@@ -71,7 +71,7 @@ public class ArcadeManager : MonoBehaviour
 	void AddColorBall()
 	{
 		int ballIndex = Random.Range (0,goodBallPrefabs.Count);
-		bm.AddGoodBall(goodBallPrefabs[ballIndex]);
+		bm.AddColourBall(goodBallPrefabs[ballIndex]);
 		goodBallPrefabs.RemoveAt(ballIndex);
 	}
 

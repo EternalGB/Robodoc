@@ -9,16 +9,13 @@ public class BallMachine : MonoBehaviour
 	public List<GameObject> colourBalls;
 	public List<GameObject> bonusBalls;
 	public List<GameObject> badBalls;
-	public float ballsPerSec;
 	public float minInitSpeed,maxInitSpeed;
-	public float badBallChance;
-	public float pointsPerIncr;
-	public float ballRateIncr;
-	public float badChanceIncr;
+	public AnimationCurve goodRateCurve,bonusRateCurve,badRateCurve;
+	float goodPerSec,bonusPerSec,badPerSec;
+
+	bool spawning = false;
 
 	public CircleCollider2D playArea;
-
-	List<GameObject> goodBalls;
 
 	public delegate void BallSpawnedHandler(GameObject ball);
 	public event BallSpawnedHandler BallSpawned;
@@ -27,31 +24,32 @@ public class BallMachine : MonoBehaviour
 	{
 		if(playArea == null)
 			playArea = GameObject.Find("PlayArea").GetComponent<CircleCollider2D>();
-		goodBalls = new List<GameObject>();
 	}
 
 	void Start()
 	{
-		goodBalls.AddRange(colourBalls);
-		goodBalls.AddRange(bonusBalls);
 		if(spawnOnStart)
 			StartSpawning();
+		UpdateDifficulty(0);
 		ScoreCalculator.PlayerScored += UpdateDifficulty;
 	}
 
 	public void StartSpawning()
 	{
-		Invoke("Spawn",1/ballsPerSec);
+		StartCoroutine(Timers.Countdown<List<GameObject>,float>(1/goodPerSec,Spawn,colourBalls,1/goodPerSec));
+		StartCoroutine(Timers.Countdown<List<GameObject>,float>(1/badPerSec,Spawn,badBalls,1/badPerSec));
+		StartCoroutine(Timers.Countdown<List<GameObject>,float>(1/bonusPerSec,Spawn,bonusBalls,1/bonusPerSec));
+		spawning = true;
 	}
 
 	public void StopSpawning()
 	{
-		CancelInvoke("Spawn");
+		spawning = false;
 	}
 
-	public void AddGoodBall(GameObject newBall)
+	public void AddColourBall(GameObject newBall)
 	{
-		goodBalls.Add(newBall);
+		colourBalls.Add(newBall);
 	}
 
 	public void AddBadBall(GameObject newBall)
@@ -59,14 +57,14 @@ public class BallMachine : MonoBehaviour
 		badBalls.Add(newBall);
 	}
 
-	public int NumGoodBalls()
+	public int NumColourBalls()
 	{
-		return goodBalls.Count;
+		return colourBalls.Count;
 	}
 
-	bool HaveGoodBalls()
+	bool HaveColourBalls()
 	{
-		return goodBalls != null && goodBalls.Count > 0;
+		return colourBalls != null && colourBalls.Count > 0;
 	}
 
 	bool HaveBadBalls()
@@ -74,30 +72,28 @@ public class BallMachine : MonoBehaviour
 		return badBalls != null && badBalls.Count > 0;
 	}
 
-	public void Spawn()
+	public void Spawn(List<GameObject> collection, float interval)
 	{
-		GameObject ball = null;
-		if(HaveGoodBalls() && HaveBadBalls()) {
-			if(Random.value < badBallChance) {
-				ball = PoolManager.Instance.GetPoolByRepresentative(Util.GetRandomElement(badBalls)).GetPooled();
-			} else {
-				ball = PoolManager.Instance.GetPoolByRepresentative(Util.GetRandomElement(goodBalls)).GetPooled();
-			}
-		} else if(HaveGoodBalls()) {
-			ball = PoolManager.Instance.GetPoolByRepresentative(Util.GetRandomElement(goodBalls)).GetPooled();
-		} else if(HaveBadBalls()) {
-			ball = PoolManager.Instance.GetPoolByRepresentative(Util.GetRandomElement(badBalls)).GetPooled();
+		if(spawning) {
+			GameObject ball = null;
+			if(collection != null && collection.Count > 0)
+				ball = Util.GetRandomElement<GameObject>(collection);
+			
+			if(ball != null) 
+				SpawnBall(ball);
+			//randomise the spawn a little bit
+			float nextInterval = interval + Util.RandomSign()*Random.Range(0.1f,0.2f)*interval;
+			StartCoroutine(Timers.Countdown<List<GameObject>,float>(nextInterval,Spawn,collection,interval));
 		}
-
-		if(ball != null)
-			SpawnBall(ball);
-		Invoke("Spawn",1/ballsPerSec);
 	}
 
-	public GameObject SpawnBall(GameObject ball)
+	public GameObject SpawnBall(GameObject ballPrefab)
 	{
+
 		float radius = playArea.radius;
 		Vector3 pos = PointOutside(Vector2.zero,1.05f*radius,1.2f*radius);
+
+		GameObject ball = PoolManager.Instance.GetPoolByRepresentative(ballPrefab).GetPooled();
 		ball.transform.position = pos;
 		ball.SetActive(true);
 		//always send the ball towards the screen-ish
@@ -113,8 +109,12 @@ public class BallMachine : MonoBehaviour
 
 	void UpdateDifficulty(float scoreIncrease)
 	{
-		ballsPerSec = Mathf.Clamp (ballsPerSec + ballRateIncr*scoreIncrease/pointsPerIncr,0,20);
-		badBallChance = Mathf.Clamp (badBallChance + badChanceIncr*scoreIncrease/pointsPerIncr,0,0.5f);
+		goodPerSec = goodRateCurve.Evaluate(ScoreCalculator.Instance.score);
+		bonusPerSec = bonusRateCurve.Evaluate(ScoreCalculator.Instance.score);
+		badPerSec = badRateCurve.Evaluate(ScoreCalculator.Instance.score);
+		//goodPerSec = Mathf.Clamp (goodPerSec + goodRateIncr*scoreIncrease/pointsPerIncr,0,goodRateMax);
+		//bonusPerSec = Mathf.Clamp (bonusPerSec + bonusRateIncr*scoreIncrease/pointsPerIncr,0,bonusRateMax);
+		//badPerSec = Mathf.Clamp (badPerSec + badRateIncr*scoreIncrease/pointsPerIncr,0,badRateMax);
 	}
 
 	Vector2 GetInitVelocity(Vector2 spawnPos, float minSpeed, float maxSpeed)

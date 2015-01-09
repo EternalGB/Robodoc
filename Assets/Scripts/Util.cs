@@ -101,6 +101,13 @@ public class Util
 		return Quaternion.AngleAxis(Random.Range(minAngle,maxAngle),axis);
 	}
 
+	static float[] signs = new float[]{-1,1};
+
+	public static float RandomSign()
+	{
+		return GetRandomElement<float>(signs);
+	}
+
 	public static void DestroyChildrenWithComponent<T>(Transform transform)
 	{
 		List<Transform> toDestroy = new List<Transform>();
