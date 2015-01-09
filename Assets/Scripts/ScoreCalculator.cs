@@ -66,6 +66,7 @@ public class ScoreCalculator : MonoBehaviour
 		score += amount;
 		lerpTimer = 0;
 		nextScore = 0;
+		nextLongestChain = 0;
 		CancelInvoke("ResetCombo");
 		CreateScoringBalls(player.transform,null);
 		Util.DestroyChildrenWithComponent<AttachedBall>(player.transform);
@@ -97,6 +98,7 @@ public class ScoreCalculator : MonoBehaviour
 	{
 		float score = ScoreChildren(transform, out maxDepth);
 		score += maxDepth*maxChainMultiplier;
+		Debug.Log ("Get Points - returning " + comboMulti + " X " +score + " = " + comboMulti*score);
 		return comboMulti*score;
 	}
 	
