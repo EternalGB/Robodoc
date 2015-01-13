@@ -28,9 +28,9 @@ public class BallMachine : MonoBehaviour
 
 	void Start()
 	{
+		UpdateDifficulty(0);
 		if(spawnOnStart)
 			StartSpawning();
-		UpdateDifficulty(0);
 		ScoreCalculator.PlayerScored += UpdateDifficulty;
 	}
 
