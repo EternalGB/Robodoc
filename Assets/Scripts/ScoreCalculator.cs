@@ -98,7 +98,7 @@ public class ScoreCalculator : MonoBehaviour
 	{
 		float score = ScoreChildren(transform, out maxDepth);
 		score += maxDepth*maxChainMultiplier;
-		Debug.Log ("Get Points - returning " + comboMulti + " X " +score + " = " + comboMulti*score);
+		//Debug.Log ("Get Points - returning " + comboMulti + " X " +score + " = " + comboMulti*score);
 		return comboMulti*score;
 	}
 	
