@@ -6,7 +6,7 @@ public class ArcadeStats
 
 	public enum StatKeys
 	{
-		TotalScore,HighScore,LongestChain,DelinkersHit,EjectorsHit,FreezersHit,GloopersHit,InfectorsHit,ShockersHit
+		TotalScore,HighScore,MaxCombo,LongestChain,DelinkersHit,EjectorsHit,FreezersHit,GloopersHit,InfectorsHit,ShockersHit
 	}
 
 	public static Dictionary<StatKeys,string> keyNames = new Dictionary<StatKeys, string>
@@ -14,6 +14,7 @@ public class ArcadeStats
 		{StatKeys.HighScore,"ArcadeHighScore"},
 		{StatKeys.LongestChain,"ArcadeLongestChain"},
 		{StatKeys.TotalScore,"ArcadeScoreTotal"},
+		{StatKeys.MaxCombo,"ArcadeMaxCombo"},
 		{StatKeys.DelinkersHit,"ArcadeDelinkersHit"},
 		{StatKeys.EjectorsHit,"ArcadeEjectorsHit"},
 		{StatKeys.FreezersHit,"ArcadeFreezersHit"},
@@ -70,6 +71,23 @@ public class ArcadeStats
 		set
 		{
 			SaveStat<int>(StatKeys.LongestChain,value);
+		}
+	}
+
+	public static float MaxCombo
+	{
+		get
+		{
+			float max = 0;
+			LoadStat<float>(StatKeys.MaxCombo, out max);
+			return max;
+		}
+		set
+		{
+			float max = 0;
+			LoadStat<float>(StatKeys.MaxCombo, out max);
+			if(value > max)
+				SaveStat<float>(StatKeys.MaxCombo,value);
 		}
 	}
 
@@ -208,6 +226,8 @@ public class ArcadeStats
 			return LongestChain;
 		case StatKeys.TotalScore:
 			return TotalScore;
+		case StatKeys.MaxCombo:
+			return MaxCombo;
 		default:
 			return -1;
 		}

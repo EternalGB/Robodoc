@@ -73,6 +73,9 @@ public class ScoreCalculator : MonoBehaviour
 		CreateScoringBalls(player.transform,null);
 		Util.DestroyChildrenWithComponent<AttachedBall>(player.transform);
 		ResetCombo();
+		//TODO not the best way ever
+		if(Application.loadedLevelName == "Arcade")
+			ArcadeStats.MaxCombo = amount;
 		//GameObject.FindWithTag("BallMachine").SendMessage("UpdateDifficulty",amount);
 		if(PlayerScored != null)
 			PlayerScored(amount);
