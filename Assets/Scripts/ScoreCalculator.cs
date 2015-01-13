@@ -30,7 +30,9 @@ public class ScoreCalculator : MonoBehaviour
 
 	void Start()
 	{
-		player = GameObject.Find ("PlayerBall").GetComponent<PlayerBall>();
+		GameObject playerObj;
+		if(playerObj = GameObject.Find ("PlayerBall"))
+			player = playerObj.GetComponent<PlayerBall>();
 	}
 
 	public GameObject scoringBallPrefab;
