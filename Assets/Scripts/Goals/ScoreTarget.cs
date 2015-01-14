@@ -10,6 +10,12 @@ public class ScoreTarget : Goal
 	void OnEnable()
 	{
 		startTime = Time.timeSinceLevelLoad;
+		timeRemaining = 0;
+	}
+
+	protected override void UpdateTime ()
+	{
+		timeRemaining += Time.deltaTime;
 	}
 
 	public override bool Completed ()

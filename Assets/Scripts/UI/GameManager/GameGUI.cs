@@ -69,7 +69,7 @@ public abstract class GameGUI : MonoBehaviour
 				Debug.Log (UnityEngine.EventSystems.EventSystem.current.currentSelectedGameObject.name + " is now selected");
 			*/
 			
-			goal.UpdateTime();
+			goal.UpdateDisplayTime();
 			displayTime = goal.displayTime;
 			BGImage.UpdatePos(Mathf.Clamp(1 - displayTime/120f,0,1));
 			

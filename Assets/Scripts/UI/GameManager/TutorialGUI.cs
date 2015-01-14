@@ -14,7 +14,7 @@ public class TutorialGUI : GameGUI
 		//Time.timeScale = 0;
 		tutorialManager.BeginTutorial();
 		tutorialManager.TutorialFinished += TutorialEnd;
-		goal.UpdateTime();
+		goal.UpdateDisplayTime();
 	}
 
 

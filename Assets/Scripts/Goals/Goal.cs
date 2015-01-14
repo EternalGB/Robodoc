@@ -27,11 +27,16 @@ public abstract class Goal : ScriptableObject
 
 	}
 
-	public void UpdateTime()
+	public void UpdateDisplayTime()
 	{
 		//kinda doing weird stuff here because UpdateTime will always be called every update by GameGUI
 		displayTime = Mathf.Lerp (displayTime,timeRemaining,lerpTimer);
 		lerpTimer = Mathf.Clamp (lerpTimer + lerpSpeed*Time.deltaTime,0,1f);
+		UpdateTime();
+	}
+
+	protected virtual void UpdateTime()
+	{
 		timeRemaining -= Time.deltaTime;
 	}
 
