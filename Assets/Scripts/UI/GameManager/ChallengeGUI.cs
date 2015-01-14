@@ -25,7 +25,7 @@ public class ChallengeGUI : GameGUI
 	protected override void DoGameEnd ()
 	{
 		//level.SetHighScore(goal,difficulty,goal.EvaluateSuccess());
-		ProgressionManager.UpdateProgression(PlayerPrefs.GetInt("LevelIndex"),PlayerPrefs.GetInt("GoalIndex"));
+		ChallengeProgression.UpdateProgression(PlayerPrefs.GetInt("LevelIndex"));
 	}
 
 	protected void StartLevel(int difficulty)

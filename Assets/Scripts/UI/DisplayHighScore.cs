@@ -7,14 +7,12 @@ public class DisplayHighScore : MonoBehaviour
 {
 
 	public Level level;
-	public Goal goal;
-	public int difficulty;
 	Text text;
 
 	void Start()
 	{
 		text = GetComponent<Text>();
-		text.text = ChallengeHighScores.GetScore(level,goal,difficulty).ToString();
+		text.text = ChallengeHighScores.GetScore(level).ToString();
 	}
 		
 }
