@@ -9,8 +9,7 @@ public abstract class GameGUI : MonoBehaviour
 
 	protected PlayerBall pb;
 	protected ScoreArea scoreArea;
-
-	public Level level;
+	
 	public Goal goal;
 
 	protected bool doneGoalCompleted;

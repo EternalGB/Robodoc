@@ -13,16 +13,18 @@ public class ChallengeGUI : GameGUI
 
 	protected override void InitGame ()
 	{
+		/*
 		if(level == null) {
 			level = Resources.Load<Level>("Levels/" + PlayerPrefs.GetString("LevelName","01-Circle"));
 			goal = level.possibleGoals[PlayerPrefs.GetInt("GoalIndex",0)];
 		}
+		*/
 		GameObject.FindWithTag("BallMachine").GetComponent<BallMachine>().StartSpawning();
 	}
 
 	protected override void DoGameEnd ()
 	{
-		level.SetHighScore(goal,difficulty,goal.EvaluateSuccess());
+		//level.SetHighScore(goal,difficulty,goal.EvaluateSuccess());
 		ProgressionManager.UpdateProgression(PlayerPrefs.GetInt("LevelIndex"),PlayerPrefs.GetInt("GoalIndex"));
 	}
 
