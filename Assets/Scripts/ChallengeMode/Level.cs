@@ -7,9 +7,10 @@ public class Level : ScriptableObject
 
 	public string displayName;
 	public string sceneName;
-	public Goal goal;
+	public ChallengeGoal goal;
 	public BallMachine ballMachinePrefab;
-	
+	public float rank;
+	public bool unlocked;
 
 }
 

@@ -40,11 +40,7 @@ public class ChallengeProgression
 		PlayerPrefs.DeleteKey("LevelUnlocked");
 	}
 
-	public static void UnlockAllTemporarily()
-	{
-		Level[] levels = Resources.LoadAll<Level>("Levels");
-		levelUnlockedIndex = levels.Length;
-	}
+
 
 		
 }

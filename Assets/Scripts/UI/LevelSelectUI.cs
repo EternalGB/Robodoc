@@ -21,6 +21,8 @@ public class LevelSelectUI : MonoBehaviour
 
 	void RecreateLevelGUI()
 	{
+		//TODO
+		/*
 		foreach(RectTransform child in transform)
 		{
 			if(child.gameObject.name != gameObject.name)
@@ -43,6 +45,7 @@ public class LevelSelectUI : MonoBehaviour
 			//TODO launch level
 			//lb.onClick.AddListener();
 		}
+		*/
 	}
 
 	void LaunchLevel(int levelIndex)
@@ -72,12 +75,14 @@ public class LevelSelectUI : MonoBehaviour
 
 	void Update()
 	{
+		/*
 		#if UNITY_EDITOR
 		if(Input.GetKeyDown(KeyCode.F1)) {
 			ChallengeProgression.UnlockAllTemporarily();
 			RecreateLevelGUI();
 		}
 		#endif
+		*/
 	}
 }
 

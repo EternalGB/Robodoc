@@ -9,7 +9,7 @@ public class ChallengeHighScores
 
 	public static void SetScore(Level level, float score) 
 	{
-		Debug.Log ("Attempting to set High Score for " + level.displayName + " to " + score);
+		Debug.Log ("Attempting to set High Score for " + level.name + " to " + score);
 		if(scores == null)
 			LoadScores();
 		float oldScore;
@@ -35,11 +35,14 @@ public class ChallengeHighScores
 
 	static void InitScores()
 	{
+		//TODO
+		/*
 		Level[] levels = Resources.LoadAll<Level>("Levels");
 		scores = new Dictionary<string, float>();
 		for(int i = 0; i < levels.Length; i++) {
 			scores.Add(levels[i].name,0);
 		}
+		*/
 	}
 
 	public static Dictionary<string,float> GetAllScores()

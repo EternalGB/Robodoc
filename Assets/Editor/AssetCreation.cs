@@ -13,6 +13,18 @@ public class AssetCreation
 		CreateAsset<Level>();
 	}
 
+	[MenuItem("Assets/Create/LevelTiersList")]
+	public static void CreateLevelTierList()
+	{
+		CreateAsset<LevelTiersList>();
+	}
+
+	[MenuItem("Assets/Create/Tier")]
+	public static void CreateTier()
+	{
+		CreateAsset<Tier>();
+	}
+
 	[MenuItem("Assets/Create/Goal/High Score")]
 	public static void CreateHighScore()
 	{
