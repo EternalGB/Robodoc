@@ -4,8 +4,7 @@ using System.Collections;
 [System.Serializable]
 public abstract class Goal : ScriptableObject
 {
-
-	public string displayName;
+	
 	public float initTime;
 	protected float timeRemaining;
 	public float displayTime;
