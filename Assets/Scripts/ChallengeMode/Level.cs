@@ -31,7 +31,7 @@ public class Level : ScriptableObject
 	public class LevelProgress
 	{
 
-		public float rank;
+		public int rank;
 		public bool unlocked;
 
 	}
