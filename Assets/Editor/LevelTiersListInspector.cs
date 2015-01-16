@@ -26,20 +26,27 @@ public class LevelTiersListInspector : Editor
 
 			EditorGUI.PropertyField(tierRect,tiers.serializedProperty.GetArrayElementAtIndex(index),GUIContent.none);
 			if(lm.tiers[index] != null)
-				lm.tiers[index].unlocked = EditorGUI.Toggle(unlockedRect,lm.tiers[index].unlocked);
+				lm.tiers[index].progress.unlocked = EditorGUI.Toggle(unlockedRect,lm.tiers[index].progress.unlocked);
 
 		};
 	}
 
 	public override void OnInspectorGUI()
 	{
-		//LevelTiersList lm = (LevelTiersList)target;
+		LevelTiersList lm = (LevelTiersList)target;
 		//DrawDefaultInspector();
 
 
 		serializedObject.Update();
 		tiers.DoLayoutList();
 		serializedObject.ApplyModifiedProperties();
+
+		EditorGUILayout.BeginVertical();
+		if(GUILayout.Button("Save Progress"))
+			lm.SaveProgress();
+		if(GUILayout.Button("Load Progress"))
+			lm.LoadProgress();
+		EditorGUILayout.EndVertical();
 	}
 
 }

@@ -6,7 +6,34 @@ using System;
 public class Tier : ScriptableObject
 {
 	public List<Level> levels;
-	public bool unlocked;
+	public TierProgress progress;
+
+
+	public void SaveProgress()
+	{
+		Util.SaveToPlayerPrefs<TierProgress>(name + "progress",progress);
+		if(levels != null)
+			foreach(Level level in levels)
+				level.SaveProgress();
+	}
+
+	public void LoadProgress()
+	{
+		TierProgress loadedProgress;
+		if(Util.TryLoadFromPlayerPrefs<TierProgress>(name + "progress",out loadedProgress))
+			progress = loadedProgress;
+		else
+			progress = new TierProgress{unlocked = false};
+		if(levels != null)
+			foreach(Level level in levels)
+				level.LoadProgress();
+	}
+
+	[Serializable]
+	public class TierProgress
+	{
+		public bool unlocked;
+	}
 
 }
 

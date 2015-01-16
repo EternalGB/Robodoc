@@ -8,20 +8,33 @@ public class LevelTiersList : ScriptableObject
 
 	const string key = "ChallengeLevels";
 
-	public void Save()
+	public void SaveProgress()
 	{
-		if(tiers != null)
-			Util.SaveToPlayerPrefs<List<Tier>>(key,tiers);
+		if(tiers != null) {
+			//Util.SaveToPlayerPrefs<List<Tier>>(key,tiers);
+			foreach(Tier tier in tiers) {
+				tier.SaveProgress();
+			}
+
+		}
 	}
 
-	public void Load()
+	public void LoadProgress()
 	{
+		/*
 		List<Tier> loadedTiers;
 		if(Util.TryLoadFromPlayerPrefs<List<Tier>>(key, out loadedTiers)) {
 			tiers = loadedTiers;
 		} else {
 			//init new tier list
 			tiers = new List<Tier>();
+		}
+		*/
+		if(tiers != null) {
+			foreach(Tier tier in tiers) {
+				tier.LoadProgress();
+			}
+			
 		}
 	}
 

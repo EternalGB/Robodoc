@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 
+
 [System.Serializable]
 public class BallMachine : MonoBehaviour
 {
@@ -18,7 +19,9 @@ public class BallMachine : MonoBehaviour
 
 	public CircleCollider2D playArea;
 
+
 	public delegate void BallSpawnedHandler(GameObject ball);
+	[field:System.NonSerialized]
 	public event BallSpawnedHandler BallSpawned;
 
 	void Awake()

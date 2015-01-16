@@ -23,7 +23,7 @@ public class TierInspector : Editor
 
 			EditorGUI.PropertyField(levelRect,levels.serializedProperty.GetArrayElementAtIndex(index),GUIContent.none);
 			if(tier.levels[index] != null)
-				tier.levels[index].unlocked = EditorGUI.Toggle(unlockedRect,tier.levels[index].unlocked);
+				tier.levels[index].progress.unlocked = EditorGUI.Toggle(unlockedRect,tier.levels[index].progress.unlocked);
 		};
 	}
 	
@@ -32,7 +32,7 @@ public class TierInspector : Editor
 		Tier tier = (Tier)target;
 		//DrawDefaultInspector();
 
-		tier.unlocked = GUILayout.Toggle(tier.unlocked,"Unlocked");
+		tier.progress.unlocked = GUILayout.Toggle(tier.progress.unlocked,"Unlocked");
 
 		serializedObject.Update();
 		levels.DoLayoutList();
