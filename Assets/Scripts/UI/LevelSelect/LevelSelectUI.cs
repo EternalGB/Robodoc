@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEditor;
 using UnityEngine.UI;
 using System.Collections.Generic;
 
@@ -83,7 +84,17 @@ public class LevelSelectUI : MonoBehaviour
 						//add button to levelGroup
 						levelButton.GetComponent<RectTransform>().SetParent(levelGroup);
 						//link button callback - launch level
-						levelButton.onClick.AddListener( () => {});
+						Level thisLevel = level;
+						levelButton.onClick.AddListener( () => {
+							//pass references to the goal and ball machine
+							string machinePath = AssetDatabase.GetAssetPath(thisLevel.ballMachinePrefab);
+							string goalPath = AssetDatabase.GetAssetPath(thisLevel.goal);
+							PlayerPrefs.SetString("MachinePath",machinePath);
+							PlayerPrefs.SetString("GoalPath",goalPath);
+							//actually launch the level
+							//TODO
+							//Application.LoadLevel(thisLevel.sceneName);
+						});
 					}
 				}
 
