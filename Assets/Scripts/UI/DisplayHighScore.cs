@@ -12,7 +12,7 @@ public class DisplayHighScore : MonoBehaviour
 	void Start()
 	{
 		text = GetComponent<Text>();
-		text.text = ChallengeHighScores.GetScore(level).ToString();
+		text.text = level.progress.score.ToString();
 	}
 		
 }

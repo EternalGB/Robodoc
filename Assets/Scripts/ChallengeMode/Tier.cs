@@ -5,6 +5,8 @@ using System;
 [Serializable]
 public class Tier : ScriptableObject
 {
+
+	public string displayName;
 	public List<Level> levels;
 	public TierProgress progress;
 

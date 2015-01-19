@@ -32,9 +32,11 @@ public class TierInspector : Editor
 		Tier tier = (Tier)target;
 		//DrawDefaultInspector();
 
+		serializedObject.Update();
+
+		EditorGUILayout.PropertyField(serializedObject.FindProperty("displayName"));
 		tier.progress.unlocked = GUILayout.Toggle(tier.progress.unlocked,"Unlocked");
 
-		serializedObject.Update();
 		levels.DoLayoutList();
 		serializedObject.ApplyModifiedProperties();
 	}
