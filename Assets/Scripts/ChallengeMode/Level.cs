@@ -24,7 +24,7 @@ public class Level : ScriptableObject
 		if(Util.TryLoadFromPlayerPrefs<LevelProgress>(name + "progress",out loadedProgress))
 			progress = loadedProgress;
 		else
-			progress = new LevelProgress{rank = 0, unlocked = false};
+			progress = new LevelProgress{rank = 0, unlocked = false, score = 0};
 	}
 
 	[Serializable]
@@ -33,6 +33,7 @@ public class Level : ScriptableObject
 
 		public int rank;
 		public bool unlocked;
+		public float score;
 
 	}
 
