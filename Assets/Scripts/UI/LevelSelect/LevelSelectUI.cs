@@ -12,6 +12,7 @@ public class LevelSelectUI : MonoBehaviour
 	public GameObject tierButtonPrefab;
 	public GameObject levelButtonPrefab;
 
+	public int selectedTier;
 
 	public LevelTiersList ltl;
 
@@ -40,8 +41,11 @@ public class LevelSelectUI : MonoBehaviour
 		//load progress
 		ltl.LoadProgress();
 
+		selectedTier = PlayerPrefs.GetInt("SelectedTier",0);
+
 		if(ltl != null) {
-			foreach(Tier tier in ltl.tiers) {
+			for(int i = 0; i < ltl.tiers.Count; i++) {
+				Tier tier = ltl.tiers[i];
 				//make tier button
 				GameObject tierGO = (GameObject)GameObject.Instantiate(tierButtonPrefab);
 				Button tierButton = tierGO.GetComponent<Button>();
@@ -51,27 +55,38 @@ public class LevelSelectUI : MonoBehaviour
 				//add tier button to tierGroup
 				tierGO.GetComponent<RectTransform>().SetParent(tierGroup);
 				//link tier button callback - switch tab
-				tierButton.onClick.AddListener( () => {});
+				int tierNum = i;
+				tierButton.onClick.AddListener( () => {
+					PlayerPrefs.SetInt("SelectedTier",tierNum);
+					RecreateLevelGUI();
+				});
 
-				//resize level group to fit all levels
-				VerticalLayoutGroup levelGroupLayout = levelGroup.GetComponent<VerticalLayoutGroup>();
-				float lbHeight = levelButtonPrefab.GetComponent<LayoutElement>().minHeight +
-					levelGroupLayout.spacing;
-				AdjustContentPaneHeight(levelGroup, tier.levels.Count*lbHeight + levelGroupLayout.padding.bottom + levelGroupLayout.padding.top);
-
-				foreach(Level level in tier.levels) {
-					//make level button
-					GameObject levelGO = (GameObject)GameObject.Instantiate(levelButtonPrefab);
-					Button levelButton = levelGO.GetComponent<Button>();
-					levelGO.GetComponentInChildren<Text>().text = level.displayName;
-					//set progress
-					levelButton.interactable = level.progress.unlocked;
-					levelButton.GetComponentInChildren<RankDisplay>().SetRank(level.progress.rank);
-					//add button to levelGroup
-					levelButton.GetComponent<RectTransform>().SetParent(levelGroup);
-					//link button callback - launch level
-					levelButton.onClick.AddListener( () => {});
+				//if the tier is the selected tier
+				if(i == selectedTier) {
+					tierButton.Select();
+					//resize level group to fit all levels
+					/*
+					VerticalLayoutGroup levelGroupLayout = levelGroup.GetComponent<VerticalLayoutGroup>();
+					float lbHeight = levelButtonPrefab.GetComponent<LayoutElement>().minHeight +
+						levelGroupLayout.spacing;
+					AdjustContentPaneHeight(levelGroup, tier.levels.Count*lbHeight + levelGroupLayout.padding.bottom + levelGroupLayout.padding.top);
+					*/
+					foreach(Level level in tier.levels) {
+						//make level button
+						GameObject levelGO = (GameObject)GameObject.Instantiate(levelButtonPrefab);
+						Button levelButton = levelGO.GetComponent<Button>();
+						levelGO.GetComponentInChildren<Text>().text = level.displayName;
+						//set progress
+						levelButton.interactable = level.progress.unlocked;
+						levelButton.GetComponentInChildren<RankDisplay>().SetRank(level.progress.rank);
+						//add button to levelGroup
+						levelButton.GetComponent<RectTransform>().SetParent(levelGroup);
+						//link button callback - launch level
+						levelButton.onClick.AddListener( () => {});
+					}
 				}
+
+
 			}
 			/*
 			float lbHeight = levelButtonPrefab.GetComponent<LayoutElement>().minHeight +
@@ -92,6 +107,7 @@ public class LevelSelectUI : MonoBehaviour
 			*/
 		}
 		scrollbar.value = 1;
+		//scrollbar.size = 1;
 	}
 
 	void LaunchLevel(int levelIndex)
