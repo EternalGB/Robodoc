@@ -36,6 +36,20 @@ public class ChallengeGUI : GameGUI
 	protected override void DoGameEnd ()
 	{
 
+		float result = level.goal.EvaluateSuccess();
+		int rank = 0;
+		for(int i = 0; i < level.ranks.Length; i++)
+			if(result >= level.ranks[i])
+				rank = i;
+		level.LoadProgress();
+		if(rank > level.progress.rank)
+			level.progress.rank = rank;
+		if(result > level.progress.score)
+			level.progress.score = result;
+		level.SaveProgress();
+
+		//TODO display progress in end window
+		endUI.GetComponentInChildren<ChallengeEndDisplay>().EndDisplay(level);
 	}
 
 	protected void StartLevel(int difficulty)
