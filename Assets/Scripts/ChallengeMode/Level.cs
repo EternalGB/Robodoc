@@ -10,6 +10,7 @@ public class Level : ScriptableObject
 	public string sceneName;
 	public ChallengeGoal goal;
 	public BallMachine ballMachinePrefab;
+	public float[] ranks;
 	public LevelProgress progress;
 
 

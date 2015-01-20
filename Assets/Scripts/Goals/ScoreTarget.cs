@@ -33,17 +33,7 @@ public class ScoreTarget : ChallengeGoal
 		return Util.FormatTime(score);
 	}
 
-	public override float GetRank ()
-	{
-		if(EvaluateSuccess() <= gold)
-			return 3;
-		else if(EvaluateSuccess() <= silver)
-			return 2;
-		else if(EvaluateSuccess() <= bronze)
-			return 1;
-		else
-			return 0;
-	}
+
 
 }
 

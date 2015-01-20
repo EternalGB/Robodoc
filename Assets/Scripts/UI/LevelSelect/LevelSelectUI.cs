@@ -89,8 +89,10 @@ public class LevelSelectUI : MonoBehaviour
 							//pass references to the goal and ball machine
 							string machinePath = AssetDatabase.GetAssetPath(thisLevel.ballMachinePrefab);
 							string goalPath = AssetDatabase.GetAssetPath(thisLevel.goal);
-							PlayerPrefs.SetString("MachinePath",machinePath);
-							PlayerPrefs.SetString("GoalPath",goalPath);
+							string levelPath = AssetDatabase.GetAssetPath(thisLevel);
+							Util.SaveToPlayerPrefs<string>("MachinePath",TrimPathToResourcePath(machinePath));
+							Util.SaveToPlayerPrefs<string>("GoalPath",TrimPathToResourcePath(goalPath));
+							Util.SaveToPlayerPrefs<string>("LevelPath",TrimPathToResourcePath(levelPath));
 							//actually launch the level
 							//TODO
 							//Application.LoadLevel(thisLevel.sceneName);
@@ -148,6 +150,25 @@ public class LevelSelectUI : MonoBehaviour
 		}
 		#endif
 		*/
+	}
+
+	//trim off anything from the from of the 
+	static string TrimPathToResourcePath(string assetPath)
+	{
+		string[] names = assetPath.Split(new char[]{System.IO.Path.PathSeparator});
+		bool recording = false;
+		string result = "";
+		for(int i = 0; i < names.Length; i++) {
+			if(names[i] == "Resources")
+				recording = true;
+			if(recording) {
+				result += names[i];
+				if(i != names.Length-1)
+					result += System.IO.Path.PathSeparator;
+			}
+		}
+		return result;
+
 	}
 }
 

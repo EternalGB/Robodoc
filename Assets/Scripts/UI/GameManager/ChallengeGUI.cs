@@ -4,36 +4,47 @@ using System.Collections.Generic;
 public class ChallengeGUI : GameGUI
 {
 
-	public List<GameObject> difficultyPrefabs;
-	static string[] difficulties = 
-	{
-		"Easy","Medium","Hard","Very Hard"
-	};
-	public int difficulty = 0;
+	const string defaultMachinePath = "";
+	const string defaultGoalPath = "";
+	const string defaultLevelPath = "";
+
+	BallMachine bm;
+	Level level;
 
 	protected override void InitGame ()
 	{
-		/*
-		if(level == null) {
-			level = Resources.Load<Level>("Levels/" + PlayerPrefs.GetString("LevelName","01-Circle"));
-			goal = level.possibleGoals[PlayerPrefs.GetInt("GoalIndex",0)];
-		}
-		*/
-		GameObject.FindWithTag("BallMachine").GetComponent<BallMachine>().StartSpawning();
+		string machinePath;
+		if(!Util.TryLoadFromPlayerPrefs<string>("MachinePath", out machinePath))
+			machinePath = defaultMachinePath;
+		string goalPath;
+		if(!Util.TryLoadFromPlayerPrefs<string>("GoalPath",out goalPath))
+			goalPath = defaultGoalPath;
+		string levelPath;
+		if(!Util.TryLoadFromPlayerPrefs<string>("LevelPath",out levelPath))
+			levelPath = defaultLevelPath;
+
+
+		GameObject ballMachine = (GameObject)Instantiate(Resources.Load<GameObject>(machinePath));
+		goal = (Goal)Instantiate(Resources.Load<Goal>(goalPath));
+
+		level = (Level)Instantiate(Resources.Load<Level>(levelPath));
+
+		bm = ballMachine.GetComponent<BallMachine>();
+		bm.StartSpawning();
 	}
 
 	protected override void DoGameEnd ()
 	{
-		//level.SetHighScore(goal,difficulty,goal.EvaluateSuccess());
-		ChallengeProgression.UpdateProgression(PlayerPrefs.GetInt("LevelIndex"));
+
 	}
 
 	protected void StartLevel(int difficulty)
 	{
 		Time.timeScale = 1;
-		GameObject.Instantiate(difficultyPrefabs[difficulty]);
 		GameObject.Find("BGMusic").GetComponent<AudioSource>().Play();
 	}
+
+
 
 }
 
