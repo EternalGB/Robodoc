@@ -15,6 +15,11 @@ public class HighScore : ChallengeGoal
 		return score.ToString();
 	}
 
+	public override int ScoreComparitor (float score1, float score2)
+	{
+		return (int)(score1 - score2);
+	}
+
 
 }
 

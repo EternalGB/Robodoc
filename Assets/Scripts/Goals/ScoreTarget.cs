@@ -33,7 +33,17 @@ public class ScoreTarget : ChallengeGoal
 		return Util.FormatTime(score);
 	}
 
+	public override void ResetGoal ()
+	{
+		lerpTimer = 0;
+		timeRemaining = 0;
+		startTime = 0;
+	}
 
+	public override int ScoreComparitor (float score1, float score2)
+	{
+		return (int)(score2 - score1);
+	}
 
 }
 

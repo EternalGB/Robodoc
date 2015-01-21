@@ -72,7 +72,7 @@ public abstract class GameGUI : MonoBehaviour
 			
 			goal.UpdateDisplayTime();
 			displayTime = goal.displayTime;
-			BGImage.UpdatePos(Mathf.Clamp(1 - displayTime/goal.initTime,0,1));
+			UpdateBackground();
 			
 			actualCameraZoom = Mathf.Lerp (actualCameraZoom,cameraZoom,zoomLerpTimer);
 			zoomLerpTimer = Mathf.Clamp (zoomLerpTimer + zoomLerpSpeed*Time.deltaTime,0,1f);
@@ -103,6 +103,11 @@ public abstract class GameGUI : MonoBehaviour
 			OnGoalCompleted();
 		}
 		#endif
+	}
+
+	protected virtual void UpdateBackground()
+	{
+		BGImage.UpdatePos(Mathf.Clamp(1 - displayTime/goal.initTime,0,1));
 	}
 
 	void HandlePlayerScored(float scoreIncrease)

@@ -33,6 +33,14 @@ public class ChallengeGUI : GameGUI
 		//bm.StartSpawning();
 	}
 
+	protected override void UpdateBackground ()
+	{
+		if(goal.GetType().Equals(typeof(ScoreTarget))) {
+			BGImage.UpdatePos(Mathf.Clamp (displayTime/level.ranks[level.ranks.Length-1],0,1));
+		} else
+			base.UpdateBackground ();
+	}
+
 	protected override void DoGameEnd ()
 	{
 
@@ -44,7 +52,7 @@ public class ChallengeGUI : GameGUI
 		level.LoadProgress();
 		if(rank > level.progress.rank)
 			level.progress.rank = rank;
-		if(result > level.progress.score)
+		if(((ChallengeGoal)goal).ScoreComparitor(result,level.progress.score) > 0)
 			level.progress.score = result;
 		level.SaveProgress();
 

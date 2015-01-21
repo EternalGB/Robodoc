@@ -5,7 +5,7 @@ using System.Collections;
 public abstract class ChallengeGoal : Goal
 {
 
-
+	public abstract int ScoreComparitor(float score1, float score2);
 
 }
 
