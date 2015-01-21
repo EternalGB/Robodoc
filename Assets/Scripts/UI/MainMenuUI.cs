@@ -1,28 +1,36 @@
 using UnityEngine;
 using UnityEngine.UI;
-using System.Collections;
+using System.Collections.Generic;
 
 public class MainMenuUI : MonoBehaviour
 {
 
 	public GameObject mainMenu;
+	public List<GameObject> menuScreens;
+	GameObject currentScreen;
+	Dictionary<string,GameObject> menuScreenDict;
 
 	public GameObject tutorialButton;
 
 	public ArrowedSelector controlScheme;
 	public Text arcadeScoreDisplay;
 
-	public GameObject currentUI;
-
 	public GameObject tutorialConfirmationWindow;
 
 	void Start()
 	{
-		currentUI.SetActive(true);
-
 		arcadeScoreDisplay.text = ArcadeStats.HighScore.ToString();
 		controlScheme.ChangeText(PlayerPrefs.GetInt("Controller",1));
 		tutorialButton.SetActive(PlayerPrefs.GetInt("TutorialCompleted",0) != 0);
+
+		menuScreenDict = new Dictionary<string,GameObject>();
+		foreach(GameObject screen in menuScreens) {
+			menuScreenDict.Add(screen.name,screen);
+		}
+		currentScreen = mainMenu;
+
+		ChangeUIScreen(PlayerPrefs.GetString("MenuScreen","MainMenu"));
+		PlayerPrefs.DeleteKey("MenuScreen");
 	}
 
 	void Update()
@@ -55,13 +63,23 @@ public class MainMenuUI : MonoBehaviour
 		PlayerPrefs.Save();
 	}
 
-	public void SwapUI(GameObject ui)
+	public void ChangeUIScreen(string name)
 	{
+		GameObject screen;
+		if(menuScreenDict.TryGetValue(name, out screen)) {
+			ChangeUIScreen(screen);
+		} else {
+			Debug.LogError("No such screen in dict called " + name);
+			ChangeUIScreen(mainMenu);
+		}
+	}
 
-		currentUI.SetActive(false);
-		ui.SetActive(true);
-		currentUI = ui;
-		UnityEngine.EventSystems.EventSystem.current.SetSelectedGameObject(currentUI);
+	void ChangeUIScreen(GameObject screen)
+	{
+		currentScreen.SetActive(false);
+		screen.SetActive(true);
+		UnityEngine.EventSystems.EventSystem.current.SetSelectedGameObject(screen);
+		currentScreen = screen;
 		//Debug.Log (UnityEngine.EventSystems.EventSystem.current.currentSelectedGameObject.name + " is now selected");
 	}
 

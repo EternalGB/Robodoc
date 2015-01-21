@@ -160,13 +160,23 @@ public abstract class GameGUI : MonoBehaviour
 
 	public void GoToMainMenu()
 	{
+		ExitAndGoToMainMenu("MainMenu");
+	}
+
+	public void GoToChallenges()
+	{
+		ExitAndGoToMainMenu("Challenges");
+	}
+
+	void ExitAndGoToMainMenu(string menuScreenName)
+	{
 		goal.ResetGoal();
-		PlayerPrefs.SetInt("FromGameGUI",1);
 		paused = false;
 		Time.timeScale = 1;
+		PlayerPrefs.SetString("MenuScreen",menuScreenName);
 		Application.LoadLevel("MainMenu");
 	}
-	
+
 	public void RetryLevel()
 	{
 		Application.LoadLevel(Application.loadedLevel);
