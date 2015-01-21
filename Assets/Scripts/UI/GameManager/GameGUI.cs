@@ -13,6 +13,7 @@ public abstract class GameGUI : MonoBehaviour
 	public Goal goal;
 
 	protected bool doneGoalCompleted;
+	protected bool forceCompleted = false;
 
 	public ArrowedSelector controlScheme;
 	public GameObject gameUI;
@@ -89,7 +90,7 @@ public abstract class GameGUI : MonoBehaviour
 			}
 			*/
 			
-			if(goal.Completed()) {
+			if(goal.Completed() || forceCompleted) {
 				Time.timeScale = 0;
 				OnGoalCompleted();
 			}
@@ -184,6 +185,10 @@ public abstract class GameGUI : MonoBehaviour
 		ScoreCalculator.ScorePredictionUpdated -= HandleScorePrediction;
 	}
 
+	public void EndEarly()
+	{
+		forceCompleted = true;
+	}
 
 }
 

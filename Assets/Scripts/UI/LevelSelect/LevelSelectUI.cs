@@ -93,52 +93,17 @@ public class LevelSelectUI : MonoBehaviour
 							Util.SaveToPlayerPrefs<string>("MachinePath",TrimPathToResourcePath(machinePath));
 							Util.SaveToPlayerPrefs<string>("GoalPath",TrimPathToResourcePath(goalPath));
 							Util.SaveToPlayerPrefs<string>("LevelPath",TrimPathToResourcePath(levelPath));
-							//actually launch the level
-							//TODO
-							//Application.LoadLevel(thisLevel.sceneName);
+
+							Application.LoadLevel(thisLevel.sceneName);
 						});
 					}
 				}
-
-
 			}
-			/*
-			float lbHeight = levelButtonPrefab.GetComponent<LayoutElement>().minHeight +
-				GetComponent<VerticalLayoutGroup>().spacing;
-			AdjustContentPaneHeight(levels.Length*lbHeight);
-			for(int i = 0; i < levels.Length; i++) {
-				GameObject levelGO = (GameObject)GameObject.Instantiate(levelButtonPrefab);
-				
-				RectTransform lbRect = levelGO.GetComponent<RectTransform>();
-				lbRect.SetParent(transform);
-				Button lb = levelGO.GetComponent<Button>();
-				lb.interactable = ChallengeProgression.LevelUnlocked(i);
-				lb.GetComponentInChildren<Text>().text = levels[i].displayName;
-				
-				//TODO launch level
-				//lb.onClick.AddListener();
-			}
-			*/
 		}
-		scrollbar.value = 1;
+		//scrollbar.value = 1;
 		//scrollbar.size = 1;
 	}
-
-	void LaunchLevel(int levelIndex)
-	{
-
-	}
-
-
-
-	void AdjustContentPaneHeight(RectTransform rectTrans, float height)
-	{
-		//rectTrans.sizeDelta += new Vector2(0,heightChange);
-		rectTrans.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical,height);
-
-	}
-
-
+	
 
 	void Update()
 	{
@@ -155,16 +120,26 @@ public class LevelSelectUI : MonoBehaviour
 	//trim off anything from the from of the 
 	static string TrimPathToResourcePath(string assetPath)
 	{
-		string[] names = assetPath.Split(new char[]{System.IO.Path.PathSeparator});
+		string[] names = assetPath.Split(new char[]{'/'});
 		bool recording = false;
 		string result = "";
 		for(int i = 0; i < names.Length; i++) {
-			if(names[i] == "Resources")
+			if(names[i] == "Resources") {
 				recording = true;
+				i++;
+			}
 			if(recording) {
-				result += names[i];
-				if(i != names.Length-1)
-					result += System.IO.Path.PathSeparator;
+				//if the last token remove any file extensions
+				if(i == names.Length-1) {
+					string[] tokens = names[i].Split( new char[]{'.'});
+					for(int j = 0; j < tokens.Length; j++) {
+						if(j != tokens.Length-1)
+							result += tokens[j];
+					}
+				} else {
+					result += names[i];
+					result += '/';
+				}
 			}
 		}
 		return result;
