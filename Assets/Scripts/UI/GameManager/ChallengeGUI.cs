@@ -25,12 +25,12 @@ public class ChallengeGUI : GameGUI
 
 
 		GameObject ballMachine = (GameObject)Instantiate(Resources.Load<GameObject>(machinePath));
-		goal = (Goal)Instantiate(Resources.Load<Goal>(goalPath));
+		goal = Resources.Load<Goal>(goalPath);
 
-		level = (Level)Instantiate(Resources.Load<Level>(levelPath));
+		level = Resources.Load<Level>(levelPath);
 
 		bm = ballMachine.GetComponent<BallMachine>();
-		bm.StartSpawning();
+		//bm.StartSpawning();
 	}
 
 	protected override void DoGameEnd ()
@@ -52,11 +52,6 @@ public class ChallengeGUI : GameGUI
 		endUI.GetComponentInChildren<ChallengeEndDisplay>().EndDisplay(level);
 	}
 
-	protected void StartLevel(int difficulty)
-	{
-		Time.timeScale = 1;
-		GameObject.Find("BGMusic").GetComponent<AudioSource>().Play();
-	}
 
 
 
