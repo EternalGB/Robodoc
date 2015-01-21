@@ -38,7 +38,7 @@ public class BallMachine : MonoBehaviour
 
 	public void StartSpawning()
 	{
-		Debug.Log(name + " starting spawning");
+		//Debug.Log(name + " starting spawning");
 		StartCoroutine(Timers.Countdown<List<GameObject>,float>(1/goodPerSec,Spawn,colourBalls,1/goodPerSec));
 		StartCoroutine(Timers.Countdown<List<GameObject>,float>(1/badPerSec,Spawn,badBalls,1/badPerSec));
 		StartCoroutine(Timers.Countdown<List<GameObject>,float>(1/bonusPerSec,Spawn,bonusBalls,1/bonusPerSec));
@@ -79,12 +79,12 @@ public class BallMachine : MonoBehaviour
 	{
 		if(spawning) {
 			GameObject ball = null;
-			Debug.Log ("Selecting ball");
+			//Debug.Log ("Selecting ball");
 			if(collection != null && collection.Count > 0)
 				ball = Util.GetRandomElement<GameObject>(collection);
 			
 			if(ball != null) {
-				Debug.Log ("Spawning a " + ball.name);
+				//Debug.Log ("Spawning a " + ball.name);
 				SpawnBall(ball);
 
 			}
@@ -99,7 +99,7 @@ public class BallMachine : MonoBehaviour
 
 		float radius = playArea.radius;
 		Vector3 pos = PointOutside(Vector2.zero,1.05f*radius,1.2f*radius);
-		Debug.Log ("Spawning " + ballPrefab.name + " at " + pos);
+		//Debug.Log ("Spawning " + ballPrefab.name + " at " + pos);
 		GameObject ball = PoolManager.Instance.GetPoolByRepresentative(ballPrefab).GetPooled();
 		ball.transform.position = pos;
 		ball.SetActive(true);
@@ -120,7 +120,7 @@ public class BallMachine : MonoBehaviour
 		goodPerSec = goodRateCurve.Evaluate(ScoreCalculator.Instance.score);
 		bonusPerSec = bonusRateCurve.Evaluate(ScoreCalculator.Instance.score);
 		badPerSec = badRateCurve.Evaluate(ScoreCalculator.Instance.score);
-		Debug.Log ("Updating difficulty " + goodPerSec + " " + bonusPerSec + " " + badPerSec);
+		//Debug.Log ("Updating difficulty " + goodPerSec + " " + bonusPerSec + " " + badPerSec);
 	}
 
 	Vector2 GetInitVelocity(Vector2 spawnPos, float minSpeed, float maxSpeed)

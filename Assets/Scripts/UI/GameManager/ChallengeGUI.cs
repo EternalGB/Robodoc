@@ -40,7 +40,7 @@ public class ChallengeGUI : GameGUI
 		int rank = 0;
 		for(int i = 0; i < level.ranks.Length; i++)
 			if(result >= level.ranks[i])
-				rank = i;
+				rank = i+1;
 		level.LoadProgress();
 		if(rank > level.progress.rank)
 			level.progress.rank = rank;

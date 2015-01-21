@@ -72,7 +72,7 @@ public abstract class GameGUI : MonoBehaviour
 			
 			goal.UpdateDisplayTime();
 			displayTime = goal.displayTime;
-			BGImage.UpdatePos(Mathf.Clamp(1 - displayTime/120f,0,1));
+			BGImage.UpdatePos(Mathf.Clamp(1 - displayTime/goal.initTime,0,1));
 			
 			actualCameraZoom = Mathf.Lerp (actualCameraZoom,cameraZoom,zoomLerpTimer);
 			zoomLerpTimer = Mathf.Clamp (zoomLerpTimer + zoomLerpSpeed*Time.deltaTime,0,1f);
@@ -149,8 +149,8 @@ public abstract class GameGUI : MonoBehaviour
 	protected void OnGoalCompleted()
 	{
 		if(!doneGoalCompleted) {
-			DoGameEnd();
 			endUI.SetActive(true);
+			DoGameEnd();
 			paused = true;
 			doneGoalCompleted = true;
 		}
