@@ -9,6 +9,7 @@ public abstract class UnlockRequirement : ScriptableObject
 	{
 		//super important, stops Unity from GCing the object
 		hideFlags = HideFlags.HideAndDontSave;
+		DontDestroyOnLoad(this);
 	}
 
 	public abstract bool RequirementMet();
