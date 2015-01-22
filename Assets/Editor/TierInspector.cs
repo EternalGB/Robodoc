@@ -2,12 +2,17 @@ using UnityEngine;
 using UnityEditor;
 using UnityEditorInternal;
 using System.Collections;
+using System;
 
 [CustomEditor(typeof(Tier))]
 public class TierInspector : Editor
 {
+
+	static Type[] unlockReqTypes = new Type[]{typeof(AlwaysUnlocked),typeof(RankPointRequirement)};
+	static string[] unlockReqNames;
 	
 	ReorderableList levels;
+	int selectedUnlockReq;
 
 	void OnEnable()
 	{
@@ -25,6 +30,26 @@ public class TierInspector : Editor
 			if(tier.levels[index] != null)
 				tier.levels[index].progress.unlocked = EditorGUI.Toggle(unlockedRect,tier.levels[index].progress.unlocked);
 		};
+
+
+		//setup unlock req stuff
+		unlockReqNames = new string[unlockReqTypes.Length];
+
+		for(int i = 0; i < unlockReqTypes.Length; i++) {
+			unlockReqNames[i] = unlockReqTypes[i].Name;
+		}
+		if(tier.unlockReq == null) {
+			Debug.Log ("Null unlock req at OnEnable");
+			selectedUnlockReq = 0;
+			//tier.unlockReq = (UnlockRequirement)Activator.CreateInstance(unlockReqTypes[0]);
+			tier.unlockReq = (UnlockRequirement)CreateInstance(unlockReqTypes[0]);
+		} else {
+			for(int i = 0; i < unlockReqTypes.Length; i++) {
+				if(tier.unlockReq.GetType().Equals(unlockReqTypes[i]))
+					selectedUnlockReq = i;
+			}
+		}
+
 	}
 	
 	public override void OnInspectorGUI()
@@ -38,8 +63,25 @@ public class TierInspector : Editor
 		tier.progress.unlocked = GUILayout.Toggle(tier.progress.unlocked,"Unlocked");
 
 		levels.DoLayoutList();
+
+		int newIndex = EditorGUILayout.Popup("Unlock Requirement ",selectedUnlockReq,unlockReqNames);
+		if(newIndex != selectedUnlockReq) {
+			//clean up the current object
+			DestroyImmediate(tier.unlockReq);
+			tier.unlockReq = (UnlockRequirement)CreateInstance(unlockReqTypes[newIndex]);
+		}
+		selectedUnlockReq = newIndex;
+
+
+		if(tier.unlockReq != null) {
+			tier.unlockReq.DrawInInspector();
+		} else
+			Debug.Log ("Null unlock req");
+
 		serializedObject.ApplyModifiedProperties();
 	}
+
+
 	
 }
 

@@ -36,6 +36,7 @@ public class Level : ScriptableObject
 		public bool unlocked;
 		public float score;
 
+
 	}
 
 }

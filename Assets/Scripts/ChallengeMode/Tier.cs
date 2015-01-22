@@ -9,7 +9,7 @@ public class Tier : ScriptableObject
 	public string displayName;
 	public List<Level> levels;
 	public TierProgress progress;
-
+	public UnlockRequirement unlockReq;
 
 	public void SaveProgress()
 	{
