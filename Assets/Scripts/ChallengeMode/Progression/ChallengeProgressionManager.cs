@@ -20,6 +20,28 @@ public class ChallengeProgressionManager : MonoBehaviour
 	void Start()
 	{
 		LoadProgress();
+		CheckProgress();
+		SaveProgress();
+	}
+
+	void CheckProgress()
+	{
+		ltl.LoadProgress();
+		int rankPoints = 0;
+		foreach(Tier tier in ltl.tiers) {
+			foreach(Level level in tier.levels) {
+				rankPoints += level.progress.rank;
+			}
+		}
+		//TODO check if rankPoints have increased and display a message
+		progress.rankPoints = rankPoints;
+		foreach(Tier tier in ltl.tiers) {
+			//TODO check for actual unlocking and display message
+			if(tier.unlockReq.RequirementMet())
+				tier.progress.unlocked = true;
+			//TODO check individual levels also
+		}
+		ltl.SaveProgress();
 	}
 
 	public void LoadProgress()
@@ -46,6 +68,7 @@ public class ChallengeProgressionManager : MonoBehaviour
 		SaveProgress();
 	}
 
+	[System.Serializable]
 	public class ChallengeProgression
 	{
 		public int rankPoints;
