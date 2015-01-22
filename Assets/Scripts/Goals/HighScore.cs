@@ -20,6 +20,10 @@ public class HighScore : ChallengeGoal
 		return (int)(score1 - score2);
 	}
 
+	public override int RankComparitor (int rank1, int rank2)
+	{
+		return rank1 - rank2;
+	}
 
 }
 

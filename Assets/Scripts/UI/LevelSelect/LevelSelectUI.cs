@@ -80,7 +80,7 @@ public class LevelSelectUI : MonoBehaviour
 						//set progress
 						levelButton.interactable = level.progress.unlocked;
 						levelButton.GetComponentInChildren<RankDisplay>().SetRank(level.progress.rank);
-						levelButton.GetComponentInChildren<ScoreDisplay>().SetScore(level.progress.score);
+						levelButton.GetComponentInChildren<ScoreDisplay>().SetScore(level.goal.FormatSuccess(level.progress.score));
 						//add button to levelGroup
 						levelButton.GetComponent<RectTransform>().SetParent(levelGroup);
 						//link button callback - launch level

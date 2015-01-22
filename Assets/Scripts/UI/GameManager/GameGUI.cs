@@ -184,9 +184,8 @@ public abstract class GameGUI : MonoBehaviour
 
 	public void RetryLevel()
 	{
-		Application.LoadLevel(Application.loadedLevel);
 		goal.ResetGoal();
-
+		Application.LoadLevel(Application.loadedLevel);
 	}
 
 	public void UpdateControlScheme()

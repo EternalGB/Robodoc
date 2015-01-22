@@ -50,10 +50,12 @@ public class ChallengeGUI : GameGUI
 			if(result >= level.ranks[i])
 				rank = i+1;
 		level.LoadProgress();
-		if(rank > level.progress.rank)
+		if(((ChallengeGoal)goal).RankComparitor(level.progress.rank,rank) > 0)
 			level.progress.rank = rank;
-		if(((ChallengeGoal)goal).ScoreComparitor(result,level.progress.score) > 0)
+		//Debug.Log ("Finishing " + level.name + " last score: " + level.progress.score + " new score: " + result);
+		if(((ChallengeGoal)goal).ScoreComparitor(level.progress.score,result) > 0) {
 			level.progress.score = result;
+		}
 		level.SaveProgress();
 
 		//TODO display progress in end window

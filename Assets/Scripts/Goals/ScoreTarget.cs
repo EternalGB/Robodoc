@@ -37,12 +37,17 @@ public class ScoreTarget : ChallengeGoal
 	{
 		lerpTimer = 0;
 		timeRemaining = 0;
-		startTime = 0;
+		//startTime = 0;
 	}
 
 	public override int ScoreComparitor (float score1, float score2)
 	{
 		return (int)(score2 - score1);
+	}
+
+	public override int RankComparitor (int rank1, int rank2)
+	{
+		return rank2 - rank1;
 	}
 
 }

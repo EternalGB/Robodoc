@@ -7,9 +7,9 @@ public class ScoreDisplay : MonoBehaviour
 
 	public Text text;
 
-	public void SetScore(float score)
+	public void SetScore(string score)
 	{
-		text.text = score.ToString();
+		text.text = score;
 	}
 		
 }
