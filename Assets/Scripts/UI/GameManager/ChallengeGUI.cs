@@ -10,6 +10,7 @@ public class ChallengeGUI : GameGUI
 
 	BallMachine bm;
 	Level level;
+	
 
 	protected override void InitGame ()
 	{
