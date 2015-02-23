@@ -11,6 +11,7 @@ public class ChallengeGUI : GameGUI
 	BallMachine bm;
 	Level level;
 	
+	public GoalRankDisplay grd;
 
 	protected override void InitGame ()
 	{
@@ -32,6 +33,7 @@ public class ChallengeGUI : GameGUI
 
 		bm = ballMachine.GetComponent<BallMachine>();
 		//bm.StartSpawning();
+		grd.Init(level,goal);
 	}
 
 	protected override void UpdateBackground ()
@@ -46,15 +48,13 @@ public class ChallengeGUI : GameGUI
 	{
 
 		float result = level.goal.EvaluateSuccess();
-		int rank = 0;
-		for(int i = 0; i < level.ranks.Length; i++)
-			if(result >= level.ranks[i])
-				rank = i+1;
+
 		level.LoadProgress();
-		if(((ChallengeGoal)goal).RankComparitor(level.progress.rank,rank) > 0)
+		int rank = level.FindRank(result);
+		if(level.progress.rank > rank)
 			level.progress.rank = rank;
 		//Debug.Log ("Finishing " + level.name + " last score: " + level.progress.score + " new score: " + result);
-		if(((ChallengeGoal)goal).ScoreComparitor(level.progress.score,result) > 0) {
+		if(((ChallengeGoal)goal).ScoreComparitor(result,level.progress.score) > 0) {
 			level.progress.score = result;
 		}
 		level.SaveProgress();

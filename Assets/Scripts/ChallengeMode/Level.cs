@@ -28,6 +28,15 @@ public class Level : ScriptableObject
 			progress = new LevelProgress{rank = 0, unlocked = false, score = 0};
 	}
 
+	public int FindRank(float score)
+	{
+		int rank = 0;
+		for(int i = 0; i < ranks.Length; i++)
+			if(goal.ScoreComparitor(score,ranks[i]) > 0)
+				rank = i+1;
+		return rank;
+	}
+
 	[Serializable]
 	public class LevelProgress
 	{

@@ -42,13 +42,9 @@ public class ScoreTarget : ChallengeGoal
 
 	public override int ScoreComparitor (float score1, float score2)
 	{
-		return (int)(score2 - score1);
+		return (int)Mathf.Sign(score2 - score1);
 	}
-
-	public override int RankComparitor (int rank1, int rank2)
-	{
-		return rank2 - rank1;
-	}
+	
 
 }
 

@@ -17,13 +17,10 @@ public class HighScore : ChallengeGoal
 
 	public override int ScoreComparitor (float score1, float score2)
 	{
-		return (int)(score1 - score2);
+		return (int)Mathf.Sign(score1 - score2);
 	}
 
-	public override int RankComparitor (int rank1, int rank2)
-	{
-		return rank1 - rank2;
-	}
+
 
 }
 
