@@ -11,6 +11,11 @@ public class Tier : ScriptableObject
 	public TierProgress progress;
 	public UnlockRequirement unlockReq;
 
+	void OnEnable()
+	{
+		hideFlags = HideFlags.DontSave;
+	}
+
 	public void SaveProgress()
 	{
 		Util.SaveToPlayerPrefs<TierProgress>(name + "progress",progress);

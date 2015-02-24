@@ -33,7 +33,8 @@ public class ChallengeGUI : GameGUI
 
 		bm = ballMachine.GetComponent<BallMachine>();
 		//bm.StartSpawning();
-		grd.Init(level,goal);
+		if(grd != null)
+			grd.Init(level,goal as ChallengeGoal);
 	}
 
 	protected override void UpdateBackground ()
@@ -47,11 +48,12 @@ public class ChallengeGUI : GameGUI
 	protected override void DoGameEnd ()
 	{
 
+
 		float result = level.goal.EvaluateSuccess();
 
 		level.LoadProgress();
 		int rank = level.FindRank(result);
-		if(level.progress.rank > rank)
+		if(rank > level.progress.rank)
 			level.progress.rank = rank;
 		//Debug.Log ("Finishing " + level.name + " last score: " + level.progress.score + " new score: " + result);
 		if(((ChallengeGoal)goal).ScoreComparitor(result,level.progress.score) > 0) {
@@ -60,7 +62,7 @@ public class ChallengeGUI : GameGUI
 		level.SaveProgress();
 
 		//TODO display progress in end window
-		endUI.GetComponentInChildren<ChallengeEndDisplay>().EndDisplay(level);
+		endUI.GetComponentInChildren<ChallengeEndDisplay>().EndDisplay(result,rank,goal as ChallengeGoal);
 	}
 
 

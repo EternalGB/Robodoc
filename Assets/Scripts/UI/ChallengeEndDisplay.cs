@@ -8,10 +8,10 @@ public class ChallengeEndDisplay : MonoBehaviour
 	public RankDisplay rankDisplay;
 	public Text scoreDisplay;
 
-	public void EndDisplay(Level level)
+	public void EndDisplay(float score, int rank, ChallengeGoal goal)
 	{
-		rankDisplay.SetRank(level.progress.rank);
-		scoreDisplay.text = level.progress.score.ToString ();
+		rankDisplay.SetRank(rank);
+		scoreDisplay.text = goal.FormatSuccess(score);
 	}
 }
 

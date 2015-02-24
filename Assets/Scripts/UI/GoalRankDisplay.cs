@@ -9,10 +9,10 @@ public class GoalRankDisplay : MonoBehaviour
 	public Text nextTarget;
 
 	Level level;
-	Goal goal;
+	ChallengeGoal goal;
 	int rank;
 
-	public void Init(Level level, Goal goal)
+	public void Init(Level level, ChallengeGoal goal)
 	{
 		this.level = level;
 		this.goal = goal;
@@ -22,11 +22,18 @@ public class GoalRankDisplay : MonoBehaviour
 	{
 		if(level != null && goal != null) {
 			rank = level.FindRank(goal.EvaluateSuccess());
-			rankDisplay.SetRank(rank);
-			if(rank != level.ranks.Length)
-				nextTarget.text = goal.FormatSuccess(level.ranks[rank]);
-			else
-				nextTarget.text = "";
+			if(rankDisplay)
+				rankDisplay.SetRank(rank);
+			if(nextTarget) {
+				if(goal.GetType() == typeof(ScoreTarget))
+					nextTarget.text = (goal as ScoreTarget).targetScore.ToString();
+				else {
+					if(rank != level.ranks.Length)
+						nextTarget.text = goal.FormatSuccess(level.ranks[rank]);
+					else
+						nextTarget.text = "";
+				}
+			}
 		}
 
 	}
