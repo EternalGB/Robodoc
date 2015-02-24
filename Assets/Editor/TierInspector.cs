@@ -7,12 +7,9 @@ using System;
 [CustomEditor(typeof(Tier))]
 public class TierInspector : Editor
 {
-
-	static Type[] unlockReqTypes = new Type[]{typeof(AlwaysUnlocked),typeof(RankPointRequirement)};
-	static string[] unlockReqNames;
 	
+
 	ReorderableList levels;
-	int selectedUnlockReq;
 
 	void OnEnable()
 	{
@@ -32,26 +29,11 @@ public class TierInspector : Editor
 		};
 
 
-		//setup unlock req stuff
-		unlockReqNames = new string[unlockReqTypes.Length];
-
-		for(int i = 0; i < unlockReqTypes.Length; i++) {
-			unlockReqNames[i] = unlockReqTypes[i].Name;
-		}
-		if(tier.unlockReq == null) {
-			Debug.Log ("Null unlock req at OnEnable");
-			selectedUnlockReq = 0;
-			//tier.unlockReq = (UnlockRequirement)Activator.CreateInstance(unlockReqTypes[0]);
-			tier.unlockReq = (UnlockRequirement)CreateInstance(unlockReqTypes[0]);
-		} else {
-			for(int i = 0; i < unlockReqTypes.Length; i++) {
-				if(tier.unlockReq.GetType().Equals(unlockReqTypes[i]))
-					selectedUnlockReq = i;
-			}
-		}
 
 	}
-	
+
+
+
 	public override void OnInspectorGUI()
 	{
 		Tier tier = (Tier)target;
@@ -64,22 +46,18 @@ public class TierInspector : Editor
 
 		levels.DoLayoutList();
 
-		int newIndex = EditorGUILayout.Popup("Unlock Requirement ",selectedUnlockReq,unlockReqNames);
-		if(newIndex != selectedUnlockReq) {
-			//clean up the current object
-			DestroyImmediate(tier.unlockReq);
-			tier.unlockReq = (UnlockRequirement)CreateInstance(unlockReqTypes[newIndex]);
-		}
-		selectedUnlockReq = newIndex;
+		EditorGUILayout.PropertyField(serializedObject.FindProperty("pointsNeededToUnlock"));
 
-
-		if(tier.unlockReq != null) {
-			tier.unlockReq.DrawInInspector();
-		} else
-			Debug.Log ("Null unlock req");
+		EditorGUILayout.BeginVertical();
+		if(GUILayout.Button("Save Progress"))
+			tier.SaveProgress();
+		if(GUILayout.Button("Load Progress"))
+			tier.LoadProgress();
+		EditorGUILayout.EndVertical();
 
 		serializedObject.ApplyModifiedProperties();
 	}
+
 
 
 	

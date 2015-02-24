@@ -9,13 +9,16 @@ public class Tier : ScriptableObject
 	public string displayName;
 	public List<Level> levels;
 	public TierProgress progress;
-	public UnlockRequirement unlockReq;
+	public int pointsNeededToUnlock;
 
-	void OnEnable()
+	public bool Unlocked
 	{
-		hideFlags = HideFlags.DontSave;
+		get
+		{
+			return ChallengeProgressionManager.Instance.progress.rankPoints >= pointsNeededToUnlock;
+		}
 	}
-
+	
 	public void SaveProgress()
 	{
 		Util.SaveToPlayerPrefs<TierProgress>(name + "progress",progress);
@@ -35,6 +38,8 @@ public class Tier : ScriptableObject
 			foreach(Level level in levels)
 				level.LoadProgress();
 	}
+
+
 
 	[Serializable]
 	public class TierProgress

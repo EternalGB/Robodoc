@@ -37,7 +37,7 @@ public class ChallengeProgressionManager : MonoBehaviour
 		progress.rankPoints = rankPoints;
 		foreach(Tier tier in ltl.tiers) {
 			//TODO check for actual unlocking and display message
-			if(tier.unlockReq.RequirementMet())
+			if(tier.Unlocked)
 				tier.progress.unlocked = true;
 			//TODO check individual levels also
 		}
