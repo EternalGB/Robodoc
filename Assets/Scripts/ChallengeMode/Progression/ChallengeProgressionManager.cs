@@ -72,6 +72,11 @@ public class ChallengeProgressionManager : MonoBehaviour
 	public class ChallengeProgression
 	{
 		public int rankPoints;
+
+		public override string ToString ()
+		{
+			return rankPoints.ToString();
+		}
 	}
 
 }
