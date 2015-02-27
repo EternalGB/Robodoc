@@ -7,14 +7,21 @@ public class Settings
 
 	public enum SettingName
 	{
-		MASTERVOL,MUSICVOL,SFXVOL
+		MASTERVOL,MUSICVOL,SFXVOL,MOVCONTROLS
+	}
+
+	public enum ControlType
+	{
+		KEYBOARD = 0,
+		MOUSE = 1
 	}
 
 	public static Dictionary<SettingName,Type> settingTypes = new Dictionary<SettingName, Type>
 	{
 		{SettingName.MASTERVOL,typeof(float)},
 		{SettingName.MUSICVOL,typeof(float)},
-		{SettingName.SFXVOL,typeof(float)}
+		{SettingName.SFXVOL,typeof(float)},
+		{SettingName.MOVCONTROLS,typeof(ControlType)}
 	};
 
 	public static Dictionary<SettingName,object> settingValues;
@@ -58,15 +65,22 @@ public class Settings
 
 	public static void Save()
 	{
-		if(settingValues == null) {
-			Load();
-		}
 		foreach(SettingName setting in settingValues.Keys) {
-			object value;
-			if(settingValues.TryGetValue(setting,out value))
-				Util.SaveToPlayerPrefs("Settings" + Enum.GetName(typeof(SettingName),setting),value);
+			//Debug.Log ("Saving " + Enum.GetName(typeof(SettingName),setting));
+			SaveSetting(setting);
 		}
 
+	}
+
+	public static void SaveSetting(SettingName setting)
+	{
+		if(settingValues == null)
+			Load();
+		object value;
+		if(settingValues.TryGetValue(setting,out value)) {
+			Util.SaveToPlayerPrefs("Settings" + Enum.GetName(typeof(SettingName),setting),value);
+			//Debug.Log (Enum.GetName(typeof(SettingName),setting) + " saved as " + value.ToString());
+		}
 	}
 
 }

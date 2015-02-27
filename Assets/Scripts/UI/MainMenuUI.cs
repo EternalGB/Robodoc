@@ -12,7 +12,7 @@ public class MainMenuUI : MonoBehaviour
 
 	public GameObject tutorialButton;
 
-	public ArrowedSelector controlScheme;
+	//public ArrowedSelector controlScheme;
 	public Text arcadeScoreDisplay;
 
 	public GameObject tutorialConfirmationWindow;
@@ -20,7 +20,7 @@ public class MainMenuUI : MonoBehaviour
 	void Start()
 	{
 		arcadeScoreDisplay.text = ArcadeStats.HighScore.ToString();
-		controlScheme.ChangeText(PlayerPrefs.GetInt("Controller",1));
+		//controlScheme.ChangeText(PlayerPrefs.GetInt("Controller",1));
 		tutorialButton.SetActive(PlayerPrefs.GetInt("TutorialCompleted",0) != 0);
 
 		menuScreenDict = new Dictionary<string,GameObject>();
@@ -51,7 +51,6 @@ public class MainMenuUI : MonoBehaviour
 			Application.LoadLevel("Arcade");
 			PlayerPrefs.SetInt ("LevelIndex",-1);
 			PlayerPrefs.SetString("LevelName","Arcade");
-			UpdateControlScheme();
 			PlayerPrefs.Save();
 		}
 	}
@@ -59,7 +58,6 @@ public class MainMenuUI : MonoBehaviour
 	public void LaunchTutorial()
 	{
 		Application.LoadLevel("Tutorial");
-		UpdateControlScheme();
 		PlayerPrefs.Save();
 	}
 
@@ -83,10 +81,6 @@ public class MainMenuUI : MonoBehaviour
 		//Debug.Log (UnityEngine.EventSystems.EventSystem.current.currentSelectedGameObject.name + " is now selected");
 	}
 
-	public void UpdateControlScheme()
-	{
-		PlayerPrefs.SetInt("Controller",controlScheme.index);
-	}
 
 	public void GoToScene(string sceneName)
 	{

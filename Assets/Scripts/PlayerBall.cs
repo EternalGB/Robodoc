@@ -27,6 +27,8 @@ public class PlayerBall : MonoBehaviour
 	Material origMat;
 	List<Material> matQueue;
 
+	Settings.ControlType movControls;
+
 	void Start()
 	{
 		ballPool = PoolManager.Instance.GetPoolByRepresentative(ballPrefab);
@@ -41,7 +43,15 @@ public class PlayerBall : MonoBehaviour
 		rigidbody2D.centerOfMass = Vector2.zero;
 
 		if(!FlagsHelper.IsSet<BallStatus>(status,BallStatus.FROZEN)) {
-			if(PlayerPrefs.GetInt("Controller",1) == 1) {
+			object contr;
+			if(!Settings.TryGetSetting(Settings.SettingName.MOVCONTROLS, out contr)) {
+				movControls = Settings.ControlType.MOUSE;
+				Debug.Log ("Couldn't load move controls");
+			} else {
+				movControls = (Settings.ControlType)contr;
+			}
+
+			if(movControls == Settings.ControlType.MOUSE) {
 				//move towards the mouse
 				
 				mousePos = Util.MouseToWorldPos(0);

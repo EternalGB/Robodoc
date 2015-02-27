@@ -48,13 +48,13 @@ public class LevelSelectUI : MonoBehaviour
 			for(int i = 0; i < ltl.tiers.Count; i++) {
 				Tier tier = ltl.tiers[i];
 				//make tier button
-				GameObject tierGO = (GameObject)GameObject.Instantiate(tierButtonPrefab);
+				GameObject tierGO = (GameObject)Instantiate(tierButtonPrefab);
 				Button tierButton = tierGO.GetComponent<Button>();
 				tierGO.GetComponentInChildren<Text>().text = tier.displayName;
 				//set progress
 				tierButton.interactable = tier.progress.unlocked;
 				//add tier button to tierGroup
-				tierGO.GetComponent<RectTransform>().SetParent(tierGroup);
+				tierGO.GetComponent<RectTransform>().SetParent(tierGroup,false);
 				//link tier button callback - switch tab
 				int tierNum = i;
 				tierButton.onClick.AddListener( () => {
@@ -82,7 +82,7 @@ public class LevelSelectUI : MonoBehaviour
 						levelButton.GetComponentInChildren<RankDisplay>().SetRank(level.progress.rank);
 						levelButton.GetComponentInChildren<ScoreDisplay>().SetScore(level.goal.FormatSuccess(level.progress.score));
 						//add button to levelGroup
-						levelButton.GetComponent<RectTransform>().SetParent(levelGroup);
+						levelButton.GetComponent<RectTransform>().SetParent(levelGroup,false);
 						//link button callback - launch level
 						Level thisLevel = level;
 						levelButton.onClick.AddListener( () => {

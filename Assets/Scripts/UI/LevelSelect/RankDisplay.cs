@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Collections.Generic;
 
-[ExecuteInEditMode]
+
 public class RankDisplay : MonoBehaviour
 {
 
