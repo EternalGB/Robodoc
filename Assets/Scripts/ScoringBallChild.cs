@@ -8,11 +8,12 @@ public class ScoringBallChild : PoolableObject
 
 	public override void Destroy()
 	{
-		PoolableParticleBurst particles = PoolManager.Instance.
-			GetPoolByRepresentative(particleBurstPrefab).GetPooled().GetComponent<PoolableParticleBurst>();
+		PoolableTrackingParticleBurst particles = PoolManager.Instance.
+			GetPoolByRepresentative(particleBurstPrefab).GetPooled().GetComponent<PoolableTrackingParticleBurst>();
 		particles.transform.position = transform.position;
 		particles.gameObject.SetActive(true);
 		particles.particleSystem.startColor = ScoringBall.GetParticleColor(GetComponent<SpriteRenderer>().sprite);
+		particles.SetTarget(GameObject.Find ("PlayerBall").transform);
 		particles.Play();
 		base.Destroy();
 	}

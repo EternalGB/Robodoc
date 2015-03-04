@@ -4,9 +4,9 @@ using System.Collections;
 public class PoolableParticleBurst : PoolableObject
 {
 	
-	bool hasPlayed;
+	protected bool hasPlayed;
 
-	void OnEnable()
+	protected void OnEnable()
 	{
 		hasPlayed = false;
 	}
@@ -17,7 +17,7 @@ public class PoolableParticleBurst : PoolableObject
 		hasPlayed = true;
 	}
 
-	void Update()
+	protected void Update()
 	{
 		if(hasPlayed && particleSystem.isStopped) {
 			Destroy();
