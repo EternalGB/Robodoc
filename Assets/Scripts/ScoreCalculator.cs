@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 using System.Collections.Generic;
 
 public class ScoreCalculator : MonoBehaviour
@@ -40,10 +41,12 @@ public class ScoreCalculator : MonoBehaviour
 
 	public float maxChainMultiplier = 3;
 
-
+	public Image comboMeter;
 	public int maxComboMultiplier = 11;
 	public int comboMulti = 1;
 	public float comboTimeout;
+	float comboTimer = 0;
+	bool comboReset = true;
 	
 	public float score = 0;
 	public float nextScore = 0;
@@ -97,6 +100,12 @@ public class ScoreCalculator : MonoBehaviour
 		displayBiggestScore = Mathf.Floor(Mathf.Lerp (displayBiggestScore,biggestScore,lerpTimer));
 
 		lerpTimer = Mathf.Clamp (lerpTimer + lerpSpeed*Time.deltaTime,0,1f);
+
+		comboTimer = Mathf.Clamp (comboTimer - Time.deltaTime, 0, comboTimeout);
+		if(comboTimer == 0 && !comboReset) {
+			ResetCombo();
+		}
+		comboMeter.fillAmount = comboTimer/comboTimeout;
 	}
 
 	float GetPoints(Transform transform, out int maxDepth)
@@ -184,14 +193,18 @@ public class ScoreCalculator : MonoBehaviour
 	{
 		if(comboMulti < maxComboMultiplier)
 			comboMulti++;
-		CancelInvoke("ResetCombo");
-		Invoke("ResetCombo",comboTimeout);
+		comboTimer = comboTimeout;
+		comboReset = false;
+		//CancelInvoke("ResetCombo");
+		//Invoke("ResetCombo",comboTimeout);
 	}
 	
 	void ResetCombo()
 	{
 		comboMulti = 1;
 		SetScorePrediction();
+		comboTimer = 0;
+		comboReset = true;
 	}
 
 	bool ScoringBallComboValid(Transform parent, Transform child)
