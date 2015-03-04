@@ -105,7 +105,8 @@ public class ScoreCalculator : MonoBehaviour
 		if(comboTimer == 0 && !comboReset) {
 			ResetCombo();
 		}
-		comboMeter.fillAmount = comboTimer/comboTimeout;
+		if(comboMeter != null)
+			comboMeter.fillAmount = comboTimer/comboTimeout;
 	}
 
 	float GetPoints(Transform transform, out int maxDepth)
