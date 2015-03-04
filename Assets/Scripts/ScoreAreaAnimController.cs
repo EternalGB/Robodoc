@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
 
+[ExecuteInEditMode]
 public class ScoreAreaAnimController : MonoBehaviour
 {
 
@@ -8,7 +9,7 @@ public class ScoreAreaAnimController : MonoBehaviour
 	public float fill;
 	Vector3 scale;
 
-	void Start()
+	void OnEnable()
 	{
 		scale = new Vector3(maxSize,maxSize,maxSize);
 	}
