@@ -7,7 +7,7 @@ public class WaypointCreation : EditorWindow
 
 	enum ShapeType
 	{
-		CIRCLE,NGON
+		CIRCLE,NGON,FIGURE8
 	}
 
 	[MenuItem("Window/Waypoints")]
@@ -23,6 +23,9 @@ public class WaypointCreation : EditorWindow
 	int ngonSides = 3;
 	float size = 1;
 
+	float figure8Size = 1;
+	int figure8Segments = 10;
+
 	void OnGUI()
 	{
 		shape = (ShapeType)EditorGUILayout.EnumPopup("Shape",shape);
@@ -37,6 +40,12 @@ public class WaypointCreation : EditorWindow
 			size = Mathf.Clamp(EditorGUILayout.FloatField("Size",size),1,float.MaxValue);
 			if(GUILayout.Button("Create")) {
 				CreateNgon(ngonSides,size);
+			}
+		} else if(shape == ShapeType.FIGURE8) {
+			figure8Size = Mathf.Clamp(EditorGUILayout.FloatField("Size",figure8Size),0,float.MaxValue);
+			figure8Segments = Mathf.Clamp (EditorGUILayout.IntField("Segments",figure8Segments),0,int.MaxValue);
+			if(GUILayout.Button("Create")) {
+				CreateFigureEight(figure8Size,figure8Segments);
 			}
 		}
 
@@ -67,6 +76,35 @@ public class WaypointCreation : EditorWindow
 			next.transform.position = Quaternion.AngleAxis(i*(180-internalAngle),Vector3.forward)*(size*top);
 			next.transform.parent = parent.transform;
 		}
+	}
+
+	void CreateFigureEight(float a, int resolution)
+	{
+		GameObject parent = new GameObject("WP-Figure8",typeof(WaypointPathDrawer));
+		parent.transform.position = Vector3.zero;
+
+
+		float angleIncr = Mathf.PI/resolution;
+		for(float angle = -Mathf.PI/4; angle <= Mathf.PI/4; angle += angleIncr) {
+			GameObject next = new GameObject((angle).ToString());
+			next.transform.position = GetFigureEightPoint(a,angle);
+			next.transform.parent = parent.transform;
+		}
+		for(float angle = 5*Mathf.PI/4; angle >= 3*Mathf.PI/4; angle -= angleIncr) {
+			GameObject next = new GameObject((angle).ToString());
+			next.transform.position = GetFigureEightPoint(a,angle);
+			next.transform.parent = parent.transform;
+		}
+	}
+
+	Vector2 GetFigureEightPoint(float a, float angle)
+	{
+		float r = Mathf.Pow(a,2)*Mathf.Cos(2*angle)*Mathf.Pow(1/Mathf.Cos(angle),4);
+		if(r != 0)
+			r = Mathf.Sqrt(r);
+		Vector2 pos = new Vector2(r,0);
+		pos = Quaternion.AngleAxis(Mathf.Rad2Deg*angle,Vector3.forward)*pos;
+		return pos;
 	}
 
 }
