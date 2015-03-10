@@ -151,8 +151,9 @@ public class PlayerBall : MonoBehaviour
 				//Debug.Log ("BadBall Collision");
 				BadBall bb = col.gameObject.GetComponent<BadBall>();
 				bb.ApplyEffect(cps[0].otherCollider.transform);
-				if(bb.HasSound)
+				if(bb.HasSound) 
 					SoundEffectManager.PlayClipOnce(bb.HitSound,Vector3.zero,1);
+				
 				//recalculate score
 				ScoreCalculator.Instance.SetScorePrediction();
 			}

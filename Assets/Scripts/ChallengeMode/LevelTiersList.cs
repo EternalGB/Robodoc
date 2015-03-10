@@ -8,6 +8,11 @@ public class LevelTiersList : ScriptableObject
 
 	const string key = "ChallengeLevels";
 
+	void OnEnable()
+	{
+		LoadProgress();
+	}
+
 	public void SaveProgress()
 	{
 		if(tiers != null) {

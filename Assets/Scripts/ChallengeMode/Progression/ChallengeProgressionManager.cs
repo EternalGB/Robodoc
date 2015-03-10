@@ -40,6 +40,10 @@ public class ChallengeProgressionManager : MonoBehaviour
 			if(tier.Unlocked)
 				tier.progress.unlocked = true;
 			//TODO check individual levels also
+			foreach(Level level in tier.levels) {
+				if(level.Unlocked)
+					level.progress.unlocked = true;
+			}
 		}
 		ltl.SaveProgress();
 	}

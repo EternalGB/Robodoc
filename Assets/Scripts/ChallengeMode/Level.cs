@@ -12,7 +12,15 @@ public class Level : ScriptableObject
 	public BallMachine ballMachinePrefab;
 	public float[] ranks;
 	public LevelProgress progress;
+	public int pointsNeededToUnlock;
 
+	public bool Unlocked
+	{
+		get
+		{
+			return ChallengeProgressionManager.Instance.progress.rankPoints >= pointsNeededToUnlock;
+		}
+	}
 
 	public void SaveProgress()
 	{

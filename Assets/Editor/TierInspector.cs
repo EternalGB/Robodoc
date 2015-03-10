@@ -20,12 +20,16 @@ public class TierInspector : Editor
 			Rect propertyRect = new Rect(rect);
 			propertyRect.height = EditorGUIUtility.singleLineHeight;
 
-			Rect unlockedRect = new Rect(propertyRect.x,propertyRect.y,60,propertyRect.height);
-			Rect levelRect = new Rect(propertyRect.x + 60,propertyRect.y,propertyRect.width-60,propertyRect.height);
+
+			Rect levelRect = new Rect(propertyRect.x,propertyRect.y,240,propertyRect.height);
+			Rect unlockedRect = new Rect(propertyRect.x + 240,propertyRect.y,60,propertyRect.height);
+			Rect pointRect = new Rect(propertyRect.x + 300,propertyRect.y,propertyRect.width - 300,propertyRect.height); 
 
 			EditorGUI.PropertyField(levelRect,levels.serializedProperty.GetArrayElementAtIndex(index),GUIContent.none);
-			if(tier.levels[index] != null)
+			if(tier.levels[index] != null) {
 				tier.levels[index].progress.unlocked = EditorGUI.Toggle(unlockedRect,tier.levels[index].progress.unlocked);
+				tier.levels[index].pointsNeededToUnlock = EditorGUI.IntField(pointRect,tier.levels[index].pointsNeededToUnlock);
+			}
 		};
 
 
