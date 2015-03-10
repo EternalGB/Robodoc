@@ -21,12 +21,15 @@ public class LevelTiersListInspector : Editor
 			Rect propertyRect = new Rect(rect);
 			propertyRect.height = EditorGUIUtility.singleLineHeight;
 
-			Rect unlockedRect = new Rect(propertyRect.x,propertyRect.y,60,propertyRect.height);
-			Rect tierRect = new Rect(propertyRect.x + 60,propertyRect.y,propertyRect.width-60,propertyRect.height);
+			Rect tierRect = new Rect(propertyRect.x,propertyRect.y,240,propertyRect.height);
+			Rect unlockedRect = new Rect(propertyRect.x + 240,propertyRect.y,60,propertyRect.height);
+			Rect pointRect = new Rect(propertyRect.x + 300,propertyRect.y,propertyRect.width - 300,propertyRect.height); 
 
 			EditorGUI.PropertyField(tierRect,tiers.serializedProperty.GetArrayElementAtIndex(index),GUIContent.none);
-			if(lm.tiers[index] != null)
+			if(lm.tiers[index] != null) {
 				lm.tiers[index].progress.unlocked = EditorGUI.Toggle(unlockedRect,lm.tiers[index].progress.unlocked);
+				lm.tiers[index].pointsNeededToUnlock = EditorGUI.IntField(pointRect,lm.tiers[index].pointsNeededToUnlock);
+			}
 
 		};
 	}
