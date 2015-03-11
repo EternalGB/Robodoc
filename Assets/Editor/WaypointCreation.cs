@@ -28,30 +28,34 @@ public class WaypointCreation : EditorWindow
 
 	void OnGUI()
 	{
+		GameObject parent = null;
 		shape = (ShapeType)EditorGUILayout.EnumPopup("Shape",shape);
 		if(shape == ShapeType.CIRCLE) {
 			radius = Mathf.Clamp(EditorGUILayout.FloatField("Radius",radius),0,float.MaxValue);
 			segments = Mathf.Clamp (EditorGUILayout.IntField("Segments",segments),0,int.MaxValue);
 			if(GUILayout.Button("Create")) {
-				CreateCircle(radius,segments);
+				parent = CreateCircle(radius,segments);
 			}
 		} else if(shape == ShapeType.NGON) {
 			ngonSides = Mathf.Clamp(EditorGUILayout.IntField("N",ngonSides),3,int.MaxValue);
 			size = Mathf.Clamp(EditorGUILayout.FloatField("Size",size),1,float.MaxValue);
 			if(GUILayout.Button("Create")) {
-				CreateNgon(ngonSides,size);
+				parent = CreateNgon(ngonSides,size);
 			}
 		} else if(shape == ShapeType.FIGURE8) {
 			figure8Size = Mathf.Clamp(EditorGUILayout.FloatField("Size",figure8Size),0,float.MaxValue);
 			figure8Segments = Mathf.Clamp (EditorGUILayout.IntField("Segments",figure8Segments),0,int.MaxValue);
 			if(GUILayout.Button("Create")) {
-				CreateFigureEight(figure8Size,figure8Segments);
+				parent = CreateFigureEight(figure8Size,figure8Segments);
 			}
+		}
+		if(parent != null) {
+			Undo.RegisterCreatedObjectUndo(parent, "Created Waypoints");
 		}
 
 	}
 
-	void CreateCircle(float radius, int resolution)
+	GameObject CreateCircle(float radius, int resolution)
 	{
 		GameObject parent = new GameObject("WP-Circle",typeof(WaypointPathDrawer));
 		parent.transform.position = Vector3.zero;
@@ -62,9 +66,10 @@ public class WaypointCreation : EditorWindow
 			next.transform.position = radius*(new Vector3(Mathf.Cos(angle*i),Mathf.Sin (angle*i)));
 			next.transform.parent = parent.transform;
 		}
+		return parent;
 	}
 
-	void CreateNgon(int n, float size)
+	GameObject CreateNgon(int n, float size)
 	{
 		GameObject parent = new GameObject("WP-" + n + "-GON",typeof(WaypointPathDrawer));
 		parent.transform.position = Vector3.zero;
@@ -76,9 +81,10 @@ public class WaypointCreation : EditorWindow
 			next.transform.position = Quaternion.AngleAxis(i*(180-internalAngle),Vector3.forward)*(size*top);
 			next.transform.parent = parent.transform;
 		}
+		return parent;
 	}
 
-	void CreateFigureEight(float a, int resolution)
+	GameObject CreateFigureEight(float a, int resolution)
 	{
 		GameObject parent = new GameObject("WP-Figure8",typeof(WaypointPathDrawer));
 		parent.transform.position = Vector3.zero;
@@ -95,6 +101,7 @@ public class WaypointCreation : EditorWindow
 			next.transform.position = GetFigureEightPoint(a,angle);
 			next.transform.parent = parent.transform;
 		}
+		return parent;
 	}
 
 	Vector2 GetFigureEightPoint(float a, float angle)
