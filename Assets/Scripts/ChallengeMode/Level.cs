@@ -10,9 +10,10 @@ public class Level : ScriptableObject
 	public string sceneName;
 	public ChallengeGoal goal;
 	public BallMachine ballMachinePrefab;
+	public int pointsNeededToUnlock;
 	public float[] ranks;
 	public LevelProgress progress;
-	public int pointsNeededToUnlock;
+
 
 	public bool Unlocked
 	{

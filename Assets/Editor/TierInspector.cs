@@ -25,10 +25,22 @@ public class TierInspector : Editor
 			Rect unlockedRect = new Rect(propertyRect.x + 240,propertyRect.y,60,propertyRect.height);
 			Rect pointRect = new Rect(propertyRect.x + 300,propertyRect.y,propertyRect.width - 300,propertyRect.height); 
 
+
+
+
 			EditorGUI.PropertyField(levelRect,levels.serializedProperty.GetArrayElementAtIndex(index),GUIContent.none);
+			SerializedProperty level = levels.serializedProperty.GetArrayElementAtIndex(index);
+			EditorGUI.BeginChangeCheck();
 			if(tier.levels[index] != null) {
+				//EditorGUI.PropertyField(unlockedRect,level.serializedObject.FindProperty("unlocked"),GUIContent.none);
+				//EditorGUI.PropertyField(pointRect,level.serializedObject.FindProperty("pointsNeededToUnlock"),GUIContent.none);
 				tier.levels[index].progress.unlocked = EditorGUI.Toggle(unlockedRect,tier.levels[index].progress.unlocked);
 				tier.levels[index].pointsNeededToUnlock = EditorGUI.IntField(pointRect,tier.levels[index].pointsNeededToUnlock);
+			}
+
+			if(EditorGUI.EndChangeCheck()) {
+				EditorUtility.SetDirty(tier.levels[index]);
+				//AssetDatabase.SaveAssets();
 			}
 		};
 

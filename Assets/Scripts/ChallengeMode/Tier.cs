@@ -8,8 +8,9 @@ public class Tier : ScriptableObject
 
 	public string displayName;
 	public List<Level> levels;
-	public TierProgress progress;
 	public int pointsNeededToUnlock;
+	public TierProgress progress;
+
 
 	public bool Unlocked
 	{
