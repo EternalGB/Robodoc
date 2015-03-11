@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 
-public class StaticScoreAreaLevelConstructor : MonoBehaviour
+public class WorldSpaceScoreAreaLevelConstructor : MonoBehaviour
 {
 
 	public Collider2D area;
