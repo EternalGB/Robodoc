@@ -82,6 +82,58 @@ public class Util
 		return bounds.center + RandomVector3(-bounds.extents,bounds.extents);
 	}
 
+	//Gets a centroid defined bounding box that includes all child collider2Ds
+	public static Bounds Get2DObjectBounds(GameObject obj)
+	{
+		Collider2D[] colliders = obj.GetComponentsInChildren<Collider2D>();
+		Vector2 max = new Vector2(float.MinValue,float.MinValue);
+		Vector2 min = new Vector2(float.MaxValue,float.MaxValue);
+		Vector2 centerSum = Vector2.zero;
+		foreach(Collider2D col in colliders) {
+			Vector3 max3 = col.bounds.center + col.bounds.extents;
+			Vector3 min3 = col.bounds.center - col.bounds.extents;
+			max.x = Mathf.Max(max.x,max3.x);
+			max.y = Mathf.Max(max.y,max3.y);
+			min.x = Mathf.Min(min.x,min3.x);
+			min.y = Mathf.Min(min.y,min3.y);
+			centerSum += (Vector2)col.bounds.center;
+		}
+		Vector2 centroid = centerSum/colliders.Length;
+		Vector2 extents = new Vector2();
+		extents.x = Mathf.Max(Mathf.Abs(centroid.x-max.x),Mathf.Abs(centroid.x - min.x));
+		extents.y = Mathf.Max(Mathf.Abs(centroid.y-max.y),Mathf.Abs(centroid.y - min.y));
+		Bounds bounds = new Bounds(centroid,2*extents);
+		return bounds;
+	}
+
+	//gets the smallest bounding box that fits all child colliders
+	public static Bounds GetSmallest2DObjectBounds(GameObject obj)
+	{
+		Collider2D[] colliders = obj.GetComponentsInChildren<Collider2D>();
+		Vector2 max = new Vector2(float.MinValue,float.MinValue);
+		Vector2 min = new Vector2(float.MaxValue,float.MaxValue);
+		foreach(Collider2D col in colliders) {
+			Vector3 max3 = col.bounds.center + col.bounds.extents;
+			Vector3 min3 = col.bounds.center - col.bounds.extents;
+			max.x = Mathf.Max(max.x,max3.x);
+			max.y = Mathf.Max(max.y,max3.y);
+			min.x = Mathf.Min(min.x,min3.x);
+			min.y = Mathf.Min(min.y,min3.y);
+		}
+		Vector2 size = max - min;
+		Vector2 center = max - size/2;
+		Bounds bounds = new Bounds(center,size);
+		return bounds;
+	}
+
+	public static bool IntersectsAny(Bounds bounds, List<Bounds> boundsList)
+	{
+		foreach(Bounds b in boundsList)
+			if(bounds.Intersects(b))
+				return true;
+		return false;
+	}
+
 	public static Vector2 RandomVectorBetween(Vector2 origin, Vector2 p1, Vector2 p2)
 	{
 		Vector2 v1 = p1-origin;
@@ -165,6 +217,7 @@ public class Util
 		}
 
 	}
+	
 
 	public static void DebugDrawConnected(List<Vector3> points, Color color, float duration)
 	{

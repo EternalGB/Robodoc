@@ -28,8 +28,9 @@ public class WaypointFollower : MonoBehaviour
 			transform.position += nextMove;
 			if(Vector3.Distance(transform.position,waypoints[wpIndex].position) < 5f)
 				wpIndex = (wpIndex+1)%waypoints.Count;
-			transform.rotation *= Quaternion.AngleAxis(rotSpeed*Time.deltaTime,Vector3.forward);
+
 		}
+		transform.rotation *= Quaternion.AngleAxis(rotSpeed*Time.deltaTime,Vector3.forward);
 	}
 
 }
