@@ -9,6 +9,7 @@ public class PoolableTrackingParticleBurst : PoolableParticleBurst
 	int numAlive;
 	public float followSpeed;
 	public float shrinkDist, destroyDist;
+	public AudioClip particleKillSound;
 
 	public void SetTarget(Transform target)
 	{
@@ -19,7 +20,6 @@ public class PoolableTrackingParticleBurst : PoolableParticleBurst
 	{
 		base.Play();
 		particles = new ParticleSystem.Particle[particleSystem.maxParticles];
-
 		//Debug.Log ("Got " + numAlive + " particles");
 	}
 
@@ -36,6 +36,8 @@ public class PoolableTrackingParticleBurst : PoolableParticleBurst
 					particles[i].size *= (dist-destroyDist)/(shrinkDist-destroyDist);
 					if(dist <= destroyDist) {
 						particles[i].lifetime = -1;
+						if(particleKillSound != null)
+							SoundEffectManager.Instance.PlayClipOnce(particleKillSound,Vector3.zero,1,Random.Range(0.9f,1.1f));
 					}
 				}
 			}
