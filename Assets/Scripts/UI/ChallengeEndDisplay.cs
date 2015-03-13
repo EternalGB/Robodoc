@@ -5,7 +5,7 @@ using System.Collections;
 public class ChallengeEndDisplay : MonoBehaviour
 {
 
-	public RankDisplay rankDisplay;
+	public AnimatedRankDisplay rankDisplay;
 	public Text scoreDisplay;
 
 	public void EndDisplay(float score, int rank, ChallengeGoal goal)

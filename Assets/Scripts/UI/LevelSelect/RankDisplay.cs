@@ -8,7 +8,7 @@ public class RankDisplay : MonoBehaviour
 
 	public List<Image> stars;
 
-	public void SetRank(int rank)
+	public virtual void SetRank(int rank)
 	{
 		if(stars != null) {
 			for(int i = 0; i < stars.Count; i++) {
