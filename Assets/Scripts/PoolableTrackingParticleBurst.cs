@@ -36,8 +36,10 @@ public class PoolableTrackingParticleBurst : PoolableParticleBurst
 					particles[i].size *= (dist-destroyDist)/(shrinkDist-destroyDist);
 					if(dist <= destroyDist) {
 						particles[i].lifetime = -1;
-						if(particleKillSound != null)
+						if(particleKillSound != null) {
 							SoundEffectManager.Instance.PlayClipOnce(particleKillSound,Vector3.zero,1,Random.Range(0.9f,1.1f));
+							target.SendMessage("GetParticle");
+						}
 					}
 				}
 			}

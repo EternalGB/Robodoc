@@ -29,6 +29,9 @@ public class PlayerBall : MonoBehaviour
 
 	Settings.ControlType movControls;
 
+	public Transform halo;
+	public float haloIncrement, haloDecrement;
+
 	void Start()
 	{
 		ballPool = PoolManager.Instance.GetPoolByRepresentative(ballPrefab);
@@ -79,6 +82,8 @@ public class PlayerBall : MonoBehaviour
 			//rigidbody2D.angularVelocity += new Vector3(0,0,rigidbody2D.velocity.x + rigidbody2D.velocity.y)*-0.1f;
 		}
 
+		//reduce the size of the halo
+		halo.localScale = new Vector3(Mathf.Clamp(halo.localScale.x - haloDecrement*Time.deltaTime,0,1),Mathf.Clamp(halo.localScale.x - haloDecrement*Time.deltaTime,0,1));
 
 		Debug.DrawLine(transform.position,(Vector2)transform.position+rigidbody2D.velocity,Color.blue,0f);
 
@@ -290,6 +295,10 @@ public class PlayerBall : MonoBehaviour
 		bombsEnabled = true;
 	}
 
+	public void GetParticle()
+	{
+		halo.localScale = Vector3.ClampMagnitude(halo.localScale + new Vector3(haloIncrement,haloIncrement),1);
+	}
 
 }
 
