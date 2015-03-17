@@ -13,6 +13,8 @@ public class ArcadeGUI : GameGUI
 		GameObject.Find("BGMusic").GetComponent<AudioSource>().Play();
 		GameObject.FindWithTag("BallMachine").GetComponent<BallMachine>().StartSpawning();
 		pb.BallCollect += BallCollectHandler;
+
+		StartCountdown();
 	}
 
 	protected override void DoGameEnd ()

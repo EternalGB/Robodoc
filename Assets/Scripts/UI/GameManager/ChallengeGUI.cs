@@ -35,7 +35,11 @@ public class ChallengeGUI : GameGUI
 		//bm.StartSpawning();
 		if(grd != null)
 			grd.Init(level,goal as ChallengeGoal);
+
+		StartCountdown();
 	}
+
+
 
 	protected override void UpdateBackground ()
 	{

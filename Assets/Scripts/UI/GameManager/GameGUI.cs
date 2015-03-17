@@ -27,6 +27,7 @@ public abstract class GameGUI : MonoBehaviour
 	public GameObject countdownCanvas;
 	public Text startingCountdownText;
 	bool gameStarted;
+	bool countdownStarted;
 	float startTimer = 3.99f;
 
 	float initCameraPos;
@@ -47,62 +48,70 @@ public abstract class GameGUI : MonoBehaviour
 
 		Time.timeScale = 0;
 		gameStarted = false;
-
+		countdownStarted = false;
 
 		InitGame();
 	}
 
 	protected abstract void InitGame();
 
+	protected void StartCountdown()
+	{
+		countdownStarted = true;
+	}
+
 	protected void Update()
 	{
-		if(!gameStarted) {
-			startTimer -= Time.unscaledDeltaTime;
-			if(startTimer <= 1) {
-				gameStarted = true;
-				countdownCanvas.SetActive(false);
-				Time.timeScale = 1;
-			}
-			startingCountdownText.text = Mathf.Floor(startTimer).ToString();
-		} else {
-			/*
+		if(countdownStarted) {
+			if(!gameStarted) {
+				startTimer -= Time.unscaledDeltaTime;
+				if(startTimer <= 1) {
+					gameStarted = true;
+					countdownCanvas.SetActive(false);
+					Time.timeScale = 1;
+				}
+				startingCountdownText.text = Mathf.Floor(startTimer).ToString();
+			} else {
+				/*
 			if(Input.anyKeyDown && UnityEngine.EventSystems.EventSystem.current.currentSelectedGameObject != null)
 				Debug.Log (UnityEngine.EventSystems.EventSystem.current.currentSelectedGameObject.name + " is now selected");
 			*/
-			
-			goal.UpdateDisplayTime();
-			displayTime = goal.displayTime;
-			UpdateBackground();
-			
-			actualCameraZoom = Mathf.Lerp (actualCameraZoom,cameraZoom,zoomLerpTimer);
-			zoomLerpTimer = Mathf.Clamp (zoomLerpTimer + zoomLerpSpeed*Time.deltaTime,0,1f);
-			Camera.main.transform.position = new Vector3(0,0,initCameraPos - actualCameraZoom);
-			
-			if(Input.GetButtonDown("Pause")) {
-				TogglePause();
-			}
-			
-			/*
+				
+				goal.UpdateDisplayTime();
+				displayTime = goal.displayTime;
+				UpdateBackground();
+				
+				actualCameraZoom = Mathf.Lerp (actualCameraZoom,cameraZoom,zoomLerpTimer);
+				zoomLerpTimer = Mathf.Clamp (zoomLerpTimer + zoomLerpSpeed*Time.deltaTime,0,1f);
+				Camera.main.transform.position = new Vector3(0,0,initCameraPos - actualCameraZoom);
+				
+				if(Input.GetButtonDown("Pause")) {
+					TogglePause();
+				}
+				
+				/*
 			if(Paused()) {
 				Time.timeScale = 0;
 			} else {
 				Time.timeScale = 1;
 			}
 			*/
+				
+				if(goal.Completed() || forceCompleted) {
+					Time.timeScale = 0;
+					OnGoalCompleted();
+				}
+			}
 			
-			if(goal.Completed() || forceCompleted) {
+			
+			#if UNITY_EDITOR
+			if(Input.GetKeyDown(KeyCode.F1)) {
 				Time.timeScale = 0;
 				OnGoalCompleted();
 			}
+			#endif
 		}
 
-
-		#if UNITY_EDITOR
-		if(Input.GetKeyDown(KeyCode.F1)) {
-			Time.timeScale = 0;
-			OnGoalCompleted();
-		}
-		#endif
 	}
 
 	protected virtual void UpdateBackground()
