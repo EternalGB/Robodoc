@@ -11,7 +11,7 @@ public class RankStar : MonoBehaviour
 	public void SetFinished()
 	{
 		animationFinished = true;
-		SoundEffectManager.PlayClipOnce(finishedSound,Vector3.zero,1);
+		SoundEffectManager.Instance.PlayClipOnce(finishedSound,Vector3.zero,1,1);
 	}
 
 }
