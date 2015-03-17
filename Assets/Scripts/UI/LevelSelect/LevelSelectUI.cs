@@ -50,9 +50,14 @@ public class LevelSelectUI : MonoBehaviour
 				//make tier button
 				GameObject tierGO = (GameObject)Instantiate(tierButtonPrefab);
 				Button tierButton = tierGO.GetComponent<Button>();
-				tierGO.GetComponentInChildren<Text>().text = tier.displayName;
+
 				//set progress
 				tierButton.interactable = tier.progress.unlocked;
+				if(tier.progress.unlocked) {
+					tierGO.GetComponentInChildren<Text>().text = tier.displayName;
+				} else {
+					tierGO.GetComponentInChildren<Text>().text = "Unlocked at " + tier.pointsNeededToUnlock + " RP";
+				}
 				//add tier button to tierGroup
 				tierGO.GetComponent<RectTransform>().SetParent(tierGroup,false);
 				//link tier button callback - switch tab
@@ -76,7 +81,12 @@ public class LevelSelectUI : MonoBehaviour
 						//make level button
 						GameObject levelGO = (GameObject)GameObject.Instantiate(levelButtonPrefab);
 						Button levelButton = levelGO.GetComponent<Button>();
-						levelGO.GetComponentInChildren<Text>().text = level.displayName;
+						if(level.progress.unlocked) {
+							levelGO.GetComponentInChildren<Text>().text = level.displayName;
+						} else {
+							levelGO.GetComponentInChildren<Text>().text = "Unlocked at " + level.pointsNeededToUnlock + " RP";
+						}
+
 						//set progress
 						levelButton.interactable = level.progress.unlocked;
 						levelButton.GetComponentInChildren<RankDisplay>().SetRank(level.progress.rank);
