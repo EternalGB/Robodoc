@@ -10,6 +10,14 @@ public class SingleButtonSelector : MonoBehaviour
 	public List<string> texts;
 	public Text displayText;
 
+	void OnEnable()
+	{
+		if(texts != null && texts.Count > 0) {
+			displayText.text = texts[0];
+		}
+		GetComponent<Button>().onClick.AddListener(SelectNext);
+	}
+
 	public void SelectNext()
 	{
 		index = (index+1)%texts.Count;
@@ -30,6 +38,9 @@ public class SingleButtonSelector : MonoBehaviour
 		return index;
 	}
 
-
+	void OnDisable()
+	{
+		GetComponent<Button>().onClick.RemoveListener(SelectNext);
+	}
 }
 
