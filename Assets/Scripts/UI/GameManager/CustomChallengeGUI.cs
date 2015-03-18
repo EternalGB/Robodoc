@@ -10,5 +10,10 @@ public class CustomChallengeGUI : ChallengeGUI
 
 	}
 
+	protected override void DoGameEnd ()
+	{
+		base.DoGameEnd ();
+	}
+
 }
 
