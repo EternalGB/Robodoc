@@ -30,7 +30,7 @@ public class PoolableTrackingParticleBurst : PoolableParticleBurst
 			numAlive = particleSystem.GetParticles(particles);
 			for(int i = 0; i < numAlive; i++) {
 				particles[i].velocity = ((Vector2)target.position - (Vector2)particles[i].position).normalized*followSpeed;
-				particles[i].angularVelocity = Mathf.Max(particles[i].velocity.x,particles[i].velocity.y)*1000;
+				particles[i].angularVelocity = Mathf.Max(particles[i].velocity.x,particles[i].velocity.y)*100;
 				float dist = Vector2.Distance(particles[i].position,target.position);
 				if(dist <= shrinkDist) {
 					particles[i].size *= (dist-destroyDist)/(shrinkDist-destroyDist);
