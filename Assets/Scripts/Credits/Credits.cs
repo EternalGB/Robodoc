@@ -44,10 +44,10 @@ public class Credits : MonoBehaviour
 		GUISkin unityDef = GUI.skin;
 		GUI.skin = skin;
 
-		GUILayout.BeginArea(new Rect(new Rect(640,creditPos,640,boxHeight)));
+		GUILayout.BeginArea(new Rect(new Rect(560,creditPos,800,boxHeight)));
 
 		foreach(CreditText text in credits) {
-			text.Draw(640);
+			text.Draw(800);
 		}
 
 		GUILayout.EndArea();
