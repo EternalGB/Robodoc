@@ -65,7 +65,6 @@ public class ChallengeGUI : GameGUI
 		}
 		level.SaveProgress();
 
-		//TODO display progress in end window
 		endUI.GetComponentInChildren<ChallengeEndDisplay>().EndDisplay(result,rank,goal as ChallengeGoal);
 	}
 
