@@ -37,6 +37,13 @@ public class Level : ScriptableObject
 			progress = new LevelProgress{rank = 0, unlocked = false, score = 0};
 	}
 
+	public void ResetProgress()
+	{
+		progress.unlocked = false;
+		progress.score = 0;
+		progress.rank = 0;
+	}
+
 	public int FindRank(float score)
 	{
 		int rank = 0;
@@ -45,6 +52,7 @@ public class Level : ScriptableObject
 				rank = i+1;
 		return rank;
 	}
+
 
 	[Serializable]
 	public class LevelProgress

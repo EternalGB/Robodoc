@@ -89,8 +89,10 @@ public class MainMenuUI : MonoBehaviour
 
 	public void ResetProgress()
 	{
-		//TODO challenge progress clearing
-		//ChallengeHighScores.Clear();
+		ChallengeProgressionManager.Instance.ResetProgress();
+
+
+
 		ArcadeStats.Clear();
 		PlayerPrefs.DeleteKey("TutorialCompleted");
 		Application.LoadLevel(Application.loadedLevel);

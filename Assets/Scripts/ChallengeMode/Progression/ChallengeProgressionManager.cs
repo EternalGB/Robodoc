@@ -72,6 +72,12 @@ public class ChallengeProgressionManager : MonoBehaviour
 		SaveProgress();
 	}
 
+	public void ResetProgress()
+	{
+		progress.rankPoints = 0;
+		ltl.ResetProgress();
+	}
+
 	[System.Serializable]
 	public class ChallengeProgression
 	{

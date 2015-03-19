@@ -40,7 +40,13 @@ public class Tier : ScriptableObject
 				level.LoadProgress();
 	}
 
-
+	public void ResetProgress()
+	{
+		progress.unlocked = false;
+		foreach(Level level in levels)
+			level.ResetProgress();
+		SaveProgress();
+	}
 
 	[Serializable]
 	public class TierProgress

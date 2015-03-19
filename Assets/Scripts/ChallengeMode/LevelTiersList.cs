@@ -43,6 +43,13 @@ public class LevelTiersList : ScriptableObject
 		}
 	}
 
+	public void ResetProgress()
+	{
+		foreach(Tier tier in tiers)
+			tier.ResetProgress();
+
+	}
+
 
 
 }
