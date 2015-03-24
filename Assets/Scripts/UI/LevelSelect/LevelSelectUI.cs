@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEditor;
 using UnityEngine.UI;
 using System.Collections.Generic;
 
@@ -97,12 +96,7 @@ public class LevelSelectUI : MonoBehaviour
 						Level thisLevel = level;
 						levelButton.onClick.AddListener( () => {
 							//pass references to the goal and ball machine
-							string machinePath = AssetDatabase.GetAssetPath(thisLevel.ballMachinePrefab);
-							string goalPath = AssetDatabase.GetAssetPath(thisLevel.goal);
-							string levelPath = AssetDatabase.GetAssetPath(thisLevel);
-							Util.SaveToPlayerPrefs<string>("MachinePath",TrimPathToResourcePath(machinePath));
-							Util.SaveToPlayerPrefs<string>("GoalPath",TrimPathToResourcePath(goalPath));
-							Util.SaveToPlayerPrefs<string>("LevelPath",TrimPathToResourcePath(levelPath));
+							SelectedLevel.level = thisLevel;
 
 							Application.LoadLevel(thisLevel.sceneName);
 						});

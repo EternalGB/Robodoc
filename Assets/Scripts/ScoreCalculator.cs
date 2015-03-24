@@ -62,6 +62,8 @@ public class ScoreCalculator : MonoBehaviour
 	public float displayLongestChain = 0;
 	public float displayNextLongestChain = 0;
 
+	public int numBombs = 3;
+
 	public void ScoreStructure()
 	{
 		int maxChain = 0;

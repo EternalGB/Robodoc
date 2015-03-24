@@ -11,13 +11,17 @@ public class Tier : ScriptableObject
 	public int pointsNeededToUnlock;
 	public TierProgress progress;
 
-
 	public bool Unlocked
 	{
 		get
 		{
 			return ChallengeProgressionManager.Instance.progress.rankPoints >= pointsNeededToUnlock;
 		}
+	}
+
+	void OnEnable()
+	{
+		hideFlags = HideFlags.None;
 	}
 	
 	public void SaveProgress()

@@ -15,6 +15,7 @@ public class ChallengeGUI : GameGUI
 
 	protected override void InitGame ()
 	{
+		/*
 		string machinePath;
 		if(!Util.TryLoadFromPlayerPrefs<string>("MachinePath", out machinePath))
 			machinePath = defaultMachinePath;
@@ -24,12 +25,13 @@ public class ChallengeGUI : GameGUI
 		string levelPath;
 		if(!Util.TryLoadFromPlayerPrefs<string>("LevelPath",out levelPath))
 			levelPath = defaultLevelPath;
+		*/
+		level = SelectedLevel.level;
 
+		GameObject ballMachine = (GameObject)Instantiate(level.ballMachinePrefab.gameObject);
+		goal = level.goal;
 
-		GameObject ballMachine = (GameObject)Instantiate(Resources.Load<GameObject>(machinePath));
-		goal = Resources.Load<Goal>(goalPath);
-
-		level = Resources.Load<Level>(levelPath);
+		//level = Resources.Load<Level>(levelPath);
 
 		bm = ballMachine.GetComponent<BallMachine>();
 		//bm.StartSpawning();

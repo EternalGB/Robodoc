@@ -8,7 +8,6 @@ public class PlayerBall : MonoBehaviour
 	ObjectPool ballPool;
 	public float speed, rotSpeed;
 	Vector3 mousePos;
-	public int numBombs = 3;
 	float bombForce = 1000;
 	
 
@@ -32,12 +31,19 @@ public class PlayerBall : MonoBehaviour
 	public Transform halo;
 	public float haloIncrement, haloDecrement;
 
+	public TouchPadController movStick;
+	public TouchPadController rotStick;
+
 	void Start()
 	{
 		ballPool = PoolManager.Instance.GetPoolByRepresentative(ballPrefab);
 		origMat = GetComponent<SpriteRenderer>().sharedMaterial;
 		matQueue = new List<Material>();
 		matQueue.Add(origMat);
+		if(movStick == null)
+			movStick = GameObject.FindGameObjectWithTag("MovementController").GetComponent<TouchPadController>();
+		if(rotStick == null)
+			rotStick = GameObject.FindGameObjectWithTag("RotationController").GetComponent<TouchPadController>();
 	}
 
 	void Update()
@@ -46,28 +52,7 @@ public class PlayerBall : MonoBehaviour
 		rigidbody2D.centerOfMass = Vector2.zero;
 
 		if(!FlagsHelper.IsSet<BallStatus>(status,BallStatus.FROZEN)) {
-			object contr;
-			if(!Settings.TryGetSetting(Settings.SettingName.MOVCONTROLS, out contr)) {
-				movControls = Settings.ControlType.MOUSE;
-				Debug.Log ("Couldn't load move controls");
-			} else {
-				movControls = (Settings.ControlType)contr;
-			}
-
-			if(movControls == Settings.ControlType.MOUSE) {
-				//move towards the mouse
-				
-				mousePos = Util.MouseToWorldPos(0);
-				if(Vector2.Distance(mousePos,transform.position) >= 2)
-					rigidbody2D.velocity = (mousePos - transform.position).normalized*speed;
-				else {
-					rigidbody2D.velocity = Vector2.zero;
-					transform.position = mousePos;
-				}
-			} else {
-				//use the keyboard
-				rigidbody2D.velocity = new Vector3(Input.GetAxis("Horizontal")*speed,Input.GetAxis("Vertical")*speed);
-			}
+			rigidbody2D.velocity = speed*movStick.GetDirection();
 		}
 
 
@@ -77,9 +62,8 @@ public class PlayerBall : MonoBehaviour
 
 		//spin left or right
 		if(!FlagsHelper.IsSet<BallStatus>(status,BallStatus.SHOCKED)) {
-			rotAngle = Mathf.Repeat(rotAngle + Input.GetAxisRaw("Spin")*rotSpeed*Time.deltaTime,360);
+			rotAngle = Mathf.Repeat(rotAngle - rotStick.GetDirection().x*rotSpeed*Time.deltaTime,360);
 			transform.rotation = Quaternion.AngleAxis(rotAngle,Vector3.forward);
-			//rigidbody2D.angularVelocity += new Vector3(0,0,rigidbody2D.velocity.x + rigidbody2D.velocity.y)*-0.1f;
 		}
 
 		//reduce the size of the halo
@@ -198,7 +182,7 @@ public class PlayerBall : MonoBehaviour
 
 	void FireBomb()
 	{
-		if(numBombs > 0) {
+		if(ScoreCalculator.Instance.numBombs > 0) {
 			SoundEffectManager.Instance.PlayClipOnce("Bomb",Vector3.zero,1,1);
 			GameObject[] balls = GameObject.FindGameObjectsWithTag("Ball");
 			foreach(GameObject ball in balls) {
@@ -206,7 +190,7 @@ public class PlayerBall : MonoBehaviour
 					ball.rigidbody2D.velocity += (Vector2)ball.transform.position.normalized*bombForce;
 				}
 			}
-			numBombs--;
+			ScoreCalculator.Instance.numBombs--;
 		}
 	}
 

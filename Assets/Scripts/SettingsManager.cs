@@ -8,7 +8,6 @@ public class SettingsManager : MonoBehaviour
 	public Slider masterVolume;
 	public Slider musicVolume;
 	public Slider sfxVolume;
-	public SingleButtonSelector controlScheme;
 
 	void Start()
 	{
@@ -19,16 +18,6 @@ public class SettingsManager : MonoBehaviour
 			GetMusicVolume();
 		if(sfxVolume != null)
 			GetSFXVolume();
-
-		if(controlScheme != null) {
-			object control;
-			if(!TryGetSetting(Settings.SettingName.MOVCONTROLS, out control)) {
-				Settings.ChangeSetting(Settings.SettingName.MOVCONTROLS, Settings.ControlType.MOUSE);
-				control = Settings.ControlType.MOUSE;
-			}
-			//Debug.Log ("Setting index to " + control);
-			controlScheme.SetIndex((int)control);
-		}
 	}
 
 	public void ChangeSetting(Settings.SettingName setting, object value)
@@ -88,7 +77,6 @@ public class SettingsManager : MonoBehaviour
 
 	public void SaveSettings()
 	{
-		ChangeSetting(Settings.SettingName.MOVCONTROLS, (Settings.ControlType)controlScheme.GetIndex());
 		Settings.Save();
 	}
 
