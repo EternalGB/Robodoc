@@ -11,6 +11,7 @@ public class ScoreTarget : ChallengeGoal
 	{
 		startTime = Time.timeSinceLevelLoad;
 		timeRemaining = 0;
+
 	}
 
 	protected override void UpdateTime ()

@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 using System.Collections.Generic;
 
 public class ChallengeGUI : GameGUI
@@ -39,6 +40,13 @@ public class ChallengeGUI : GameGUI
 			grd = GameObject.Find ("NextRankArea").GetComponent<GoalRankDisplay>();
 		if(grd != null)
 			grd.Init(level,goal as ChallengeGoal);
+
+		if(goal.GetType().IsAssignableFrom(typeof(ScoreTarget))) {
+			GameObject targetDisplay = GameObject.Find ("ScoreTarget");
+			if(targetDisplay)
+				targetDisplay.GetComponent<Text>().text = (goal as ScoreTarget).targetScore.ToString();
+		}
+
 
 		StartCountdown();
 	}

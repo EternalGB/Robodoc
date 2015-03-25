@@ -12,6 +12,8 @@ public class PlayAreaController : MonoBehaviour
 	void Start()
 	{
 		circleCollider = GetComponent<CircleCollider2D>();
+		if(radiusPoint == null)
+			radiusPoint = GameObject.Find ("Radius").GetComponent<RectTransform>();
 	}
 
 	void Update()
