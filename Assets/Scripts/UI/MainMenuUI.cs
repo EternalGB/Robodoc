@@ -35,10 +35,9 @@ public class MainMenuUI : MonoBehaviour
 
 	void Update()
 	{
-		/*
-		if(Input.anyKeyDown && UnityEngine.EventSystems.EventSystem.current.currentSelectedGameObject != null)
-			Debug.Log (UnityEngine.EventSystems.EventSystem.current.currentSelectedGameObject.name + " is now selected");
-			*/
+
+		if(Input.GetKeyDown(KeyCode.Escape))
+			Application.Quit();
 	}
 
 	public void LaunchArcade()

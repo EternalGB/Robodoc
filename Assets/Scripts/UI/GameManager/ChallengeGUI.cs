@@ -35,6 +35,8 @@ public class ChallengeGUI : GameGUI
 
 		bm = ballMachine.GetComponent<BallMachine>();
 		//bm.StartSpawning();
+		if(grd == null)
+			grd = GameObject.Find ("NextRankArea").GetComponent<GoalRankDisplay>();
 		if(grd != null)
 			grd.Init(level,goal as ChallengeGoal);
 
