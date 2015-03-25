@@ -144,17 +144,19 @@ public abstract class GameGUI : MonoBehaviour
 
 	public void TogglePause()
 	{
-		if(paused) {
-			//PlayerPrefs.SetInt("Controller",controlScheme.index);
-			PlayerPrefs.Save();
-			pauseUI.SetActive(false);
-			paused = false;
-			Time.timeScale = 1;
-		} else if(!paused) {
-			pauseUI.SetActive(true);
-			paused = true;
-			//controlScheme.ChangeText(PlayerPrefs.GetInt("Controller",1));
-			Time.timeScale = 0;
+		if(!doneGoalCompleted) {
+			if(paused) {
+				//PlayerPrefs.SetInt("Controller",controlScheme.index);
+				PlayerPrefs.Save();
+				pauseUI.SetActive(false);
+				paused = false;
+				Time.timeScale = 1;
+			} else if(!paused) {
+				pauseUI.SetActive(true);
+				paused = true;
+				//controlScheme.ChangeText(PlayerPrefs.GetInt("Controller",1));
+				Time.timeScale = 0;
+			}
 		}
 	}
 
