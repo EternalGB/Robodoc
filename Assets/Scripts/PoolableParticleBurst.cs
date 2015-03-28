@@ -13,13 +13,13 @@ public class PoolableParticleBurst : PoolableObject
 
 	public void Play()
 	{
-		this.particleSystem.Play();
+		this.GetComponent<ParticleSystem>().Play();
 		hasPlayed = true;
 	}
 
 	protected void Update()
 	{
-		if(hasPlayed && particleSystem.isStopped) {
+		if(hasPlayed && GetComponent<ParticleSystem>().isStopped) {
 			Destroy();
 		}
 	}

@@ -34,7 +34,7 @@ public class AttachedBall : PoolableObject
 	public void AddStatus(BallStatus newStatus, Material newMat)
 	{
 		if(newMat != null) {
-			renderer.sharedMaterial = newMat;
+			GetComponent<Renderer>().sharedMaterial = newMat;
 			matQueue.Add(newMat);
 		}
 		FlagsHelper.Set<BallStatus>(ref status, newStatus);
@@ -60,7 +60,7 @@ public class AttachedBall : PoolableObject
 	public void CheckStatus()
 	{
 		if(matQueue.Count > 0)
-			renderer.sharedMaterial = matQueue[matQueue.Count-1];
+			GetComponent<Renderer>().sharedMaterial = matQueue[matQueue.Count-1];
 	}
 
 	public void SetType(string typeName)
@@ -112,7 +112,7 @@ public class AttachedBall : PoolableObject
 				c.parent = ejected.transform;
 			AddStatusAllAttachedBalls(ejected.transform,BallStatus.EJECTED,ejected.GetComponent<SpriteRenderer>().sharedMaterial);
 			ejected.SetActive(true);
-			ejected.rigidbody2D.velocity = (pos - transform.parent.position).normalized*50;
+			ejected.GetComponent<Rigidbody2D>().velocity = (pos - transform.parent.position).normalized*50;
 			Destroy();
 		}
 		ScoreCalculator.Instance.SetScorePrediction();

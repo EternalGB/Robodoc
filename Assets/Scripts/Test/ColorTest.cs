@@ -22,7 +22,7 @@ public class ColorTest : MonoBehaviour
 	{
 		Palette palette = new Palette(quads.Count,0.99f,0.99f);
 		for(int i = 0; i < quads.Count; i++) {
-			quads[i].renderer.material.color = palette.GetColor(i);
+			quads[i].GetComponent<Renderer>().material.color = palette.GetColor(i);
 		}
 	}
 

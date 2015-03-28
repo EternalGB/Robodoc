@@ -96,7 +96,6 @@ public class BallMachine : MonoBehaviour
 
 	public GameObject SpawnBall(GameObject ballPrefab)
 	{
-
 		float radius = playArea.radius;
 		Vector3 pos = PointOutside(Vector2.zero,1.05f*radius,1.2f*radius);
 		//Debug.Log ("Spawning " + ballPrefab.name + " at " + pos);
@@ -104,8 +103,9 @@ public class BallMachine : MonoBehaviour
 		ball.transform.position = pos;
 		ball.SetActive(true);
 		//always send the ball towards the screen-ish
-		ball.rigidbody2D.velocity = GetInitVelocity(pos,minInitSpeed,maxInitSpeed);	
-		ball.rigidbody2D.angularVelocity = Mathf.Sign (ball.rigidbody2D.velocity.x)*ball.rigidbody2D.velocity.magnitude;
+		ball.GetComponent<Rigidbody2D>().velocity = GetInitVelocity(pos,minInitSpeed,maxInitSpeed);
+		//Debug.Log ("Set velocity to " + ball.GetComponent<Rigidbody2D> ().velocity);
+		ball.GetComponent<Rigidbody2D>().angularVelocity = Mathf.Sign (ball.GetComponent<Rigidbody2D>().velocity.x)*ball.GetComponent<Rigidbody2D>().velocity.magnitude;
 		//ball.rigidbody2D.velocity = Util.RandomVectorBetween(pos,screenTopLeft,screenBottomRight).normalized*Random.Range (minInitSpeed,maxInitSpeed);
 		if(BallSpawned != null)
 			BallSpawned(ball);

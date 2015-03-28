@@ -7,17 +7,17 @@ public class PoolableSoundPlayer : PoolableObject
 
 	public override void Destroy ()
 	{
-		audio.Stop();
-		audio.clip = null;
-		audio.loop = false;
-		audio.pitch = 1;
+		GetComponent<AudioSource>().Stop();
+		GetComponent<AudioSource>().clip = null;
+		GetComponent<AudioSource>().loop = false;
+		GetComponent<AudioSource>().pitch = 1;
 
 		base.Destroy ();
 	}
 
 	void Update()
 	{
-		if(!audio.isPlaying) {
+		if(!GetComponent<AudioSource>().isPlaying) {
 			Destroy();
 		}
 	}
