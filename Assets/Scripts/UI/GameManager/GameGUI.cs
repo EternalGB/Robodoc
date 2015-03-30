@@ -16,7 +16,6 @@ public abstract class GameGUI : MonoBehaviour
 	protected bool forceCompleted = false;
 
 	//public ArrowedSelector controlScheme;
-	public GameObject gameUI;
 	public GameObject pauseUI;
 	public GameObject endUI;
 
