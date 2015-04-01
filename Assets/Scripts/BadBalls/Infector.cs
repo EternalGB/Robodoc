@@ -8,7 +8,7 @@ public class Infector : BadBall
 	public float spreadInterval;
 
 
-	public override void ApplyEffect (Transform target)
+	protected override void ApplyEffect (Transform target)
 	{
 		AttachedBall ball;
 		if(ball = target.GetComponent<AttachedBall>()) {

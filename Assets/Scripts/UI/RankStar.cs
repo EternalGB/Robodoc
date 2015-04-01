@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Audio;
 using System.Collections;
 
 public class RankStar : MonoBehaviour
@@ -7,6 +8,7 @@ public class RankStar : MonoBehaviour
 
 	public bool animationFinished = false;
 	public AudioClip prefinishedSound, finishedSound;
+	public AudioMixerGroup mixerGroup;
 
 	public void SetFinished()
 	{
@@ -15,12 +17,12 @@ public class RankStar : MonoBehaviour
 
 	public void PlayEndSound()
 	{
-		SoundEffectManager.Instance.PlayClipOnce(finishedSound,Vector3.zero,1,1);
+		SoundEffectManager.Instance.PlayClipOnce(finishedSound,mixerGroup, Vector3.zero,1,1);
 	}
 
 	public void PlayPreSound()
 	{
-		SoundEffectManager.Instance.PlayClipOnce(prefinishedSound,Vector3.zero,1,1);
+		SoundEffectManager.Instance.PlayClipOnce(prefinishedSound, mixerGroup, Vector3.zero,1,1);
 	}
 
 }

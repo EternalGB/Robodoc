@@ -7,13 +7,7 @@ public class Settings
 
 	public enum SettingName
 	{
-		MASTERVOL,MUSICVOL,SFXVOL,MOVCONTROLS
-	}
-
-	public enum ControlType
-	{
-		KEYBOARD = 0,
-		MOUSE = 1
+		MASTERVOL,MUSICVOL,SFXVOL
 	}
 
 	public static Dictionary<SettingName,Type> settingTypes = new Dictionary<SettingName, Type>
@@ -21,7 +15,6 @@ public class Settings
 		{SettingName.MASTERVOL,typeof(float)},
 		{SettingName.MUSICVOL,typeof(float)},
 		{SettingName.SFXVOL,typeof(float)},
-		{SettingName.MOVCONTROLS,typeof(ControlType)}
 	};
 
 	public static Dictionary<SettingName,object> settingValues;
@@ -31,6 +24,25 @@ public class Settings
 		if(settingValues == null)
 			Load();
 		return settingValues.TryGetValue(setting,out value);
+	}
+
+	public static float GetFloat(SettingName setting, float defaultValue)
+	{
+		if(settingValues == null)
+			Load();
+		Type type;
+		if(settingTypes.TryGetValue(setting,out type)) {
+			if(type.Equals(typeof(float))) {
+				if(settingValues.ContainsKey(setting))
+					return (float)settingValues[setting];
+				else
+					return defaultValue;
+			} else {
+				return defaultValue;
+			}
+		} else {
+			return defaultValue;
+		}
 	}
 
 	public static void ChangeSetting(SettingName setting, object value)
@@ -44,6 +56,7 @@ public class Settings
 					settingValues[setting] = value;
 				else
 					settingValues.Add(setting,value);
+				//Debug.Log ("Setting " + Enum.GetName(typeof(SettingName),setting) + " to " + value.ToString());
 			} else {
 				throw new ArgumentException("Wrong type, type of " + Enum.GetName(typeof(SettingName),setting) + " is " + type.ToString());
 			}

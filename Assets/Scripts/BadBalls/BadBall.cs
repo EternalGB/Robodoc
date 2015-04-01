@@ -1,10 +1,12 @@
 using UnityEngine;
+using UnityEngine.Audio;
 using System.Collections;
 
 public abstract class BadBall : PoolableScreenObj
 {
 
 	public AudioClip[] onHitSounds;
+	public AudioMixerGroup mixerGroup;
 
 	public bool HasSound
 	{
@@ -16,7 +18,14 @@ public abstract class BadBall : PoolableScreenObj
 		get{ return Util.GetRandomElement(onHitSounds);}
 	}
 
-	public abstract void ApplyEffect(Transform target);
+	public void Hit(Transform target)
+	{
+		if(HasSound)
+			SoundEffectManager.Instance.PlayClipOnce(HitSound, mixerGroup, Vector3.zero,1,1);
+		ApplyEffect(target);
+	}
+
+	protected abstract void ApplyEffect(Transform target);
 
 }
 

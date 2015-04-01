@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Audio;
 using System.Collections;
 
 public class PoolableTrackingParticleBurst : PoolableParticleBurst
@@ -10,6 +11,7 @@ public class PoolableTrackingParticleBurst : PoolableParticleBurst
 	public float followSpeed;
 	public float shrinkDist, destroyDist;
 	public AudioClip particleKillSound;
+	public AudioMixerGroup mixerGroup;
 
 	public void SetTarget(Transform target)
 	{
@@ -37,7 +39,7 @@ public class PoolableTrackingParticleBurst : PoolableParticleBurst
 					if(dist <= destroyDist) {
 						particles[i].lifetime = -1;
 						if(particleKillSound != null) {
-							SoundEffectManager.Instance.PlayClipOnce(particleKillSound,Vector3.zero,1,Random.Range(0.9f,1.1f));
+							SoundEffectManager.Instance.PlayClipOnce(particleKillSound, mixerGroup, Vector3.zero,1,Random.Range(0.9f,1.1f));
 							target.SendMessage("GetParticle");
 						}
 					}

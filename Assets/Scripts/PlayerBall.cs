@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Audio;
 using System.Collections.Generic;
 
 public class PlayerBall : MonoBehaviour
@@ -26,14 +27,15 @@ public class PlayerBall : MonoBehaviour
 	Material origMat;
 	List<Material> matQueue;
 
-	Settings.ControlType movControls;
-
 	public Transform halo;
 	public float haloIncrement, haloDecrement;
 
 	public TouchPadController movStick;
 	public TouchPadController rotStick;
 	public TouchButton pulseButton;
+
+	public AudioClip bombClip;
+	public AudioMixerGroup bombMixer;
 
 	void Start()
 	{
@@ -99,8 +101,7 @@ public class PlayerBall : MonoBehaviour
 			if(col.gameObject.layer == LayerMask.NameToLayer("GoodBall")) {
 				PointBall pb;
 				if(pb = col.gameObject.GetComponent<PointBall>()) {
-					if(pb.HasSound)
-						SoundEffectManager.PlayClipOnce(pb.CollectSound,Vector3.zero,1);
+					pb.Hit(playerPart.transform);
 					Vector3 pos = pb.transform.position;
 					Quaternion rot = pb.transform.rotation;
 					Vector3 scale = pb.transform.localScale;
@@ -142,9 +143,8 @@ public class PlayerBall : MonoBehaviour
 			} else if(col.gameObject.layer == LayerMask.NameToLayer("BadBall")) {
 				//Debug.Log ("BadBall Collision");
 				BadBall bb = col.gameObject.GetComponent<BadBall>();
-				bb.ApplyEffect(cps[0].otherCollider.transform);
-				if(bb.HasSound) 
-					SoundEffectManager.PlayClipOnce(bb.HitSound,Vector3.zero,1);
+				bb.Hit(cps[0].otherCollider.transform);
+
 				
 				//recalculate score
 				ScoreCalculator.Instance.SetScorePrediction();
@@ -186,7 +186,7 @@ public class PlayerBall : MonoBehaviour
 	void FireBomb()
 	{
 		if(ScoreCalculator.Instance.numBombs > 0) {
-			SoundEffectManager.Instance.PlayClipOnce("Bomb",Vector3.zero,1,1);
+			SoundEffectManager.Instance.PlayClipOnce(bombClip, bombMixer, Vector3.zero,1,1);
 			GameObject[] balls = GameObject.FindGameObjectsWithTag("Ball");
 			foreach(GameObject ball in balls) {
 				if(ball.GetComponent<Rigidbody2D>()) {

@@ -6,7 +6,7 @@ public class Delinker : BadBall
 
 	public Material ejectedMat;
 
-	public override void ApplyEffect (Transform target)
+	protected override void ApplyEffect (Transform target)
 	{
 		if(!(target.gameObject.layer == LayerMask.NameToLayer("Player"))) {
 			//Debug.Log ("Delinker Ball Applying Effect - Target: " + target.GetInstanceID());

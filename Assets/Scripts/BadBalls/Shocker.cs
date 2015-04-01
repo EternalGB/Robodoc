@@ -7,7 +7,7 @@ public class Shocker : BadBall
 	public float shockDuration;
 	public Material shockMat;
 
-	public override void ApplyEffect (Transform target)
+	protected override void ApplyEffect (Transform target)
 	{
 		GameObject player = GameObject.Find("PlayerBall");
 		if(player) {

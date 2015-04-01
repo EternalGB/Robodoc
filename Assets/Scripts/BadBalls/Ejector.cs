@@ -6,7 +6,7 @@ public class Ejector : BadBall
 	public GameObject ejectedBallPrefab;
 	public float ejectionForce;
 
-	public override void ApplyEffect (Transform target)
+	protected override void ApplyEffect (Transform target)
 	{
 		if(target.gameObject.name == "PlayerBall") {
 			EjectChildren(target);
