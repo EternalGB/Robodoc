@@ -1,8 +1,19 @@
 fileFormatVersion: 2
 guid: 5395085f981b3d74888ff8de519462b6
+timeCreated: 1427873297
+licenseType: Free
 MonoImporter:
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - goal: {instanceID: 0}
+  - pauseUI: {instanceID: 0}
+  - endUI: {instanceID: 0}
+  - BGImage: {instanceID: 0}
+  - countdownCanvas: {instanceID: 0}
+  - startingCountdownText: {instanceID: 0}
+  - masterMixer: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 
+  assetBundleName: 
+  assetBundleVariant: 

@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Audio;
 using System.Collections.Generic;
 
 public abstract class GameGUI : MonoBehaviour
@@ -35,6 +36,8 @@ public abstract class GameGUI : MonoBehaviour
 	float actualCameraZoom;
 	float zoomLerpTimer;
 	float zoomLerpSpeed = 0.1f;
+
+	public AudioMixer masterMixer;
 
 	protected void Start()
 	{
@@ -150,11 +153,15 @@ public abstract class GameGUI : MonoBehaviour
 				pauseUI.SetActive(false);
 				paused = false;
 				Time.timeScale = 1;
+				masterMixer.FindSnapshot("Unpaused").TransitionTo(0.1f);
+
 			} else if(!paused) {
 				pauseUI.SetActive(true);
 				paused = true;
 				//controlScheme.ChangeText(PlayerPrefs.GetInt("Controller",1));
 				Time.timeScale = 0;
+				masterMixer.FindSnapshot("Paused").TransitionTo(0.1f);
+
 			}
 		}
 	}
