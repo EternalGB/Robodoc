@@ -37,7 +37,7 @@ public abstract class GameGUI : MonoBehaviour
 	float zoomLerpTimer;
 	float zoomLerpSpeed = 0.1f;
 
-	public AudioMixer masterMixer;
+	//public AudioMixer masterMixer;
 
 	protected void Start()
 	{
@@ -153,14 +153,14 @@ public abstract class GameGUI : MonoBehaviour
 				pauseUI.SetActive(false);
 				paused = false;
 				Time.timeScale = 1;
-				masterMixer.FindSnapshot("Unpaused").TransitionTo(0.1f);
+				//masterMixer.FindSnapshot("Unpaused").TransitionTo(0.1f);
 
 			} else if(!paused) {
 				pauseUI.SetActive(true);
 				paused = true;
 				//controlScheme.ChangeText(PlayerPrefs.GetInt("Controller",1));
 				Time.timeScale = 0;
-				masterMixer.FindSnapshot("Paused").TransitionTo(0.1f);
+				//masterMixer.FindSnapshot("Paused").TransitionTo(0.1f);
 
 			}
 		}
