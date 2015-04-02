@@ -26,7 +26,13 @@ public abstract class Unlockable : MonoBehaviour
 		}
 	}
 
-	public abstract bool ConditionMet();
+	public ArcadeStats.StatKeys stat;
+	public float unlockRequirement;
+	
+	public bool ConditionMet ()
+	{
+		return ArcadeStats.GetStat(stat) >= unlockRequirement;
+	}
 
 	public void Unlock()
 	{
