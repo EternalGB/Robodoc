@@ -203,11 +203,11 @@ public class PlayerBall : MonoBehaviour
 			GetComponent<Renderer>().sharedMaterial = frozenMat;
 			AddStatus(BallStatus.FROZEN,frozenMat);
 			GetComponent<Rigidbody2D>().velocity = Vector2.zero;
-			GetComponent<Rigidbody2D>().isKinematic = true;
+			//GetComponent<Rigidbody2D>().isKinematic = true;
 			AttachedBall.AddStatusAllAttachedBalls(transform,BallStatus.FROZEN,frozenMat);
 			StartCoroutine(Timers.Countdown(duration,() => {
 				RemoveStatus(BallStatus.FROZEN,frozenMat);
-				GetComponent<Rigidbody2D>().isKinematic = false;
+				//GetComponent<Rigidbody2D>().isKinematic = false;
 			}));
 		}
 	}
