@@ -40,7 +40,10 @@ public class Level : ScriptableObject
 	public void ResetProgress()
 	{
 		progress.unlocked = false;
-		progress.score = 0;
+		if(goal.GetType().Equals(typeof(ScoreTarget)))
+		   progress.score = float.MaxValue;
+		else
+			progress.score = 0;
 		progress.rank = 0;
 	}
 
