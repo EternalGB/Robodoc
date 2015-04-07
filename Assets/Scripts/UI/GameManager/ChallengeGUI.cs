@@ -13,6 +13,7 @@ public class ChallengeGUI : GameGUI
 	Level level;
 	
 	public GoalRankDisplay grd;
+	public ChallengeLevelMusicSelector musicSelector;
 
 	protected override void InitGame ()
 	{
@@ -47,7 +48,9 @@ public class ChallengeGUI : GameGUI
 				targetDisplay.GetComponent<Text>().text = (goal as ScoreTarget).targetScore.ToString();
 		}
 
-
+		if(musicSelector == null)
+			musicSelector = GameObject.FindGameObjectWithTag("BGMusic").GetComponent<ChallengeLevelMusicSelector>();
+		musicSelector.SelectMusic(goal);
 
 	}
 
