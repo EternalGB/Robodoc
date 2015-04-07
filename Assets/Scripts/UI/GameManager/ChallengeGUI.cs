@@ -48,7 +48,7 @@ public class ChallengeGUI : GameGUI
 		}
 
 
-		StartCountdown();
+
 	}
 
 

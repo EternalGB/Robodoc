@@ -16,7 +16,7 @@ public class TutorialGUI : GameGUI
 		tutorialManager.TutorialFinished += TutorialEnd;
 		goal.UpdateDisplayTime();
 
-		StartCountdown();
+
 	}
 
 
