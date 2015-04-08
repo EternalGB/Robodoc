@@ -9,20 +9,22 @@ public abstract class Unlockable : MonoBehaviour
 	public string heading;
 	public string unlockableName;
 
+
+
 	public bool Unlocked
 	{
 		get
 		{
 			int unlocked = 0;
-			Util.TryLoadFromPlayerPrefs<int>(unlockableName,out unlocked);
+			Util.TryLoadFromPlayerPrefs<int>(name,out unlocked);
 			return unlocked == 1;
 		}
 		private set
 		{
 			if(value)
-				Util.SaveToPlayerPrefs<int>(unlockableName,1);
+				Util.SaveToPlayerPrefs<int>(name,1);
 			else
-				Util.SaveToPlayerPrefs<int>(unlockableName,0);
+				Util.SaveToPlayerPrefs<int>(name,0);
 		}
 	}
 
@@ -44,7 +46,7 @@ public abstract class Unlockable : MonoBehaviour
 
 	public void Reset()
 	{
-		PlayerPrefs.DeleteKey(unlockableName);
+		PlayerPrefs.DeleteKey(name);
 	}
 
 }

@@ -12,21 +12,13 @@ public class ArcadeManager : MonoBehaviour
 	public List<GameObject> badBalls;
 	public int initBadBalls = 2;
 
-	public ProbabilityTable modifications;
-
-
-
-	float scoreTotal;
-	public float initMilestone;
-	float milestone;
-	int milestoneIndex = 0;
-	public float milestoneIncreaseRate;
-
+	public GameObject clotPrefab;
+	float  clotSpawnInterval;
+	int tryLimit = 10;
 
 
 	void Awake()
 	{
-		modifications.Clear();
 		progression.ProcessUnlocked();
 		while(goodBallPrefabs.Count > 0) {
 			AddColorBall();
@@ -34,38 +26,17 @@ public class ArcadeManager : MonoBehaviour
 		for(int i = 0; i < initBadBalls; i++) {
 			AddBadBall();
 		}
-	}
 
-	void Start()
-	{
-		ScoreCalculator.PlayerScored += UpdateDifficulty;
-		milestone = GenMileStone(initMilestone,milestoneIncreaseRate,milestoneIndex);
-		milestoneIndex++;
+		InvokeRepeating("SpawnClot", clotSpawnInterval, clotSpawnInterval);
 	}
-
-	void UpdateDifficulty(float scoreIncrease)
-	{
-		scoreTotal += scoreIncrease;
-		if(scoreTotal >= milestone) {
-			if(modifications != null && modifications.Size > 0)
-				((LevelModifier)modifications.GetRandom()).DoModification();
-			if(badBalls.Count > 0)
-				AddBadBall();
-			milestone = GenMileStone(initMilestone,milestoneIncreaseRate,milestoneIndex);
-			milestoneIndex++;
-		}
-	}
-
-	float GenMileStone(float initMilestone, float incrSpeed, int index)
-	{
-		return initMilestone*Mathf.Exp(incrSpeed*index);
-	}
-
+	
 	void AddBadBall()
 	{
-		int badBallIndex = Random.Range(0,badBalls.Count);
-		bm.AddBadBall(badBalls[badBallIndex]);
-		badBalls.RemoveAt(badBallIndex);
+		if(badBalls.Count > 0) {
+			int badBallIndex = Random.Range(0,badBalls.Count);
+			bm.AddBadBall(badBalls[badBallIndex]);
+			badBalls.RemoveAt(badBallIndex);
+		}
 	}
 
 	void AddColorBall()
@@ -75,9 +46,26 @@ public class ArcadeManager : MonoBehaviour
 		goodBallPrefabs.RemoveAt(ballIndex);
 	}
 
-	void OnDisable()
+	public void SetClotSpawnInterval(float rate)
 	{
-		ScoreCalculator.PlayerScored -= UpdateDifficulty;
+		clotSpawnInterval = rate;
 	}
+
+	void SpawnClot()
+	{
+		GameObject clot = (GameObject)GameObject.Instantiate(clotPrefab);
+		Vector3 pos;
+		float radius = 35;
+		int tries = 0;
+		do {
+			pos = Util.RandomPointInside(GameObject.Find ("PlayArea").GetComponent<Collider2D>());
+			tries++;
+			if(tries >= tryLimit)
+				return;
+		} while(Util.ExistsWithinSphere(pos,radius,"Clot"));
+		clot.transform.position = pos;
+		clot.transform.rotation = Util.RandomRotation(Vector3.forward,0,360);
+	}
+	
 }
 

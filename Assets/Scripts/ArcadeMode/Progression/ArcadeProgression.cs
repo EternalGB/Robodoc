@@ -32,6 +32,7 @@ public class ArcadeProgression : MonoBehaviour
 		}
 		foreach(Unlockable unlock in unlockables) {
 			if(unlock.Unlocked) {
+				Debug.Log ("Unlocking " + unlock.name);
 				unlock.UnlockEffect();
 			}
 		}
