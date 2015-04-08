@@ -6,23 +6,23 @@ public class AudioPauseController : MonoBehaviour
 {
 
 	GameGUI manager;
-	AudioSource audio;
+	AudioSource audioSource;
 
 	void Start ()
 	{
 		manager = GameObject.FindGameObjectWithTag("GameGUI").GetComponent<GameGUI>();
 		manager.PauseToggled += PauseHandler;
 
-		audio = GetComponent<AudioSource>();
+		audioSource = GetComponent<AudioSource>();
 
 	}
 
 	void PauseHandler(bool paused)
 	{
 		if(paused) {
-			audio.Pause();
+			audioSource.Pause();
 		} else {
-			audio.UnPause();
+			audioSource.UnPause();
 		}
 	}
 
