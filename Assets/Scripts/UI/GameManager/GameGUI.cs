@@ -35,6 +35,13 @@ public abstract class GameGUI : MonoBehaviour
 
 	//public AudioMixer masterMixer;
 
+	public delegate void GameEndEvent();
+	public event GameEndEvent GameEnd;
+
+	public delegate void PauseToggleEvent(bool paused);
+	public event PauseToggleEvent PauseToggled;
+	
+
 	protected void Start()
 	{
 
@@ -48,6 +55,8 @@ public abstract class GameGUI : MonoBehaviour
 		gameStarted = false;
 
 		InitGame();
+
+		GameEnd += DoGameEnd;
 	}
 
 	protected abstract void InitGame();
@@ -152,6 +161,7 @@ public abstract class GameGUI : MonoBehaviour
 				//masterMixer.FindSnapshot("Paused").TransitionTo(0.1f);
 
 			}
+			PauseToggled(paused);
 		}
 	}
 
@@ -161,7 +171,7 @@ public abstract class GameGUI : MonoBehaviour
 	{
 		if(!doneGoalCompleted) {
 			endUI.SetActive(true);
-			DoGameEnd();
+			GameEnd();
 			paused = true;
 			doneGoalCompleted = true;
 		}
