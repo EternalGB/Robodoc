@@ -13,6 +13,8 @@ public class BallMachine : MonoBehaviour
 	public float minInitSpeed,maxInitSpeed;
 	public AnimationCurve goodRateCurve,bonusRateCurve,badRateCurve;
 	float goodPerSec,bonusPerSec,badPerSec;
+	float goodSpawnScaler = 1, bonusSpawnScaler = 1, badSpawnScaler = 1;
+	float speedScaler = 1;
 
 	bool spawning = false;
 
@@ -103,7 +105,7 @@ public class BallMachine : MonoBehaviour
 		ball.transform.position = pos;
 		ball.SetActive(true);
 		//always send the ball towards the screen-ish
-		ball.GetComponent<Rigidbody2D>().velocity = GetInitVelocity(pos,minInitSpeed,maxInitSpeed);
+		ball.GetComponent<Rigidbody2D>().velocity = speedScaler*GetInitVelocity(pos,minInitSpeed,maxInitSpeed);
 		//Debug.Log ("Set velocity to " + ball.GetComponent<Rigidbody2D> ().velocity);
 		ball.GetComponent<Rigidbody2D>().angularVelocity = Mathf.Sign (ball.GetComponent<Rigidbody2D>().velocity.x)*ball.GetComponent<Rigidbody2D>().velocity.magnitude;
 		//ball.rigidbody2D.velocity = Util.RandomVectorBetween(pos,screenTopLeft,screenBottomRight).normalized*Random.Range (minInitSpeed,maxInitSpeed);
@@ -117,11 +119,28 @@ public class BallMachine : MonoBehaviour
 	void UpdateDifficulty(float scoreIncrease)
 	{
 
-		goodPerSec = goodRateCurve.Evaluate(ScoreCalculator.Instance.score);
-		bonusPerSec = bonusRateCurve.Evaluate(ScoreCalculator.Instance.score);
-		badPerSec = badRateCurve.Evaluate(ScoreCalculator.Instance.score);
+		goodPerSec = goodSpawnScaler*goodRateCurve.Evaluate(ScoreCalculator.Instance.score);
+		bonusPerSec = bonusSpawnScaler*bonusRateCurve.Evaluate(ScoreCalculator.Instance.score);
+		badPerSec = badSpawnScaler*badRateCurve.Evaluate(ScoreCalculator.Instance.score);
 		//Debug.Log ("Updating difficulty " + goodPerSec + " " + bonusPerSec + " " + badPerSec);
 	}
+
+	public void IncreaseGoodRateScaler(float scaler)
+	{
+		goodSpawnScaler += scaler;
+		bonusSpawnScaler += scaler;
+	}
+
+	public void IncreaseBadRateScaler(float scaler)
+	{
+		badSpawnScaler += scaler;
+	}
+
+	public void IncreaseSpeedScaler(float scaler)
+	{
+		speedScaler += scaler;
+	}
+
 
 	Vector2 GetInitVelocity(Vector2 spawnPos, float minSpeed, float maxSpeed)
 	{

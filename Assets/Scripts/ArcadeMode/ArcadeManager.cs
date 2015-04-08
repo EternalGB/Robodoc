@@ -15,7 +15,7 @@ public class ArcadeManager : MonoBehaviour
 	public GameObject clotPrefab;
 	float  clotSpawnInterval = 0;
 	int tryLimit = 10;
-
+	
 
 	void Awake()
 	{
