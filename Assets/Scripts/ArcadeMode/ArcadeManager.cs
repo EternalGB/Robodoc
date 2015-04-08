@@ -13,7 +13,7 @@ public class ArcadeManager : MonoBehaviour
 	public int initBadBalls = 2;
 
 	public GameObject clotPrefab;
-	float  clotSpawnInterval;
+	float  clotSpawnInterval = 0;
 	int tryLimit = 10;
 
 
@@ -27,7 +27,8 @@ public class ArcadeManager : MonoBehaviour
 			AddBadBall();
 		}
 
-		InvokeRepeating("SpawnClot", clotSpawnInterval, clotSpawnInterval);
+		if(clotSpawnInterval > 0)
+			InvokeRepeating("SpawnClot", clotSpawnInterval, clotSpawnInterval);
 	}
 	
 	void AddBadBall()
