@@ -152,7 +152,7 @@ public abstract class GameGUI : MonoBehaviour
 				paused = false;
 				Time.timeScale = 1;
 				//masterMixer.FindSnapshot("Unpaused").TransitionTo(0.1f);
-
+				GoToMainMenu();
 			} else if(!paused) {
 				pauseUI.SetActive(true);
 				paused = true;
