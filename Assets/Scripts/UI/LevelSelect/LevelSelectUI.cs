@@ -55,7 +55,7 @@ public class LevelSelectUI : MonoBehaviour
 				if(tier.progress.unlocked) {
 					tierGO.GetComponentInChildren<Text>().text = tier.displayName;
 				} else {
-					tierGO.GetComponentInChildren<Text>().text = "Unlocked at " + tier.pointsNeededToUnlock + " RP";
+					tierGO.GetComponentInChildren<Text>().text = tier.pointsNeededToUnlock + " RP";
 				}
 				//add tier button to tierGroup
 				tierGO.GetComponent<RectTransform>().SetParent(tierGroup,false);

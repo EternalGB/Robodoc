@@ -7,6 +7,7 @@ public class RankDisplay : MonoBehaviour
 {
 
 	public List<Image> stars;
+	public Color locked, unlocked;
 
 	public virtual void SetRank(int rank)
 	{
@@ -14,9 +15,9 @@ public class RankDisplay : MonoBehaviour
 			for(int i = 0; i < stars.Count; i++) {
 				Color currColor = stars[i].color;
 				if(i < rank)
-					currColor.a = 1;
+					currColor = unlocked;
 				else
-					currColor.a = 0;
+					currColor = locked;
 				stars[i].color = currColor;
 			}
 		}

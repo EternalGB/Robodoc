@@ -85,11 +85,11 @@ public abstract class GameGUI : MonoBehaviour
 			actualCameraZoom = Mathf.Lerp (actualCameraZoom,cameraZoom,zoomLerpTimer);
 			zoomLerpTimer = Mathf.Clamp (zoomLerpTimer + zoomLerpSpeed*Time.deltaTime,0,1f);
 			Camera.main.transform.position = new Vector3(0,0,initCameraPos - actualCameraZoom);
-			
+
 			if(Input.GetButtonDown("Pause")) {
 				TogglePause();
 			}
-			
+
 			/*
 		if(Paused()) {
 			Time.timeScale = 0;
@@ -152,7 +152,6 @@ public abstract class GameGUI : MonoBehaviour
 				paused = false;
 				Time.timeScale = 1;
 				//masterMixer.FindSnapshot("Unpaused").TransitionTo(0.1f);
-				GoToMainMenu();
 			} else if(!paused) {
 				pauseUI.SetActive(true);
 				paused = true;
