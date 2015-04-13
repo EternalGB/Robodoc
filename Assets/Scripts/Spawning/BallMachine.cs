@@ -104,8 +104,14 @@ public class BallMachine : MonoBehaviour
 		GameObject ball = PoolManager.Instance.GetPoolByRepresentative(ballPrefab).GetPooled();
 		ball.transform.position = pos;
 		ball.SetActive(true);
+		Vector2 initVel;
+		if(ball.layer == LayerMask.NameToLayer("BadBall")) {
+			initVel = (GameObject.Find("PlayerBall").transform.position - ball.transform.position).normalized*Random.Range(minInitSpeed,maxInitSpeed);
+		} else {
+			initVel = GetInitVelocity(pos,minInitSpeed,maxInitSpeed);
+		}
 		//always send the ball towards the screen-ish
-		ball.GetComponent<Rigidbody2D>().velocity = speedScaler*GetInitVelocity(pos,minInitSpeed,maxInitSpeed);
+		ball.GetComponent<Rigidbody2D>().velocity = speedScaler*initVel;
 		//Debug.Log ("Set velocity to " + ball.GetComponent<Rigidbody2D> ().velocity);
 		ball.GetComponent<Rigidbody2D>().angularVelocity = Mathf.Sign (ball.GetComponent<Rigidbody2D>().velocity.x)*ball.GetComponent<Rigidbody2D>().velocity.magnitude;
 		//ball.rigidbody2D.velocity = Util.RandomVectorBetween(pos,screenTopLeft,screenBottomRight).normalized*Random.Range (minInitSpeed,maxInitSpeed);
