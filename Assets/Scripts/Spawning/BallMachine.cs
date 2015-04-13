@@ -105,7 +105,7 @@ public class BallMachine : MonoBehaviour
 		ball.transform.position = pos;
 		ball.SetActive(true);
 		Vector2 initVel;
-		if(ball.layer == LayerMask.NameToLayer("BadBall")) {
+		if(ball.layer == LayerMask.NameToLayer("BadBall") && GameObject.Find ("PlayerBall") != null) {
 			initVel = (GameObject.Find("PlayerBall").transform.position - ball.transform.position).normalized*Random.Range(minInitSpeed,maxInitSpeed);
 		} else {
 			initVel = GetInitVelocity(pos,minInitSpeed,maxInitSpeed);
