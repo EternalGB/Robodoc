@@ -18,11 +18,13 @@ public abstract class GameGUI : MonoBehaviour
 
 	//public ArrowedSelector controlScheme;
 	public GameObject pauseUI;
+	public GameObject settingsUI;
 	public GameObject endUI;
 
 	public BGController BGImage;
 	public float displayTime;
 	protected bool paused = false;
+	bool settingsOpen = false;
 
 	bool gameStarted;
 
@@ -53,6 +55,9 @@ public abstract class GameGUI : MonoBehaviour
 
 		Time.timeScale = 0;
 		gameStarted = false;
+
+		if(settingsUI == null)
+			settingsUI = GameObject.FindGameObjectWithTag("SettingsMenu");
 
 		InitGame();
 
@@ -86,8 +91,16 @@ public abstract class GameGUI : MonoBehaviour
 			zoomLerpTimer = Mathf.Clamp (zoomLerpTimer + zoomLerpSpeed*Time.deltaTime,0,1f);
 			Camera.main.transform.position = new Vector3(0,0,initCameraPos - actualCameraZoom);
 
-			if(Input.GetButtonDown("Pause")) {
-				TogglePause();
+			if(Input.GetButtonDown("Cancel")) {
+				if(settingsOpen) {
+					Debug.Log ("Closing settings menu");
+					HideSettings();
+				} else if(!paused)
+					TogglePause();
+				else {
+					Debug.Log ("Returning to main menu");
+					GoToMainMenu();
+				}
 			}
 
 			/*
@@ -214,5 +227,20 @@ public abstract class GameGUI : MonoBehaviour
 		forceCompleted = true;
 	}
 
+	public void ShowSettings()
+	{
+		pauseUI.SetActive(false);
+		settingsUI.SetActive(true);
+		settingsOpen = true;
+	}
+
+	public void HideSettings()
+	{
+		Settings.Save();
+		settingsUI.SetActive(false);
+		pauseUI.SetActive(true);
+		settingsOpen = false;
+	}
+	
 }
 

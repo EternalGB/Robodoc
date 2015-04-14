@@ -36,8 +36,12 @@ public class MainMenuUI : MonoBehaviour
 	void Update()
 	{
 
-		if(Input.GetKeyDown(KeyCode.Escape))
-			Application.Quit();
+		if(Input.GetButtonDown("Cancel")) {
+			if(currentScreen.name == "MainMenu")
+				Application.Quit();
+			else
+				ChangeUIScreen("MainMenu");
+		}
 	}
 
 	public void LaunchArcade()

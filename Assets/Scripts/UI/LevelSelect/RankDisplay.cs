@@ -7,7 +7,13 @@ public class RankDisplay : MonoBehaviour
 {
 
 	public List<Image> stars;
-	public Color locked, unlocked;
+	Color locked, unlocked;
+
+	void OnEnable()
+	{
+		locked = Color.grey;
+		unlocked = Color.white;
+	}
 
 	public virtual void SetRank(int rank)
 	{
