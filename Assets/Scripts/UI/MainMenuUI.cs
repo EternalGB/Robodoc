@@ -29,7 +29,7 @@ public class MainMenuUI : MonoBehaviour
 		}
 		currentScreen = mainMenu;
 
-		//ChangeUIScreen(PlayerPrefs.GetString("MenuScreen","MainMenu"));
+		ChangeUIScreen(PlayerPrefs.GetString("MenuScreen","MainMenu"));
 		PlayerPrefs.DeleteKey("MenuScreen");
 	}
 
