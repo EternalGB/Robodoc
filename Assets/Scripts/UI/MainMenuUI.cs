@@ -48,8 +48,7 @@ public class MainMenuUI : MonoBehaviour
 	{
 
 		if(PlayerPrefs.GetInt("TutorialCompleted",0) == 0) {
-			mainMenu.SetActive(false);
-			tutorialConfirmationWindow.SetActive(true);
+			ChangeUIScreen("TutorialConfirmation");
 		} else {
 			Application.LoadLevel("Arcade");
 			PlayerPrefs.SetInt ("LevelIndex",-1);
@@ -60,8 +59,8 @@ public class MainMenuUI : MonoBehaviour
 
 	public void LaunchTutorial()
 	{
-		Application.LoadLevel("Tutorial");
 		PlayerPrefs.Save();
+		Application.LoadLevel("Tutorial");
 	}
 
 	public void ChangeUIScreen(string name)
