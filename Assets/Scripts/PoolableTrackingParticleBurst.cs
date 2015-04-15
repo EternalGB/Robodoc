@@ -12,6 +12,8 @@ public class PoolableTrackingParticleBurst : PoolableParticleBurst
 	public float shrinkDist, destroyDist;
 	public AudioClip particleKillSound;
 	public AudioMixerGroup mixerGroup;
+	float minPitch = 0.75f;
+	float maxPitch = 1.25f;
 
 	public void SetTarget(Transform target)
 	{
@@ -39,7 +41,8 @@ public class PoolableTrackingParticleBurst : PoolableParticleBurst
 					if(dist <= destroyDist) {
 						particles[i].lifetime = -1;
 						if(particleKillSound != null) {
-							SoundEffectManager.Instance.PlayClipOnce(particleKillSound, mixerGroup, Vector3.zero,1,Random.Range(0.9f,1.1f));
+							float pitchPercent = target.FindChild("Halo").transform.localScale.x;
+							SoundEffectManager.Instance.PlayClipOnce(particleKillSound, mixerGroup, Vector3.zero,1,Mathf.Lerp(minPitch,maxPitch,pitchPercent));
 							target.SendMessage("GetParticle");
 						}
 					}
@@ -47,6 +50,8 @@ public class PoolableTrackingParticleBurst : PoolableParticleBurst
 			}
 			GetComponent<ParticleSystem>().SetParticles(particles,numAlive);
 		}
+
+
 	}
 
 }
