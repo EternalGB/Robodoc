@@ -40,11 +40,9 @@ public class BallMachine : MonoBehaviour
 
 	public void StartSpawning()
 	{
-		//Debug.Log(name + " starting spawning");
 		Invoke("StartGoodSpawning",Random.Range(0,1/goodPerSec));
 		Invoke("StartBadSpawning", Random.Range(0,1/badPerSec));
 		Invoke("StartBonusSpawning", Random.Range(0,1/bonusPerSec));
-
 
 		spawning = true;
 	}
