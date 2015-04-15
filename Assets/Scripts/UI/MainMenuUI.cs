@@ -11,6 +11,7 @@ public class MainMenuUI : MonoBehaviour
 	Dictionary<string,GameObject> menuScreenDict;
 
 	public GameObject tutorialButton;
+	public GameObject challengeButton;
 
 	//public ArrowedSelector controlScheme;
 	public Text arcadeScoreDisplay;
@@ -22,6 +23,7 @@ public class MainMenuUI : MonoBehaviour
 		arcadeScoreDisplay.text = ArcadeStats.HighScore.ToString();
 		//controlScheme.ChangeText(PlayerPrefs.GetInt("Controller",1));
 		tutorialButton.SetActive(PlayerPrefs.GetInt("TutorialCompleted",0) != 0);
+		challengeButton.GetComponent<Button>().interactable = (PlayerPrefs.GetInt ("TutorialCompleted",0) != 0);
 
 		menuScreenDict = new Dictionary<string,GameObject>();
 		foreach(GameObject screen in menuScreens) {
