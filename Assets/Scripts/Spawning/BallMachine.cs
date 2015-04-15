@@ -41,10 +41,27 @@ public class BallMachine : MonoBehaviour
 	public void StartSpawning()
 	{
 		//Debug.Log(name + " starting spawning");
-		StartCoroutine(Timers.Countdown<List<GameObject>,float>(1/goodPerSec,Spawn,colourBalls,1/goodPerSec));
-		StartCoroutine(Timers.Countdown<List<GameObject>,float>(1/badPerSec,Spawn,badBalls,1/badPerSec));
-		StartCoroutine(Timers.Countdown<List<GameObject>,float>(1/bonusPerSec,Spawn,bonusBalls,1/bonusPerSec));
+		Invoke("StartGoodSpawning",Random.Range(0,1/goodPerSec));
+		Invoke("StartBadSpawning", Random.Range(0,1/badPerSec));
+		Invoke("StartBonusSpawning", Random.Range(0,1/bonusPerSec));
+
+
 		spawning = true;
+	}
+
+	void StartGoodSpawning()
+	{
+		StartCoroutine(Timers.Countdown<List<GameObject>,float>(1/goodPerSec,Spawn,colourBalls,1/goodPerSec));
+	}
+
+	void StartBadSpawning()
+	{
+		StartCoroutine(Timers.Countdown<List<GameObject>,float>(1/badPerSec,Spawn,badBalls,1/badPerSec));
+	}
+
+	void StartBonusSpawning()
+	{
+		StartCoroutine(Timers.Countdown<List<GameObject>,float>(1/bonusPerSec,Spawn,bonusBalls,1/bonusPerSec));
 	}
 
 	public void StopSpawning()
