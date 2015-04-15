@@ -11,7 +11,7 @@ public class BallMachine : MonoBehaviour
 	public List<GameObject> bonusBalls;
 	public List<GameObject> badBalls;
 	public float minInitSpeed,maxInitSpeed;
-	public AnimationCurve goodRateCurve,bonusRateCurve,badRateCurve;
+	public Vector2 goodRateMinMax, bonusRateMinMax, badRateMinMax, scoreMinMax;
 	float goodPerSec,bonusPerSec,badPerSec;
 	float goodSpawnScaler = 1, bonusSpawnScaler = 1, badSpawnScaler = 1;
 	float speedScaler = 1;
@@ -142,9 +142,9 @@ public class BallMachine : MonoBehaviour
 	void UpdateDifficulty(float scoreIncrease)
 	{
 
-		goodPerSec = goodSpawnScaler*goodRateCurve.Evaluate(ScoreCalculator.Instance.score);
-		bonusPerSec = bonusSpawnScaler*bonusRateCurve.Evaluate(ScoreCalculator.Instance.score);
-		badPerSec = badSpawnScaler*badRateCurve.Evaluate(ScoreCalculator.Instance.score);
+		goodPerSec = goodSpawnScaler*Mathf.Lerp(goodRateMinMax.x, goodRateMinMax.y, ScoreCalculator.Instance.score/(scoreMinMax.y - scoreMinMax.x));
+		bonusPerSec = bonusSpawnScaler*Mathf.Lerp(bonusRateMinMax.x, bonusRateMinMax.y, ScoreCalculator.Instance.score/(scoreMinMax.y - scoreMinMax.x));
+		badPerSec = badSpawnScaler*Mathf.Lerp(badRateMinMax.x, badRateMinMax.y, ScoreCalculator.Instance.score/(scoreMinMax.y - scoreMinMax.x));
 		//Debug.Log ("Updating difficulty " + goodPerSec + " " + bonusPerSec + " " + badPerSec);
 	}
 
