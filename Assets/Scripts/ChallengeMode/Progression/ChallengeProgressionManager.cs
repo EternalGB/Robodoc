@@ -20,7 +20,12 @@ public class ChallengeProgressionManager : MonoBehaviour
 	void Start()
 	{
 		LoadProgress();
-		CheckProgress();
+		if(Debug.isDebugBuild) {
+			//unlock everything
+			Debug.Log ("Unlocking everything");
+			UnlockAll();
+		} else
+			CheckProgress();
 		SaveProgress();
 	}
 
@@ -76,6 +81,19 @@ public class ChallengeProgressionManager : MonoBehaviour
 	{
 		progress.rankPoints = 0;
 		ltl.ResetProgress();
+	}
+
+	public void UnlockAll()
+	{
+		foreach(Tier tier in ltl.tiers) {
+			tier.progress.unlocked = true;
+			Debug.Log ("Unlocking " + tier.displayName);
+			foreach(Level level in tier.levels) {
+				level.progress.unlocked = true;
+				Debug.Log ("Unlocking " + level.displayName);
+			}
+		}
+		ltl.SaveProgress();
 	}
 
 	[System.Serializable]

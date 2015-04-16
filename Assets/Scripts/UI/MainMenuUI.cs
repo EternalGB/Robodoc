@@ -33,6 +33,8 @@ public class MainMenuUI : MonoBehaviour
 
 		ChangeUIScreen(PlayerPrefs.GetString("MenuScreen","MainMenu"));
 		PlayerPrefs.DeleteKey("MenuScreen");
+
+
 	}
 
 	void Update()
