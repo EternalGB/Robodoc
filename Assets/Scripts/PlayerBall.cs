@@ -190,7 +190,7 @@ public class PlayerBall : MonoBehaviour
 			GameObject[] balls = GameObject.FindGameObjectsWithTag("Ball");
 			foreach(GameObject ball in balls) {
 				if(ball.GetComponent<Rigidbody2D>()) {
-					ball.GetComponent<Rigidbody2D>().velocity += (Vector2)ball.transform.position.normalized*bombForce;
+					ball.GetComponent<Rigidbody2D>().velocity += (Vector2)(ball.transform.position - transform.position).normalized*bombForce;
 				}
 			}
 			ScoreCalculator.Instance.numBombs--;
