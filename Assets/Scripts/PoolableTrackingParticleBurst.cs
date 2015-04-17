@@ -12,8 +12,8 @@ public class PoolableTrackingParticleBurst : PoolableParticleBurst
 	public float shrinkDist, destroyDist;
 	public AudioClip particleKillSound;
 	public AudioMixerGroup mixerGroup;
-	float minPitch = 0.75f;
-	float maxPitch = 1.25f;
+	float minPitch = 0.6f;
+	float maxPitch = 1.33f;
 
 	public void SetTarget(Transform target)
 	{
