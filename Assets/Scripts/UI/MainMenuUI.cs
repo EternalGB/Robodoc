@@ -22,8 +22,14 @@ public class MainMenuUI : MonoBehaviour
 	{
 		arcadeScoreDisplay.text = ArcadeStats.HighScore.ToString();
 		//controlScheme.ChangeText(PlayerPrefs.GetInt("Controller",1));
-		tutorialButton.SetActive(PlayerPrefs.GetInt("TutorialCompleted",0) != 0);
-		challengeButton.GetComponent<Button>().interactable = (PlayerPrefs.GetInt ("TutorialCompleted",0) != 0);
+		if(Debug.isDebugBuild) {
+			tutorialButton.SetActive(true);
+			challengeButton.GetComponent<Button>().interactable = true;
+		} else {
+			tutorialButton.SetActive(PlayerPrefs.GetInt("TutorialCompleted",0) != 0);
+			challengeButton.GetComponent<Button>().interactable = (PlayerPrefs.GetInt ("TutorialCompleted",0) != 0);
+		}
+
 
 		menuScreenDict = new Dictionary<string,GameObject>();
 		foreach(GameObject screen in menuScreens) {
