@@ -16,6 +16,9 @@ public class BallMachine : MonoBehaviour
 	float goodSpawnScaler = 1, bonusSpawnScaler = 1, badSpawnScaler = 1;
 	float speedScaler = 1;
 
+	float spawnRateIndex, spawnRateIndexTemp;
+	public float spawnIndexIncreaseRate;
+
 	bool spawning = false;
 
 	public CircleCollider2D playArea;
@@ -32,10 +35,37 @@ public class BallMachine : MonoBehaviour
 
 	void Start()
 	{
-		UpdateDifficulty(0);
+		UpdateSpawnRate(0);
 		if(spawnOnStart)
 			StartSpawning();
 		ScoreCalculator.PlayerScored += UpdateDifficulty;
+		ScoreCalculator.ScorePredictionUpdated += UpdateDifficultyTemp;
+	}
+
+	void Update()
+	{
+		spawnRateIndex += spawnIndexIncreaseRate*Time.deltaTime;
+		UpdateSpawnRate(spawnRateIndex + spawnRateIndexTemp);
+
+	}
+	
+	void UpdateDifficulty(float scoreIncrease)
+	{
+		spawnRateIndex += scoreIncrease;
+		
+		//Debug.Log ("Updating difficulty " + goodPerSec + " " + bonusPerSec + " " + badPerSec);
+	}
+	
+	void UpdateDifficultyTemp(float heldScore, int nextMaxChain)
+	{
+		spawnRateIndexTemp = heldScore;
+	}
+
+	void UpdateSpawnRate(float index)
+	{
+		goodPerSec = goodSpawnScaler*Mathf.Lerp(goodRateMinMax.x, goodRateMinMax.y, index/(scoreMinMax.y - scoreMinMax.x));
+		bonusPerSec = bonusSpawnScaler*Mathf.Lerp(bonusRateMinMax.x, bonusRateMinMax.y, index/(scoreMinMax.y - scoreMinMax.x));
+		badPerSec = badSpawnScaler*Mathf.Lerp(badRateMinMax.x, badRateMinMax.y, index/(scoreMinMax.y - scoreMinMax.x));
 	}
 
 	public void StartSpawning()
@@ -136,15 +166,6 @@ public class BallMachine : MonoBehaviour
 	}
 
 
-
-	void UpdateDifficulty(float scoreIncrease)
-	{
-
-		goodPerSec = goodSpawnScaler*Mathf.Lerp(goodRateMinMax.x, goodRateMinMax.y, ScoreCalculator.Instance.score/(scoreMinMax.y - scoreMinMax.x));
-		bonusPerSec = bonusSpawnScaler*Mathf.Lerp(bonusRateMinMax.x, bonusRateMinMax.y, ScoreCalculator.Instance.score/(scoreMinMax.y - scoreMinMax.x));
-		badPerSec = badSpawnScaler*Mathf.Lerp(badRateMinMax.x, badRateMinMax.y, ScoreCalculator.Instance.score/(scoreMinMax.y - scoreMinMax.x));
-		//Debug.Log ("Updating difficulty " + goodPerSec + " " + bonusPerSec + " " + badPerSec);
-	}
 
 	public void IncreaseGoodRateScaler(float scaler)
 	{
