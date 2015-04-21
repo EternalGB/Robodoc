@@ -6,7 +6,7 @@ public class RandomObstacleGenerator : MonoBehaviour
 
 	public Collider2D spawnArea;
 	public List<GameObject> obstacles;
-	public int minObstacles, maxObstacles;
+	public int minClots, maxClots;
 	public List<GameObject> paths;
 	public float moveChance;
 	public int minMoveSpeed, maxMoveSpeed;
@@ -18,11 +18,17 @@ public class RandomObstacleGenerator : MonoBehaviour
 
 	void Start()
 	{
-		int numObs = Random.Range(minObstacles,maxObstacles);
-		int tryLimit = numObs*numAcross;
-		List<Vector2> positions = GeneratePositions(spawnArea.bounds, numObs);
+		int numClots = Random.Range(minClots,maxClots);
+
+
+
+		int tryLimit = numClots*numAcross;
+		List<Vector2> positions = GeneratePositions(spawnArea.bounds, numClots/3);
 		List<Bounds> obstaclesBounds = new List<Bounds>();
-		for(int i = 0; i < numObs; i++) {
+
+		int clotCount = 0;
+
+		while(clotCount < numClots) {
 			//choose an obstacle
 			GameObject obstacle = (GameObject)Instantiate(Util.GetRandomElement(obstacles));
 			obstacle.transform.rotation *= Util.RandomRotation(Vector3.forward,-90,90);
@@ -73,6 +79,9 @@ public class RandomObstacleGenerator : MonoBehaviour
 
 			positions.Remove(pos);
 			obstaclesBounds.Add(Util.GetSmallest2DObjectBounds(obstacle));
+
+			int thisClots = obstacle.transform.childCount;
+			clotCount += thisClots;
 		}
 	}
 
