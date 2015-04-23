@@ -14,9 +14,11 @@ public class ArcadeProgression : MonoBehaviour
 
 	public System.Collections.IEnumerator UpdateProgression()
 	{
+		List<string> unlockedNames = new List<string>();
 		foreach(Unlockable unlock in unlockables) {
-			if(!unlock.Unlocked && unlock.ConditionMet()) {
+			if(!unlock.Unlocked && unlock.ConditionMet() && !unlockedNames.Contains(unlock.unlockableName)) {
 				unlock.Unlock();
+				unlockedNames.Add(unlock.unlockableName);
 				yield return StartCoroutine(DisplayUnlockMessage(unlock));
 			}
 		}
@@ -30,10 +32,12 @@ public class ArcadeProgression : MonoBehaviour
 			}
 			PlayerPrefs.SetInt("ArcadeProgressionCleared",0);
 		}
+
 		foreach(Unlockable unlock in unlockables) {
 			if(unlock.Unlocked) {
 				Debug.Log ("Unlocking " + unlock.name);
 				unlock.UnlockEffect();
+
 			}
 		}
 	}
