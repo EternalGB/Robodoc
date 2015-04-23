@@ -5,17 +5,9 @@ public class Arcade : Goal
 {
 
 	public float initRatio;
-	public float timeToScoreRatio;
+	float timeToScoreRatio;
 	public float ratioDegradeRate;
-
-
-	void OnEnable()
-	{
-		base.OnEnable();
-		timeToScoreRatio = initRatio;
-		ScoreCalculator.PlayerScored += AddTime;
-	}
-
+	
 	void OnDisable()
 	{
 		//dunno if I have to do this but just in case...
@@ -25,8 +17,8 @@ public class Arcade : Goal
 	void AddTime(float scoreIncrease)
 	{
 		lerpTimer = 0;
-		timeRemaining += Mathf.Ceil(scoreIncrease/timeToScoreRatio);
-		timeToScoreRatio += scoreIncrease/ratioDegradeRate;
+		timeRemaining += Mathf.Ceil(scoreIncrease/(timeToScoreRatio + ScoreCalculator.Instance.score/ratioDegradeRate));
+		//timeToScoreRatio += scoreIncrease/ratioDegradeRate;
 	}
 	
 	public override float EvaluateSuccess ()
@@ -37,6 +29,13 @@ public class Arcade : Goal
 	public override string FormatSuccess (float score)
 	{
 		return score.ToString();
+	}
+
+	public override void ResetGoal ()
+	{
+		base.ResetGoal ();
+		timeToScoreRatio = initRatio;
+		ScoreCalculator.PlayerScored += AddTime;
 	}
 }
 
