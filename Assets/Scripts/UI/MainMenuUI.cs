@@ -27,7 +27,7 @@ public class MainMenuUI : MonoBehaviour
 			challengeButton.GetComponent<Button>().interactable = true;
 		} else {
 			tutorialButton.SetActive(PlayerPrefs.GetInt("TutorialCompleted",0) != 0);
-			challengeButton.GetComponent<Button>().interactable = (PlayerPrefs.GetInt ("TutorialCompleted",0) != 0);
+			//challengeButton.GetComponent<Button>().interactable = (PlayerPrefs.GetInt ("TutorialCompleted",0) != 0);
 		}
 
 
@@ -120,6 +120,11 @@ public class MainMenuUI : MonoBehaviour
 	public void SetTutorialCompleted()
 	{
 		PlayerPrefs.SetInt("TutorialCompleted",1);
+	}
+
+	public void OpenFullVersion()
+	{
+		Application.OpenURL("market://details?id=com.EternalGoldenBraid.Robodoc");
 	}
 
 }
