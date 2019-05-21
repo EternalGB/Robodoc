@@ -10,7 +10,7 @@ public class AddScoreArea : LevelModifier
 	public override void DoModification ()
 	{
 		GameObject scoreArea = (GameObject)GameObject.Instantiate(scoreAreaPrefab);
-		Collider2D allowableArea = GameObject.Find ("PlayArea").collider2D;
+		Collider2D allowableArea = GameObject.Find ("PlayArea").GetComponent<Collider2D>();
 		Vector3 pos;
 		float radius = scoreArea.transform.localScale.x*scoreArea.GetComponent<CircleCollider2D>().radius;
 		int tries = 0;

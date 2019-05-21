@@ -37,7 +37,7 @@ public class Ejector : BadBall
 
 			AttachedBall.AddStatusAllAttachedBalls(ejected.transform,BallStatus.EJECTED,ejected.GetComponent<SpriteRenderer>().sharedMaterial);
 			ejected.SetActive(true);
-			ejected.rigidbody2D.velocity = (pos - parent.position).normalized*ejectionForce;
+			ejected.GetComponent<Rigidbody2D>().velocity = (pos - parent.position).normalized*ejectionForce;
 		}
 	}
 

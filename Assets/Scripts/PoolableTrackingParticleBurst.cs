@@ -19,7 +19,7 @@ public class PoolableTrackingParticleBurst : PoolableParticleBurst
 	public void Play()
 	{
 		base.Play();
-		particles = new ParticleSystem.Particle[particleSystem.maxParticles];
+		particles = new ParticleSystem.Particle[GetComponent<ParticleSystem>().maxParticles];
 		//Debug.Log ("Got " + numAlive + " particles");
 	}
 
@@ -27,7 +27,7 @@ public class PoolableTrackingParticleBurst : PoolableParticleBurst
 	{
 		base.Update();
 		if(target != null && hasPlayed) {
-			numAlive = particleSystem.GetParticles(particles);
+			numAlive = GetComponent<ParticleSystem>().GetParticles(particles);
 			for(int i = 0; i < numAlive; i++) {
 				particles[i].velocity = ((Vector2)target.position - (Vector2)particles[i].position).normalized*followSpeed;
 				particles[i].angularVelocity = Mathf.Max(particles[i].velocity.x,particles[i].velocity.y)*100;
@@ -43,7 +43,7 @@ public class PoolableTrackingParticleBurst : PoolableParticleBurst
 					}
 				}
 			}
-			particleSystem.SetParticles(particles,numAlive);
+			GetComponent<ParticleSystem>().SetParticles(particles,numAlive);
 		}
 	}
 

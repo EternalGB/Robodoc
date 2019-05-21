@@ -43,7 +43,7 @@ public class PlayerBall : MonoBehaviour
 	void Update()
 	{
 		//to stop new colliders changing the center of mass
-		rigidbody2D.centerOfMass = Vector2.zero;
+		GetComponent<Rigidbody2D>().centerOfMass = Vector2.zero;
 
 		if(!FlagsHelper.IsSet<BallStatus>(status,BallStatus.FROZEN)) {
 			object contr;
@@ -59,14 +59,14 @@ public class PlayerBall : MonoBehaviour
 				
 				mousePos = Util.MouseToWorldPos(0);
 				if(Vector2.Distance(mousePos,transform.position) >= 2)
-					rigidbody2D.velocity = (mousePos - transform.position).normalized*speed;
+					GetComponent<Rigidbody2D>().velocity = (mousePos - transform.position).normalized*speed;
 				else {
-					rigidbody2D.velocity = Vector2.zero;
+					GetComponent<Rigidbody2D>().velocity = Vector2.zero;
 					transform.position = mousePos;
 				}
 			} else {
 				//use the keyboard
-				rigidbody2D.velocity = new Vector3(Input.GetAxis("Horizontal")*speed,Input.GetAxis("Vertical")*speed);
+				GetComponent<Rigidbody2D>().velocity = new Vector3(Input.GetAxis("Horizontal")*speed,Input.GetAxis("Vertical")*speed);
 			}
 		}
 
@@ -85,7 +85,7 @@ public class PlayerBall : MonoBehaviour
 		//reduce the size of the halo
 		halo.localScale = new Vector3(Mathf.Clamp(halo.localScale.x - haloDecrement*Time.deltaTime,0,1),Mathf.Clamp(halo.localScale.x - haloDecrement*Time.deltaTime,0,1));
 
-		Debug.DrawLine(transform.position,(Vector2)transform.position+rigidbody2D.velocity,Color.blue,0f);
+		Debug.DrawLine(transform.position,(Vector2)transform.position+GetComponent<Rigidbody2D>().velocity,Color.blue,0f);
 
 
 	}
@@ -93,9 +93,9 @@ public class PlayerBall : MonoBehaviour
 	void FixedUpdate()
 	{
 		if(!playArea.OverlapPoint(transform.position)) {
-			if( Vector2.Distance(playArea.transform.position,(Vector2)transform.position + rigidbody2D.velocity) >
+			if( Vector2.Distance(playArea.transform.position,(Vector2)transform.position + GetComponent<Rigidbody2D>().velocity) >
 			   Vector2.Distance(playArea.transform.position,transform.position)) {
-				rigidbody2D.velocity = Vector2.zero;//rigidbody2D.velocity - (Vector2)transform.position.normalized*rigidbody2D.velocity.magnitude;
+				GetComponent<Rigidbody2D>().velocity = Vector2.zero;//rigidbody2D.velocity - (Vector2)transform.position.normalized*rigidbody2D.velocity.magnitude;
 			}
 		}
 	}
@@ -202,8 +202,8 @@ public class PlayerBall : MonoBehaviour
 			SoundEffectManager.Instance.PlayClipOnce("Bomb",Vector3.zero,1,1);
 			GameObject[] balls = GameObject.FindGameObjectsWithTag("Ball");
 			foreach(GameObject ball in balls) {
-				if(ball.rigidbody2D) {
-					ball.rigidbody2D.velocity += (Vector2)ball.transform.position.normalized*bombForce;
+				if(ball.GetComponent<Rigidbody2D>()) {
+					ball.GetComponent<Rigidbody2D>().velocity += (Vector2)ball.transform.position.normalized*bombForce;
 				}
 			}
 			numBombs--;
@@ -213,14 +213,14 @@ public class PlayerBall : MonoBehaviour
 	public void GetFrozen(float duration, Material frozenMat)
 	{
 		if(!FlagsHelper.IsSet<BallStatus>(status,BallStatus.FROZEN)) {
-			renderer.sharedMaterial = frozenMat;
+			GetComponent<Renderer>().sharedMaterial = frozenMat;
 			AddStatus(BallStatus.FROZEN,frozenMat);
-			rigidbody2D.velocity = Vector2.zero;
-			rigidbody2D.isKinematic = true;
+			GetComponent<Rigidbody2D>().velocity = Vector2.zero;
+			GetComponent<Rigidbody2D>().isKinematic = true;
 			AttachedBall.AddStatusAllAttachedBalls(transform,BallStatus.FROZEN,frozenMat);
 			StartCoroutine(Timers.Countdown(duration,() => {
 				RemoveStatus(BallStatus.FROZEN,frozenMat);
-				rigidbody2D.isKinematic = false;
+				GetComponent<Rigidbody2D>().isKinematic = false;
 			}));
 		}
 	}
@@ -228,7 +228,7 @@ public class PlayerBall : MonoBehaviour
 	public void GetShocked(float duration, Material shockedMat)
 	{
 		if(!FlagsHelper.IsSet<BallStatus>(status,BallStatus.SHOCKED)) {
-			renderer.sharedMaterial = shockedMat;
+			GetComponent<Renderer>().sharedMaterial = shockedMat;
 			AddStatus(BallStatus.SHOCKED,shockedMat);
 			AttachedBall.AddStatusAllAttachedBalls(transform,BallStatus.SHOCKED,shockedMat);
 			StartCoroutine(Timers.Countdown(duration,() => RemoveStatus(BallStatus.SHOCKED,shockedMat)));
@@ -238,7 +238,7 @@ public class PlayerBall : MonoBehaviour
 	public void GetGlooped(float duration, Material gloopMat)
 	{
 		if(!FlagsHelper.IsSet<BallStatus>(status,BallStatus.GLOOPED)) {
-			renderer.sharedMaterial = gloopMat;
+			GetComponent<Renderer>().sharedMaterial = gloopMat;
 			AddStatus(BallStatus.GLOOPED,gloopMat);
 			//we make copies so the delegate we create keeps its own state
 			/*
@@ -258,7 +258,7 @@ public class PlayerBall : MonoBehaviour
 	public void AddStatus(BallStatus newStatus, Material newMat)
 	{
 		if(newMat != null) {
-			renderer.sharedMaterial = newMat;
+			GetComponent<Renderer>().sharedMaterial = newMat;
 			matQueue.Add(newMat);
 		}
 		FlagsHelper.Set<BallStatus>(ref status, newStatus);
@@ -277,7 +277,7 @@ public class PlayerBall : MonoBehaviour
 	void CheckStatus()
 	{
 		if(matQueue.Count > 0)
-			renderer.sharedMaterial = matQueue[matQueue.Count-1];
+			GetComponent<Renderer>().sharedMaterial = matQueue[matQueue.Count-1];
 	}
 
 	public bool HasStatus(BallStatus checkStatus)

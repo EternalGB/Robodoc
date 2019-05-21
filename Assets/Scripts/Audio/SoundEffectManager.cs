@@ -37,7 +37,7 @@ public class SoundEffectManager : MonoBehaviour
 	{
 		GameObject player = playerPool.GetPooled();
 		player.SetActive(true);
-		AudioSource asrc = player.audio;
+		AudioSource asrc = player.GetComponent<AudioSource>();
 		return asrc;
 	}
 

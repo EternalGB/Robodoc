@@ -9,12 +9,12 @@ public class MusicPlayer : MonoBehaviour
 	//have to call this on awake also otherwise there's a tiny moment where the volume is different
 	void Awake()
 	{
-		audio.volume = volumeModifier*GetVolume();
+		GetComponent<AudioSource>().volume = volumeModifier*GetVolume();
 	}
 
 	void Update()
 	{
-		audio.volume = volumeModifier*GetVolume();
+		GetComponent<AudioSource>().volume = volumeModifier*GetVolume();
 	}
 
 	static float GetVolume()

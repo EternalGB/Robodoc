@@ -14,7 +14,7 @@ public class AddWall : LevelModifier
 		float radius = 40;
 		int tries = 0;
 		do {
-			pos = Util.RandomPointInside(GameObject.Find ("PlayArea").collider2D);
+			pos = Util.RandomPointInside(GameObject.Find ("PlayArea").GetComponent<Collider2D>());
 			tries++;
 			if(tries >= tryLimit)
 				return;
