@@ -30,10 +30,6 @@ public class PlayerBall : MonoBehaviour
 	public Transform halo;
 	public float haloIncrement, haloDecrement;
 
-	public TouchPadController movStick;
-	public TouchPadController rotStick;
-	public TouchButton pulseButton;
-
 	public AudioClip bombClip;
 	public AudioMixerGroup bombMixer;
 
@@ -43,12 +39,6 @@ public class PlayerBall : MonoBehaviour
 		origMat = GetComponent<SpriteRenderer>().sharedMaterial;
 		matQueue = new List<Material>();
 		matQueue.Add(origMat);
-		if(movStick == null)
-			movStick = GameObject.FindGameObjectWithTag("MovementController").GetComponent<TouchPadController>();
-		if(rotStick == null)
-			rotStick = GameObject.FindGameObjectWithTag("RotationController").GetComponent<TouchPadController>();
-		if (pulseButton == null)
-			pulseButton = GameObject.FindGameObjectWithTag ("PulseController").GetComponent<TouchButton> ();
 	}
 
 	void Update()
@@ -57,17 +47,25 @@ public class PlayerBall : MonoBehaviour
 		GetComponent<Rigidbody2D>().centerOfMass = Vector2.zero;
 
 		if(!FlagsHelper.IsSet<BallStatus>(status,BallStatus.FROZEN)) {
-			GetComponent<Rigidbody2D>().velocity = speed*movStick.GetDirection();
-		}
+            //move towards the mouse
+            mousePos = Util.MouseToWorldPos(0);
+            if (Vector2.Distance(mousePos, transform.position) >= 2)
+                GetComponent<Rigidbody2D>().velocity = (mousePos - transform.position).normalized * speed;
+            else
+            {
+                GetComponent<Rigidbody2D>().velocity = Vector2.zero;
+                transform.position = mousePos;
+            }
+        }
 
 
-		if(bombsEnabled && pulseButton.Pressed()) {
+		if(bombsEnabled && Input.GetButtonDown("Bomb")) {
 			FireBomb();
 		}
 
 		//spin left or right
 		if(!FlagsHelper.IsSet<BallStatus>(status,BallStatus.SHOCKED)) {
-			rotAngle = Mathf.Repeat(rotAngle - rotStick.GetDirection().x*rotSpeed*Time.deltaTime,360);
+			rotAngle = Mathf.Repeat(rotAngle - Input.GetAxisRaw("Spin")*rotSpeed*Time.deltaTime,360);
 			transform.rotation = Quaternion.AngleAxis(rotAngle,Vector3.forward);
 		}
 
